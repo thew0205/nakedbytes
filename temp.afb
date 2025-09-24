@@ -1,0 +1,118 @@
+// Annotated Flatbuffer Binary
+//
+// Schema file: temp.fbs
+// Binary file: temp.bin
+
+header:
+  +0x00 | 18 00 00 00             | UOffset32  | 0x00000018 (24) Loc: 0x18     | offset to root table `Test`
+
+padding:
+  +0x04 | 00 00 00 00 00 00       | uint8_t[6] | ......                        | padding
+
+vtable (Test):
+  +0x0A | 0E 00                   | uint16_t   | 0x000E (14)                   | size of this vtable
+  +0x0C | 18 00                   | uint16_t   | 0x0018 (24)                   | size of referring table
+  +0x0E | 04 00                   | VOffset16  | 0x0004 (4)                    | offset to field `tags` (id: 0)
+  +0x10 | 08 00                   | VOffset16  | 0x0008 (8)                    | offset to field `tz` (id: 1)
+  +0x12 | 0C 00                   | VOffset16  | 0x000C (12)                   | offset to field `days` (id: 2)
+  +0x14 | 10 00                   | VOffset16  | 0x0010 (16)                   | offset to field `coord` (id: 3)
+  +0x16 | 14 00                   | VOffset16  | 0x0014 (20)                   | offset to field `data` (id: 4)
+
+root_table (Test):
+  +0x18 | 0E 00 00 00             | SOffset32  | 0x0000000E (14) Loc: 0x0A     | offset to vtable
+  +0x1C | B0 00 00 00             | UOffset32  | 0x000000B0 (176) Loc: 0xCC    | offset to field `tags` (vector)
+  +0x20 | 90 9D FF FF             | uint32_t   | 0xFFFF9D90 (4294942096)       | table field `tz` (Int)
+  +0x24 | A0 00 00 00             | UOffset32  | 0x000000A0 (160) Loc: 0xC4    | offset to field `days` (vector)
+  +0x28 | 84 00 00 00             | UOffset32  | 0x00000084 (132) Loc: 0xAC    | offset to field `coord` (vector)
+  +0x2C | 04 00 00 00             | UOffset32  | 0x00000004 (4) Loc: 0x30      | offset to field `data` (vector)
+
+vector (Test.data):
+  +0x30 | 04 00 00 00             | uint32_t   | 0x00000004 (4)                | length of vector (# items)
+  +0x34 | 60 00 00 00             | UOffset32  | 0x00000060 (96) Loc: 0x94     | offset to table[0]
+  +0x38 | 34 00 00 00             | UOffset32  | 0x00000034 (52) Loc: 0x6C     | offset to table[1]
+  +0x3C | 10 00 00 00             | UOffset32  | 0x00000010 (16) Loc: 0x4C     | offset to table[2]
+  +0x40 | 08 00 00 00             | UOffset32  | 0x00000008 (8) Loc: 0x48      | offset to table[3]
+
+vtable (DataEntry):
+  +0x44 | 04 00                   | uint16_t   | 0x0004 (4)                    | size of this vtable
+  +0x46 | 04 00                   | uint16_t   | 0x0004 (4)                    | size of referring table
+
+table (DataEntry):
+  +0x48 | 04 00 00 00             | SOffset32  | 0x00000004 (4) Loc: 0x44      | offset to vtable
+
+table (DataEntry):
+  +0x4C | C0 FF FF FF             | SOffset32  | 0xFFFFFFC0 (-64) Loc: 0x8C    | offset to vtable
+  +0x50 | 00 00 00                | uint8_t[3] | ...                           | padding
+  +0x53 | 01                      | uint8_t    | 0x01 (1)                      | table field `staff` (Bool)
+  +0x54 | 04 00 00 00             | UOffset32  | 0x00000004 (4) Loc: 0x58      | offset to field `name` (string)
+
+string (DataEntry.name):
+  +0x58 | 04 00 00 00             | uint32_t   | 0x00000004 (4)                | length of string
+  +0x5C | 6F 78 30 33             | char[4]    | ox03                          | string literal
+  +0x60 | 00                      | char       | 0x00 (0)                      | string terminator
+
+vtable (DataEntry):
+  +0x62 | 0A 00                   | uint16_t   | 0x000A (10)                   | size of this vtable
+  +0x64 | 0A 00                   | uint16_t   | 0x000A (10)                   | size of referring table
+  +0x66 | 00 00                   | VOffset16  | 0x0000 (0)                    | offset to field `name` (id: 0) <null> (String)
+  +0x68 | 00 00                   | VOffset16  | 0x0000 (0)                    | offset to field `staff` (id: 1) <defaults to 0> (Bool)
+  +0x6A | 04 00                   | VOffset16  | 0x0004 (4)                    | offset to field `extra` (id: 2)
+
+table (DataEntry):
+  +0x6C | 0A 00 00 00             | SOffset32  | 0x0000000A (10) Loc: 0x62     | offset to vtable
+  +0x70 | 0C 00 00 00             | UOffset32  | 0x0000000C (12) Loc: 0x7C     | offset to field `extra` (table)
+  +0x74 | 00 00                   | uint8_t[2] | ..                            | padding
+
+vtable (Metadata):
+  +0x76 | 06 00                   | uint16_t   | 0x0006 (6)                    | size of this vtable
+  +0x78 | 08 00                   | uint16_t   | 0x0008 (8)                    | size of referring table
+  +0x7A | 04 00                   | VOffset16  | 0x0004 (4)                    | offset to field `info` (id: 0)
+
+table (Metadata):
+  +0x7C | 06 00 00 00             | SOffset32  | 0x00000006 (6) Loc: 0x76      | offset to vtable
+  +0x80 | 04 00 00 00             | UOffset32  | 0x00000004 (4) Loc: 0x84      | offset to field `info` (string)
+
+string (Metadata.info):
+  +0x84 | 00 00 00 00             | uint32_t   | 0x00000000 (0)                | length of string
+  +0x88 | 00                      | char       | 0x00 (0)                      | string terminator
+
+padding:
+  +0x89 | 00 00 00                | uint8_t[3] | ...                           | padding
+
+vtable (DataEntry):
+  +0x8C | 08 00                   | uint16_t   | 0x0008 (8)                    | size of this vtable
+  +0x8E | 0C 00                   | uint16_t   | 0x000C (12)                   | size of referring table
+  +0x90 | 08 00                   | VOffset16  | 0x0008 (8)                    | offset to field `name` (id: 0)
+  +0x92 | 07 00                   | VOffset16  | 0x0007 (7)                    | offset to field `staff` (id: 1)
+
+table (DataEntry):
+  +0x94 | 08 00 00 00             | SOffset32  | 0x00000008 (8) Loc: 0x8C      | offset to vtable
+  +0x98 | 00 00 00                | uint8_t[3] | ...                           | padding
+  +0x9B | 01                      | uint8_t    | 0x01 (1)                      | table field `staff` (Bool)
+  +0x9C | 04 00 00 00             | UOffset32  | 0x00000004 (4) Loc: 0xA0      | offset to field `name` (string)
+
+string (DataEntry.name):
+  +0xA0 | 04 00 00 00             | uint32_t   | 0x00000004 (4)                | length of string
+  +0xA4 | 6F 78 30 33             | char[4]    | ox03                          | string literal
+  +0xA8 | 00                      | char       | 0x00 (0)                      | string terminator
+
+padding:
+  +0xA9 | 00 00 00                | uint8_t[3] | ...                           | padding
+
+vector (Test.coord):
+  +0xAC | 02 00 00 00             | uint32_t   | 0x00000002 (2)                | length of vector (# items)
+  +0xB0 | 7F 6A BC 74 93 84 56 C0 | double     | 0xC056849374BC6A7F (-90.0715) | value[0]
+  +0xB8 | FA 7E 6A BC 74 F3 3D 40 | double     | 0x403DF374BC6A7EFA (29.951)   | value[1]
+
+padding:
+  +0xC0 | 00 00 00 00             | uint8_t[4] | ....                          | padding
+
+vector (Test.days):
+  +0xC4 | 04 00 00 00             | uint32_t   | 0x00000004 (4)                | length of vector (# items)
+  +0xC8 | 01                      | uint8_t    | 0x01 (1)                      | value[0]
+  +0xC9 | 01                      | uint8_t    | 0x01 (1)                      | value[1]
+  +0xCA | 02                      | uint8_t    | 0x02 (2)                      | value[2]
+  +0xCB | 01                      | uint8_t    | 0x01 (1)                      | value[3]
+
+vector (Test.tags):
+  +0xCC | 00 00 00 00             | uint32_t   | 0x00000000 (0)                | length of vector (# items)

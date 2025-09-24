@@ -1,0 +1,61 @@
+table Metadata{
+ info:string;   
+}
+
+
+
+enum Day: byte{
+    Monday = 0, Tuesday = 1, Wednesday = 2, Thursday = 3, Friday = 4, Saturday = 5, Sunday = 6
+}
+
+table Test{
+    tags: [string];
+    tz: int16;
+    days:[Day];
+    coord: [double];
+    data: [DataEntry];
+}
+
+root_type Test;
+
+optimal arrange for one byte offset length of 1, the alignment for base line is 1 (contains only offset and a bool)
+
+alignment of metadata is 1
+table DataEntry{
+    name: string;
+    staff: bool;
+    extra: Metadata;
+}
+
+table Test2{
+    coord: [float: 2];
+    tz: int16;
+    tags: [string];
+    days:[Day];
+    data: [DataEntry];
+    baseline: DataEntry;
+}
+
+root_type Test2;
+
+
+optimal arrange for four byte offset length of 1
+
+alignment of Metadata is 4
+table DataEntry{
+    name: string;
+    extra: Metadata;
+    staff: bool;
+
+}
+
+table Test2{
+    coord: [float: 2];
+    tags: [string];
+    days:[Day];
+    data: [DataEntry];
+    baseline: DataEntry;
+    tz: int16;
+}
+
+root_type Test2;

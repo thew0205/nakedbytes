@@ -1,0 +1,226 @@
+{
+    "tags": [],
+    "tz": -25200,
+    "days": [
+        1,
+        1,
+        2,
+        1
+    ],
+    "coord": [
+        -90.0715,
+        29.9510
+    ],
+    "data": [
+        {
+            "name": "ox03",
+            "staff": true
+        },
+        {
+            "name": null,
+            "staff": false,
+            "extra": {
+                "info": ""
+            }
+        },
+        {
+            "name": "ox03",
+            "staff": true
+        },
+        {}
+    ]
+}
+
+
+Forward compatible if the initial data are fixed
+Backward compatible by comparing the offset value of the root to the number of bytes in the rule
+46 // Number of the bytes in the wire
+5 // Number of byte in the root element uint32
+0 // tags offset 0 means absent 0x00
+-25200 // fixed sized interger her is 2 bytes 0x01
+3 // days offset 0x03 
+7 //coord offset 0x04
+15 // data offset 0x05
+
+
+4 // days lenght 0x06
+1 // days data 0x07
+1 // 0x08
+2 // 0x09
+1 //0x10
+2 // coord leght 0x11
+-90.0715 // 4 byte float 0x12
+29.9510 // 4 bytes float 0x16
+3 // data length 0x20
+3 // offset to actual data  1 0x21
+5 // offset to actual data  2 0x22
+7// offset to actual data  3 0x23
+10 // start of data 1  offset to null terminated string 0x24
+0 // i byte bool 0x25
+0 // extra field is empty 0x26
+0 // start of data 2 absent string 0x27
+0 // 1 byte bool 0x28
+9 // offset to extra data field 0x29
+4 // start of data 3 offset to null terminated string  0x30
+1 // 1 byte 0x31
+0 // extra empty 0x32
+4 // string length it is basically a list of bytes 0x33
+'o' // 0x34
+'x' // 0x35
+'0' // 0x36
+'3' // 0x37
+'\0' // 0x38
+1 // start of extra field of data 2 0x39
+'\0' // 0x40
+'o' // 0x41
+'x' // 0x42
+'0' // 0x43
+'3' // 0x44
+'\0' // 0x45
+
+
+
+{
+    "tags": [],
+    "tz": -25200,
+    "days": [
+        1,
+        1,
+        2,
+        1
+    ],
+    "coord": [
+        -90.0715,
+        29.9510
+    ],
+    "data": [
+        {
+            "name": "ox03",
+            "staff": true
+        },
+        {
+            "name": null,
+            "staff": false,
+            "extra": {
+                "info": ""
+            }
+        },
+        {
+            "name": "ox03",
+            "staff": true
+        },
+        {}
+    ],
+    "baseline": {
+        "name": "oooo",
+        "staff": true
+    }
+}
+
+ 
+1 byte offset length 1
+No backward of forward compatibility.
+
+-90.0715 // In place coord array 0x00
+29.9510 // In place coord array 0x04
+-25200 // fixed sized integer here is 2 bytes 0x08
+0 // tags offset 0 means absent 0x0a
+6 // days offset 0x0b
+
+8 // data offset 0x0c
+
+1a // in place base line name 0x0d
+1 // vaseline staff 0x0e
+0 // baseline extra 0x0f
+
+4 // days length 0x10
+1 // days data 0x11
+1 // 0x08 0x12
+2 // 0x09 0x13
+1 //0x10 0x14
+
+3 // data length 0x15
+3 // offset to actual data  1 0x16
+5 // offset to actual data  2 0x17
+7 // offset to actual data  3 0x18
+
+9 // start of data 1  offset to null terminated string 0x19
+1 // 1 byte bool 0x1a
+0 // extra field is empty 0x1b
+
+0 // start of data 2 absent string 0x1c
+0 // 1 byte bool 0x17
+0 // in place extra data (info field) 0x18
+
+3 // start of data 3 offset to null terminated string  0x19
+1 // 1 byte 0x20
+0 // extra empty 0x21
+
+4 // string length it is basically a list of bytes 0x22
+'o' // 0x23
+'x' // 0x24
+'0' // 0x25
+'3' // 0x26
+'\0' // 0x27
+4 // 0x28
+'o' // 0x29
+'o'  //0x2a
+'o' //0x2b
+'o' //0x2c
+'\0' //0x2d
+
+
+
+ 
+4 byte offset, length 1
+No backward of forward compatibility.
+
+-90.0715 // In place coord array 0x00
+29.9510 // In place coord array 0x04
+0 // tags offset 0 means absent 0x08
+0x14 // days offset 0x0c
+
+0x15 // data offset 0x10
+
+0x4d // in place base line name 0x14
+0 // baseline extra 0x18
+1 // vaseline staff 0x1c
+0x00 // padding 0x1d
+-25200 // fixed sized integer here is 2 bytes 0x1e
+
+4 // days length 0x20
+1 // days data 0x21
+1 //  0x22
+2 // 0x23
+1 // 0x24
+
+3 // data length 0x25
+0x00 // padding 0x26
+0x00 // padding 0x26
+0x0c // offset to actual data  1 0x28
+0x14 // offset to actual data  2 0x2c
+0x1c // offset to actual data  3 0x30
+
+0x21 // start of data 1  offset to null terminated string 0x34
+0 // extra field is empty 0x38
+1 // 1 byte bool 0x3c
+0x00 // 3 byte padding 0x3d
+0 // start of data 2 absent string 0x40
+0 // in place extra data (info field) 0x44
+0 // 1 byte bool 0x48
+0x00 // 3 byte padding 0x49
+0x9 // start of data 3 offset to null terminated string  0x4c
+0 // extra empty 0x50
+1 // 1 byte 0x54
+
+4 // string length it is basically a list of bytes 0x55
+'o' // 0x56
+'x' // 0x57
+'0' // 0x58
+'3' // 0x59
+'\0' // 0x60
+'o' // 0x61
+'o'  //0x62
+'o' //0x63
+'o' //0x64
+'\0' //0x65
