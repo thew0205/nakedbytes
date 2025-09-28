@@ -218,3 +218,92 @@ No backward of forward compatibility.
 'o' // 0x51
 'o' // 0x52
 '\0' // 0x53
+
+Sunspec Model Definition 
+
+table SunspecPointDef{
+    id : string;
+    // This is need because it can be specified as a constant in the model definition or in another point.
+    count_point_id : string;
+    // This is need because it can be specified as a constant in the model definition or in another point.
+    sf_id : string;
+    units : string;
+    label : string;
+    data: SunspecPointData;
+    count:uint8= 1;
+    size: uint8;
+    sf : int8;
+    access:SunspecPointAccessType = kR;
+    mandatory:SunspecPointMandatoryType = kO;
+}
+
+table SunspecGroupPointDef{
+    id: string;
+    count_point_id:string;
+    points: [SunspecPointDef];
+    groups: [SunspecGroupPointDef];
+    label:string;
+    count:uint8= 1;
+    type:SunspecGroupType = kGroup;
+}
+
+
+
+table SunspecModelDef{
+    id: SunspecModelList = KModelInvalid;
+    group:SunspecGroupPointDef;
+}
+root_type SunspecModelDef;
+
+Model 1
+2 byte offset length 1
+No backward of forward compatibility.
+
+1 // id 0x00
+0x0c // SunspecGroupDef id 0x02
+0 // count point id 0x04
+0x10 // points 0x06
+0 // groups 0x08
+xx // label 0x0a
+1 // count 0x0c
+1 // type 0x0d
+"common\0" // id 0x0e
+'\0' // 0x15
+// points 0x16
+xx //point0 id 0x016
+0 // count id 0x018
+0 // sf_id 0x1a
+0 // units 0x1c
+xx // label 0x1e
+0 // data 0x20
+0 // data data 0x22
+1 // count 0x23
+1 // size 0x24
+0 // sf 0x25
+0 // access 0x26
+0 // mandatory 0x27
+
+xx //point0 id 0x016
+0 // count id 0x018
+0 // sf_id 0x1a
+0 // units 0x1c
+xx // label 0x1e
+0 // data 0x20
+0 // data data 0x22
+1 // count 0x23
+1 // size 0x24
+0 // sf 0x25
+0 // access 0x26
+0 // mandatory 0x27
+
+
+
+
+
+"id\0" // id 0x28
+'\0' // padding 0x2b
+"Model ID\0" \\ labels 0x2c
+// 0x34
+
+
+
