@@ -1,0 +1,57 @@
+{
+    "offset_size": 2,
+    "root_type": "Packet",
+    "types": [
+        {
+            "name": "Monster",
+            "type": "struct_offset",
+            "members": [
+                {
+                    "name": "name",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "Weapon",
+            "type": "struct_offset",
+            "members": [
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "damage",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "name": "AnyMessage",
+            "type": "union",
+            "unions": [
+                {
+                    "name": "Monster"
+                },
+                {
+                    "name": "Weapon"
+                }
+            ]
+        },
+        {
+            "name": "Packet",
+            "type": "struct_offset",
+            "members": [
+                {
+                    "name": "id",
+                    "type": "int16"
+                },
+                {
+                    "name": "data",
+                    "type": "AnyMessage",
+                    "is_array": true
+                }
+            ]
+        }
+    ]
+}
