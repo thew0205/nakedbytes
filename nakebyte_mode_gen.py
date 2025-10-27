@@ -4,10 +4,10 @@ from typing import List, Dict, cast
 
 
 model = {}
-with open('sunspec_model.json', 'r') as f:
+with open('array_union.json', 'r') as f:
     model = json.load(f)
 model1 = {}
-with open('model_160.json', 'r') as f:
+with open('array_union_data.json', 'r') as f:
     model1 = json.load(f)
 offset_size = 4 if model.get('offset_size') is None else model['offset_size']  # Size of the 'offset' type in bytes
 
@@ -50,6 +50,12 @@ def set_needed_types(root_type):
     for member in members:
         if not member['type']  in needed_types:
             member_type = get_type_from_json(member['type'])
+            #? Not needed?
+            set_needed_types(member_type)
+    members = root_type.get('unions', [])
+    for member in members:
+        if not member['name']  in needed_types:
+            member_type = get_type_from_json(member['name'])
             #? Not needed?
             set_needed_types(member_type)
             # needed_types.update(set_needed_types(member_type))   
@@ -120,7 +126,7 @@ class TypeDesc:
                         mem_size = real_type.size
                         mem_alignment = real_type.alignment
                     
-            if real_type.type_type == 'union':
+            if real_type.type_type == 'union' and (not is_array):
                 self.add_member(name= f"{name}_type", type_type=f"{type_type}_enum", is_array=False)
             self.alignment = max(mem_alignment, self.alignment)
             
@@ -153,9 +159,14 @@ class TypeDesc:
             raise ValueError(f"Enum value is already contained in enum member")
         else:
             if value == None:
-                value = 0
+                if len(self.e_members) == 0:
+                    value =0
+                else:
+                    value = self.e_members[-1].value + 1
+            elif value != None:
                 for e in self.e_members:
-                    value = max(e.value, value)
+                    if value == e.value:
+                        raise ValueError(f"Enum can not have duplicate elements. {e.name} and {name} have the same value of {value}")
             self.e_members.append(EnumMember(name,value ))
     # TODO
     def add_u_members(self, type_desc: 'TypeDesc'):
@@ -293,18 +304,40 @@ def compute_type_desc(type_name: str) -> TypeDesc:
     else:
         raise ValueError(f"The type of this type which is {type_def['type']}is not supported")  
     
-        
-def compute_all_types_desc(types: set[str]):
-    
-    for type_name in types:
-        is_not_union =  is_primitive_type(type_name) or get_type_from_json(type_name)['type'] != 'union'
-        if is_not_union:
+def members_contain_union_recursively(type_json: Dict) -> bool:
+    for mem in type_json["members"]:
+        if is_primitive_type(mem["type"]):
             continue
+        type_json = get_type_from_json(mem['type'])
+        if type_json['type'] == 'enum':
+            return False
+        if type_json['type'] == 'union':
+            return True
+        it_has  =  members_contain_union_recursively(get_type_from_json(mem["type"]))
+        if it_has:
+            return True
+    return False
+
+def compute_all_types_desc(types: set[str]):
+    types_with_union: set[str] = set()
+    union_types: set[str] = set()
+    for type_name in types:
+        if is_primitive_type(type_name):
+            continue
+        type_json = get_type_from_json(type_name)
+        if type_json["type"] == 'union':
+            union_types.add(type_name)
+            continue
+        if type_json["type"] != 'enum':
+            if members_contain_union_recursively(type_json):
+                types_with_union.add(type_name)
+                continue
         type_desc = compute_type_desc(type_name)
         types_desc.add(type_desc)
-    for type_name in types:
-        if not is_not_union:
-            continue
+    for type_name in union_types:
+        type_desc = compute_type_desc(type_name)
+        types_desc.add(type_desc)
+    for type_name in types_with_union:
         type_desc = compute_type_desc(type_name)
         types_desc.add(type_desc)
     return types_desc
@@ -418,7 +451,20 @@ def generate_array_byte(model: List, type_desc: TypeDesc) -> bytearray:
                     byte_array[curr_offset :curr_offset+ mem.size] = generate_primitive_bytearray(offset1, get_offset_type_desc_int())
                     byte_array.extend(temp_bytes)
     elif type_desc.type_type == 'union': 
-        raise ValueError("Still deciding what to do")
+        byte_array = bytearray(offset_size * 2  * item_count)
+        for i, item in enumerate(model):
+            curr_offset = offset_size * i *2
+            byte_array[curr_offset: curr_offset+ offset_size ] = generate_byte(item["type"], cast(TypeDesc, get_type_desc_from_types_desc(f'{type_desc.name}_enum')) )
+            item_bytes = generate_byte(item["value"], cast(TypeDesc, get_type_desc_from_types_desc(item["type"])))
+            if len(item_bytes) == 0:
+                value = 0
+            else: 
+                value = (len(byte_array) - (curr_offset+ offset_size))
+            byte_array[curr_offset+ offset_size: curr_offset+ offset_size * 2] = generate_primitive_bytearray(value , get_offset_type_desc_int())
+            byte_array.extend(item_bytes)
+ 
+        
+        # raise ValueError("Still deciding what to do")
     elif type_desc.is_offset_type():
         byte_array = bytearray(offset_size * item_count)
         
@@ -495,7 +541,7 @@ def generate_byte(model, type_desc: TypeDesc) -> bytearray:
                         root_array[curr_offset :curr_offset+ s_mem.size] = generate_primitive_bytearray(offset1, get_offset_type_desc_int())
                         root_array.extend(temp_bytes)
             elif mem.type_desc.type_type == 'union':
-                if f'{mem.name}_type' in model and f'{mem.name}' in model:
+                if f'{mem.name}_type' in model and f'{mem.name}' in model and model[f'{mem.name}'] != None:
                     root_array[mem.offset:mem.offset + mem.type_desc.size] = generate_primitive_bytearray(len(root_array) - mem.offset , get_offset_type_desc_int())
                     union_type_str = model[f'{mem.name}_type']
                     

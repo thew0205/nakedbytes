@@ -22,7 +22,7 @@
                 },
                 {
                     "name": "damage",
-                    "type": "int"
+                    "type": "int16"
                 }
             ]
         },
