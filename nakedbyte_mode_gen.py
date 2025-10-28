@@ -3,11 +3,12 @@ import struct
 from typing import List, Dict, cast
 
 
+
 model = {}
-with open('array_union.json', 'r') as f:
+with open('sunspec_model.json', 'r') as f:
     model = json.load(f)
 model1 = {}
-with open('array_union_data.json', 'r') as f:
+with open('model_1.json', 'r') as f:
     model1 = json.load(f)
 offset_size = 4 if model.get('offset_size') is None else model['offset_size']  # Size of the 'offset' type in bytes
 
@@ -505,7 +506,7 @@ def generate_byte(model, type_desc: TypeDesc) -> bytearray:
                 root_array[mem.offset:mem.offset + mem.size] = b'\xa5' * mem.size
             elif mem.is_array:
                 if model[f'{mem.name}'] == None or model[f'{mem.name}'] == []:
-                    root_array[mem.offset:mem.offset + mem.size] = (b'\xa5' * mem.size)
+                    root_array[mem.offset:mem.offset + mem.size] = (b'\x00' * mem.size)
                 else:
                     root_array[mem.offset:mem.offset + mem.size] = generate_primitive_bytearray((len(root_array) - mem.offset), get_offset_type_desc_int())
                 item_byte =  generate_array_byte(model[f'{mem.name}'], mem.type_desc)
@@ -585,3 +586,130 @@ print(f"Type Desc length is {len(types_desc)}")
 bin = generate_byte(model1,cast(TypeDesc, get_type_desc_from_types_desc (root_type_name)))
 with open("model1.bin2", 'wb') as f:
     f.write(bin)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def get_header_files() -> str:
+    return '''
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+
+'''
+
+def convert_to_cpp_primitive_type(type_name: str) -> str:
+    if 'uint8':
+        return 'uint8_t'
+    elif 'int8':
+        return 'int8_t'
+    elif 'uint16':
+        return 'uint16_t'
+    elif 'int16':
+        return 'int16_t'
+    elif 'uint32':
+        return 'uint32_t'
+    elif 'int32':
+        return 'int32_t'
+    elif 'uint64':
+        return 'uint64_t'
+    elif 'int64':
+        return 'int64_t'
+    elif 'float32':
+        return 'float'
+    elif 'float64':
+        return 'double'
+    elif 'char':
+        return 'char'
+    elif 'string':
+        return "const char *"
+    else:
+        raise ValueError(f"Primitive type {type_name} not supported yet.")
+
+def kind_of_struct(type_desc: TypeDesc) -> bool:
+    return type_desc.type_type in ['struct', 'struct_offset', 'class']
+    
+def generate_struct_member_get_function(mem: MemberDesc) -> str:
+    ret_str = ""
+    
+    if mem.type_desc.is_primitive:
+        type_name = convert_to_cpp_primitive_type(mem.type_desc.name)
+    else:
+        type_name = mem.type_desc.name
+    ret_str += f"{type_name} {mem.name}() {{"
+    
+    ret_str += f"}}"
+    return ret_str
+def generate_constructor(type_desc: TypeDesc) -> str:
+    if not kind_of_struct(type_desc):
+        raise ValueError("Only struct, struct_offset and class can have constructor")
+    ret_str = f"{type_desc.name}(unsigned char * data) : data_(data) {{}}"
+    return ret_str
+    
+def generate_define_offset_macro(type_desc: TypeDesc) -> str:
+    ret_str = ""
+    for mem in type_desc.members:
+        ret_str += f"#define {type_desc.name.upper()}_{mem.name.upper()}_OFFSET {mem.offset}\n"
+    return ret_str
+
+def generate_type_definition(type_desc: TypeDesc) -> str:
+    ret_str = f"struct {type_desc.name} {{"
+    ret_str += '\n\n'
+    ret_str += f"unsigned char * data_;"
+    ret_str += '\n\n'
+    ret_str += generate_constructor(type_desc)
+    ret_str += '\n\n'
+    ret_str += generate_define_offset_macro(type_desc)
+    ret_str += '\n\n'
+    
+    for mem in type_desc.members:
+        ret_str += generate_struct_member_get_function(mem)
+        ret_str += '\n\n'
+        
+    ret_str += f"}};"
+    return ret_str
+
+def get_all_type_definition(types_desc: set[TypeDesc]) -> str:
+    ret_str = ""
+    for type_desc in types_desc:
+        if type_desc.is_primitive or not kind_of_struct(type_desc):
+            continue
+        ret_str += generate_type_definition(type_desc)
+        ret_str += '\n\n'
+    return ret_str
+
+def get_all_type_declaration(types_desc: set[TypeDesc]) -> str:
+    ret_str = ""
+    for type_desc in types_desc:
+        if type_desc.is_primitive:
+            continue
+        ret_str += f"struct {type_desc.name}; \n"
+    return ret_str
+
+def generate_cpp_code(types_desc: set[TypeDesc]):
+    str_file:str = ""
+    
+    str_file += get_header_files()
+    str_file += '\n\n'
+    str_file += get_all_type_declaration(types_desc)
+    str_file += '\n\n'
+    str_file += get_all_type_definition(types_desc)
+    
+    return str_file
+    pass
+
+with open("sunspec_model_generated.cpp", 'wt') as f:
+    f.write(generate_cpp_code(types_desc))
