@@ -6,15 +6,62 @@
 
 
 
+struct SunspecGroupPointDef; 
+struct SunspecGroupType; 
+struct SunspecPointMandatoryType; 
+struct SunspecModelDef; 
+struct SunspecPointAccessType; 
 struct SunspecPointData_enum; 
 struct SunspecPointDef; 
 struct SunspecPointData; 
-struct SunspecModelDef; 
-struct SunspecGroupType; 
-struct SunspecGroupPointDef; 
-struct SunspecPointAccessType; 
-struct SunspecPointMandatoryType; 
 
+
+struct SunspecGroupPointDef {
+
+unsigned char * data_;
+
+SunspecGroupPointDef(unsigned char * data) : data_(data) {}
+
+#define SUNSPECGROUPPOINTDEF_ID_OFFSET 0
+#define SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET 2
+#define SUNSPECGROUPPOINTDEF_POINTS_OFFSET 4
+#define SUNSPECGROUPPOINTDEF_GROUPS_OFFSET 6
+#define SUNSPECGROUPPOINTDEF_LABEL_OFFSET 8
+#define SUNSPECGROUPPOINTDEF_COUNT_OFFSET 10
+#define SUNSPECGROUPPOINTDEF_TYPE_OFFSET 11
+
+
+uint8_t id() {}
+
+uint8_t count_point_id() {}
+
+SunspecPointDef points() {}
+
+SunspecGroupPointDef groups() {}
+
+uint8_t label() {}
+
+uint8_t count() {}
+
+SunspecGroupType type() {}
+
+};
+
+struct SunspecModelDef {
+
+unsigned char * data_;
+
+SunspecModelDef(unsigned char * data) : data_(data) {}
+
+#define SUNSPECMODELDEF_ID_OFFSET 0
+#define SUNSPECMODELDEF_GROUP_OFFSET 2
+
+
+uint8_t id() {}
+
+SunspecGroupPointDef group() {}
+
+};
 
 struct SunspecPointDef {
 
@@ -59,53 +106,6 @@ SunspecPointAccessType access() {}
 SunspecPointMandatoryType mandatory() {}
 
 uint8_t pad17() {}
-
-};
-
-struct SunspecModelDef {
-
-unsigned char * data_;
-
-SunspecModelDef(unsigned char * data) : data_(data) {}
-
-#define SUNSPECMODELDEF_ID_OFFSET 0
-#define SUNSPECMODELDEF_GROUP_OFFSET 2
-
-
-uint8_t id() {}
-
-SunspecGroupPointDef group() {}
-
-};
-
-struct SunspecGroupPointDef {
-
-unsigned char * data_;
-
-SunspecGroupPointDef(unsigned char * data) : data_(data) {}
-
-#define SUNSPECGROUPPOINTDEF_ID_OFFSET 0
-#define SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET 2
-#define SUNSPECGROUPPOINTDEF_POINTS_OFFSET 4
-#define SUNSPECGROUPPOINTDEF_GROUPS_OFFSET 6
-#define SUNSPECGROUPPOINTDEF_LABEL_OFFSET 8
-#define SUNSPECGROUPPOINTDEF_COUNT_OFFSET 10
-#define SUNSPECGROUPPOINTDEF_TYPE_OFFSET 11
-
-
-uint8_t id() {}
-
-uint8_t count_point_id() {}
-
-SunspecPointDef points() {}
-
-SunspecGroupPointDef groups() {}
-
-uint8_t label() {}
-
-uint8_t count() {}
-
-SunspecGroupType type() {}
 
 };
 

@@ -1,0 +1,4193 @@
+{
+  "root_type": "Model",
+  "offset_size": 2,
+  "version": 10,
+  "types": [
+    {
+      "name": "TensorType",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "FLOAT32",
+          "value": 0
+        },
+        {
+          "name": "FLOAT16",
+          "value": 1
+        },
+        {
+          "name": "INT32",
+          "value": 2
+        },
+        {
+          "name": "UINT8",
+          "value": 3
+        },
+        {
+          "name": "INT64",
+          "value": 4
+        },
+        {
+          "name": "STRING",
+          "value": 5
+        },
+        {
+          "name": "BOOL",
+          "value": 6
+        },
+        {
+          "name": "INT16",
+          "value": 7
+        },
+        {
+          "name": "COMPLEX64",
+          "value": 8
+        },
+        {
+          "name": "INT8",
+          "value": 9
+        },
+        {
+          "name": "FLOAT64",
+          "value": 10
+        },
+        {
+          "name": "COMPLEX128",
+          "value": 11
+        },
+        {
+          "name": "UINT64",
+          "value": 12
+        },
+        {
+          "name": "RESOURCE",
+          "value": 13
+        },
+        {
+          "name": "VARIANT",
+          "value": 14
+        },
+        {
+          "name": "UINT32",
+          "value": 15
+        },
+        {
+          "name": "UINT16",
+          "value": 16
+        },
+        {
+          "name": "INT4",
+          "value": 17
+        },
+        {
+          "name": "BFLOAT16",
+          "value": 18
+        }
+      ]
+    },
+    {
+      "name": "CustomQuantization",
+      "type": "class",
+      "members": [
+        {
+          "name": "custom",
+          "type": "[uint8]"
+        }
+      ]
+    },
+    {
+      "name": "QuantizationDetails",
+      "type": "union",
+      "unions": [
+        {
+          "name": "CustomQuantization"
+        },
+        {
+          "name": "BlockwiseQuantization"
+        }
+      ]
+    },
+    {
+      "name": "BlockwiseQuantization",
+      "type": "struct",
+      "members": [
+        {
+          "name": "scales",
+          "type": "int32",
+          "offset": 0
+        },
+        {
+          "name": "zero_points",
+          "type": "int32",
+          "offset": 4
+        },
+        {
+          "name": "block_size",
+          "type": "int32",
+          "offset": 8
+        }
+      ],
+      "size": 12,
+      "alignment": 4
+    },
+    {
+      "name": "QuantizationParameters",
+      "type": "class",
+      "members": [
+        {
+          "name": "min",
+          "type": "[float32]"
+        },
+        {
+          "name": "max",
+          "type": "[float32]"
+        },
+        {
+          "name": "scale",
+          "type": "[float32]"
+        },
+        {
+          "name": "zero_point",
+          "type": "[int64]"
+        },
+        {
+          "name": "details",
+          "type": "QuantizationDetails"
+        },
+        {
+          "name": "quantized_dimension",
+          "type": "int32"
+        }
+      ]
+    },
+    {
+      "name": "DimensionType",
+      "type": "enum",
+      "base_type": "int8",
+      "enums": [
+        {
+          "name": "DENSE",
+          "value": 0
+        },
+        {
+          "name": "SPARSE_CSR",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "Int32Vector",
+      "type": "class",
+      "members": [
+        {
+          "name": "enums",
+          "type": "[int32]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "Uint16Vector",
+      "type": "class",
+      "members": [
+        {
+          "name": "enums",
+          "type": "[uint16]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "Uint8Vector",
+      "type": "class",
+      "members": [
+        {
+          "name": "enums",
+          "type": "[uint8]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SparseIndexVector",
+      "type": "union",
+      "unions": [
+        {
+          "name": "Int32Vector",
+          "type": "Int32Vector"
+        },
+        {
+          "name": "Uint16Vector",
+          "type": "Uint16Vector"
+        },
+        {
+          "name": "Uint8Vector",
+          "type": "Uint8Vector"
+        }
+      ]
+    },
+    {
+      "name": "DimensionMetadata",
+      "type": "class",
+      "members": [
+        {
+          "name": "format",
+          "type": "DimensionType"
+        },
+        {
+          "name": "dense_size",
+          "type": "int32"
+        },
+        {
+          "name": "array_segments",
+          "type": "SparseIndexVector"
+        },
+        {
+          "name": "array_indices",
+          "type": "SparseIndexVector"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SparsityParameters",
+      "type": "class",
+      "members": [
+        {
+          "name": "traversal_order",
+          "type": "[int32]"
+        },
+        {
+          "name": "block_map",
+          "type": "[int32]"
+        },
+        {
+          "name": "dim_metadata",
+          "type": "[DimensionMetadata]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "VariantSubType",
+      "type": "class",
+      "members": [
+        {
+          "name": "shape",
+          "type": "[int32]"
+        },
+        {
+          "name": "type",
+          "type": "TensorType"
+        },
+        {
+          "name": "has_rank",
+          "type": "int8",
+          "default": false
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "Tensor",
+      "type": "class",
+      "members": [
+        {
+          "name": "shape",
+          "type": "[int32]"
+        },
+        {
+          "name": "type",
+          "type": "TensorType"
+        },
+        {
+          "name": "buffer",
+          "type": "uint32"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "quantization",
+          "type": "QuantizationParameters",
+          "nullable": true
+        },
+        {
+          "name": "is_variable",
+          "type": "int8",
+          "default": false
+        },
+        {
+          "name": "sparsity",
+          "type": "SparsityParameters",
+          "nullable": true
+        },
+        {
+          "name": "shape_signature",
+          "type": "[int32]",
+          "nullable": true
+        },
+        {
+          "name": "has_rank",
+          "type": "int8",
+          "default": false
+        },
+        {
+          "name": "variant_tensors",
+          "type": "[VariantSubType]",
+          "nullable": true
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "BuiltinOperator",
+      "type": "enum",
+      "base_type": "int32",
+      "enums": [
+        {
+          "name": "ADD",
+          "value": 0
+        },
+        {
+          "name": "AVERAGE_POOL_2D",
+          "value": 1
+        },
+        {
+          "name": "CONCATENATION",
+          "value": 2
+        },
+        {
+          "name": "CONV_2D",
+          "value": 3
+        },
+        {
+          "name": "DEPTHWISE_CONV_2D",
+          "value": 4
+        },
+        {
+          "name": "DEPTH_TO_SPACE",
+          "value": 5
+        },
+        {
+          "name": "DEQUANTIZE",
+          "value": 6
+        },
+        {
+          "name": "EMBEDDING_LOOKUP",
+          "value": 7
+        },
+        {
+          "name": "FLOOR",
+          "value": 8
+        },
+        {
+          "name": "FULLY_CONNECTED",
+          "value": 9
+        },
+        {
+          "name": "HASHTABLE_LOOKUP",
+          "value": 10
+        },
+        {
+          "name": "L2_NORMALIZATION",
+          "value": 11
+        },
+        {
+          "name": "L2_POOL_2D",
+          "value": 12
+        },
+        {
+          "name": "LOCAL_RESPONSE_NORMALIZATION",
+          "value": 13
+        },
+        {
+          "name": "LOGISTIC",
+          "value": 14
+        },
+        {
+          "name": "LSH_PROJECTION",
+          "value": 15
+        },
+        {
+          "name": "LSTM",
+          "value": 16
+        },
+        {
+          "name": "MAX_POOL_2D",
+          "value": 17
+        },
+        {
+          "name": "MUL",
+          "value": 18
+        },
+        {
+          "name": "RELU",
+          "value": 19
+        },
+        {
+          "name": "RELU_N1_TO_1",
+          "value": 20
+        },
+        {
+          "name": "RELU6",
+          "value": 21
+        },
+        {
+          "name": "RESHAPE",
+          "value": 22
+        },
+        {
+          "name": "RESIZE_BILINEAR",
+          "value": 23
+        },
+        {
+          "name": "RNN",
+          "value": 24
+        },
+        {
+          "name": "SOFTMAX",
+          "value": 25
+        },
+        {
+          "name": "SPACE_TO_DEPTH",
+          "value": 26
+        },
+        {
+          "name": "SVDF",
+          "value": 27
+        },
+        {
+          "name": "TANH",
+          "value": 28
+        },
+        {
+          "name": "CONCAT_EMBEDDINGS",
+          "value": 29
+        },
+        {
+          "name": "SKIP_GRAM",
+          "value": 30
+        },
+        {
+          "name": "CALL",
+          "value": 31
+        },
+        {
+          "name": "CUSTOM",
+          "value": 32
+        },
+        {
+          "name": "EMBEDDING_LOOKUP_SPARSE",
+          "value": 33
+        },
+        {
+          "name": "PAD",
+          "value": 34
+        },
+        {
+          "name": "UNIDIRECTIONAL_SEQUENCE_RNN",
+          "value": 35
+        },
+        {
+          "name": "GATHER",
+          "value": 36
+        },
+        {
+          "name": "BATCH_TO_SPACE_ND",
+          "value": 37
+        },
+        {
+          "name": "SPACE_TO_BATCH_ND",
+          "value": 38
+        },
+        {
+          "name": "TRANSPOSE",
+          "value": 39
+        },
+        {
+          "name": "MEAN",
+          "value": 40
+        },
+        {
+          "name": "SUB",
+          "value": 41
+        },
+        {
+          "name": "DIV",
+          "value": 42
+        },
+        {
+          "name": "SQUEEZE",
+          "value": 43
+        },
+        {
+          "name": "UNIDIRECTIONAL_SEQUENCE_LSTM",
+          "value": 44
+        },
+        {
+          "name": "STRIDED_SLICE",
+          "value": 45
+        },
+        {
+          "name": "BIDIRECTIONAL_SEQUENCE_RNN",
+          "value": 46
+        },
+        {
+          "name": "EXP",
+          "value": 47
+        },
+        {
+          "name": "TOPK_V2",
+          "value": 48
+        },
+        {
+          "name": "SPLIT",
+          "value": 49
+        },
+        {
+          "name": "LOG_SOFTMAX",
+          "value": 50
+        },
+        {
+          "name": "DELEGATE",
+          "value": 51
+        },
+        {
+          "name": "BIDIRECTIONAL_SEQUENCE_LSTM",
+          "value": 52
+        },
+        {
+          "name": "CAST",
+          "value": 53
+        },
+        {
+          "name": "PRELU",
+          "value": 54
+        },
+        {
+          "name": "MAXIMUM",
+          "value": 55
+        },
+        {
+          "name": "ARG_MAX",
+          "value": 56
+        },
+        {
+          "name": "MINIMUM",
+          "value": 57
+        },
+        {
+          "name": "LESS",
+          "value": 58
+        },
+        {
+          "name": "NEG",
+          "value": 59
+        },
+        {
+          "name": "PADV2",
+          "value": 60
+        },
+        {
+          "name": "GREATER",
+          "value": 61
+        },
+        {
+          "name": "GREATER_EQUAL",
+          "value": 62
+        },
+        {
+          "name": "LESS_EQUAL",
+          "value": 63
+        },
+        {
+          "name": "SELECT",
+          "value": 64
+        },
+        {
+          "name": "SLICE",
+          "value": 65
+        },
+        {
+          "name": "SIN",
+          "value": 66
+        },
+        {
+          "name": "TRANSPOSE_CONV",
+          "value": 67
+        },
+        {
+          "name": "SPARSE_TO_DENSE",
+          "value": 68
+        },
+        {
+          "name": "TILE",
+          "value": 69
+        },
+        {
+          "name": "EXPAND_DIMS",
+          "value": 70
+        },
+        {
+          "name": "EQUAL",
+          "value": 71
+        },
+        {
+          "name": "NOT_EQUAL",
+          "value": 72
+        },
+        {
+          "name": "LOG",
+          "value": 73
+        },
+        {
+          "name": "SUM",
+          "value": 74
+        },
+        {
+          "name": "SQRT",
+          "value": 75
+        },
+        {
+          "name": "RSQRT",
+          "value": 76
+        },
+        {
+          "name": "SHAPE",
+          "value": 77
+        },
+        {
+          "name": "POW",
+          "value": 78
+        },
+        {
+          "name": "ARG_MIN",
+          "value": 79
+        },
+        {
+          "name": "FAKE_QUANT",
+          "value": 80
+        },
+        {
+          "name": "REDUCE_PROD",
+          "value": 81
+        },
+        {
+          "name": "REDUCE_MAX",
+          "value": 82
+        },
+        {
+          "name": "PACK",
+          "value": 83
+        },
+        {
+          "name": "LOGICAL_OR",
+          "value": 84
+        },
+        {
+          "name": "ONE_HOT",
+          "value": 85
+        },
+        {
+          "name": "LOGICAL_AND",
+          "value": 86
+        },
+        {
+          "name": "LOGICAL_NOT",
+          "value": 87
+        },
+        {
+          "name": "UNPACK",
+          "value": 88
+        },
+        {
+          "name": "REDUCE_MIN",
+          "value": 89
+        },
+        {
+          "name": "FLOOR_DIV",
+          "value": 90
+        },
+        {
+          "name": "REDUCE_ANY",
+          "value": 91
+        },
+        {
+          "name": "SQUARE",
+          "value": 92
+        },
+        {
+          "name": "ZEROS_LIKE",
+          "value": 93
+        },
+        {
+          "name": "FILL",
+          "value": 94
+        },
+        {
+          "name": "FLOOR_MOD",
+          "value": 95
+        },
+        {
+          "name": "RANGE",
+          "value": 96
+        },
+        {
+          "name": "RESIZE_NEAREST_NEIGHBOR",
+          "value": 97
+        },
+        {
+          "name": "LEAKY_RELU",
+          "value": 98
+        },
+        {
+          "name": "SQUARED_DIFFERENCE",
+          "value": 99
+        },
+        {
+          "name": "MIRROR_PAD",
+          "value": 100
+        },
+        {
+          "name": "ABS",
+          "value": 101
+        },
+        {
+          "name": "SPLIT_V",
+          "value": 102
+        },
+        {
+          "name": "UNIQUE",
+          "value": 103
+        },
+        {
+          "name": "CEIL",
+          "value": 104
+        },
+        {
+          "name": "REVERSE_V2",
+          "value": 105
+        },
+        {
+          "name": "ADD_N",
+          "value": 106
+        },
+        {
+          "name": "GATHER_ND",
+          "value": 107
+        },
+        {
+          "name": "COS",
+          "value": 108
+        },
+        {
+          "name": "WHERE",
+          "value": 109
+        },
+        {
+          "name": "RANK",
+          "value": 110
+        },
+        {
+          "name": "ELU",
+          "value": 111
+        },
+        {
+          "name": "REVERSE_SEQUENCE",
+          "value": 112
+        },
+        {
+          "name": "MATRIX_DIAG",
+          "value": 113
+        },
+        {
+          "name": "QUANTIZE",
+          "value": 114
+        },
+        {
+          "name": "MATRIX_SET_DIAG",
+          "value": 115
+        },
+        {
+          "name": "ROUND",
+          "value": 116
+        },
+        {
+          "name": "HARD_SWISH",
+          "value": 117
+        },
+        {
+          "name": "IF",
+          "value": 118
+        },
+        {
+          "name": "WHILE",
+          "value": 119
+        },
+        {
+          "name": "NON_MAX_SUPPRESSION_V4",
+          "value": 120
+        },
+        {
+          "name": "NON_MAX_SUPPRESSION_V5",
+          "value": 121
+        },
+        {
+          "name": "SCATTER_ND",
+          "value": 122
+        },
+        {
+          "name": "SELECT_V2",
+          "value": 123
+        },
+        {
+          "name": "DENSIFY",
+          "value": 124
+        },
+        {
+          "name": "SEGMENT_SUM",
+          "value": 125
+        },
+        {
+          "name": "BATCH_MATMUL",
+          "value": 126
+        },
+        {
+          "name": "PLACEHOLDER_FOR_GREATER_OP_CODES",
+          "value": 127
+        },
+        {
+          "name": "CUMSUM",
+          "value": 128
+        },
+        {
+          "name": "CALL_ONCE",
+          "value": 129
+        },
+        {
+          "name": "BROADCAST_TO",
+          "value": 130
+        },
+        {
+          "name": "RFFT2D",
+          "value": 131
+        },
+        {
+          "name": "CONV_3D",
+          "value": 132
+        },
+        {
+          "name": "IMAG",
+          "value": 133
+        },
+        {
+          "name": "REAL",
+          "value": 134
+        },
+        {
+          "name": "COMPLEX_ABS",
+          "value": 135
+        },
+        {
+          "name": "HASHTABLE",
+          "value": 136
+        },
+        {
+          "name": "HASHTABLE_FIND",
+          "value": 137
+        },
+        {
+          "name": "HASHTABLE_IMPORT",
+          "value": 138
+        },
+        {
+          "name": "HASHTABLE_SIZE",
+          "value": 139
+        },
+        {
+          "name": "REDUCE_ALL",
+          "value": 140
+        },
+        {
+          "name": "CONV_3D_TRANSPOSE",
+          "value": 141
+        },
+        {
+          "name": "VAR_HANDLE",
+          "value": 142
+        },
+        {
+          "name": "READ_VARIABLE",
+          "value": 143
+        },
+        {
+          "name": "ASSIGN_VARIABLE",
+          "value": 144
+        },
+        {
+          "name": "BROADCAST_ARGS",
+          "value": 145
+        },
+        {
+          "name": "RANDOM_STANDARD_NORMAL",
+          "value": 146
+        },
+        {
+          "name": "BUCKETIZE",
+          "value": 147
+        },
+        {
+          "name": "RANDOM_UNIFORM",
+          "value": 148
+        },
+        {
+          "name": "MULTINOMIAL",
+          "value": 149
+        },
+        {
+          "name": "GELU",
+          "value": 150
+        },
+        {
+          "name": "DYNAMIC_UPDATE_SLICE",
+          "value": 151
+        },
+        {
+          "name": "RELU_0_TO_1",
+          "value": 152
+        },
+        {
+          "name": "UNSORTED_SEGMENT_PROD",
+          "value": 153
+        },
+        {
+          "name": "UNSORTED_SEGMENT_MAX",
+          "value": 154
+        },
+        {
+          "name": "UNSORTED_SEGMENT_SUM",
+          "value": 155
+        },
+        {
+          "name": "ATAN2",
+          "value": 156
+        },
+        {
+          "name": "UNSORTED_SEGMENT_MIN",
+          "value": 157
+        },
+        {
+          "name": "SIGN",
+          "value": 158
+        },
+        {
+          "name": "BITCAST",
+          "value": 159
+        },
+        {
+          "name": "BITWISE_XOR",
+          "value": 160
+        },
+        {
+          "name": "RIGHT_SHIFT",
+          "value": 161
+        },
+        {
+          "name": "STABLEHLO_LOGISTIC",
+          "value": 162
+        },
+        {
+          "name": "STABLEHLO_ADD",
+          "value": 163
+        },
+        {
+          "name": "STABLEHLO_DIVIDE",
+          "value": 164
+        },
+        {
+          "name": "STABLEHLO_MULTIPLY",
+          "value": 165
+        },
+        {
+          "name": "STABLEHLO_MAXIMUM",
+          "value": 166
+        },
+        {
+          "name": "STABLEHLO_RESHAPE",
+          "value": 167
+        },
+        {
+          "name": "STABLEHLO_CLAMP",
+          "value": 168
+        },
+        {
+          "name": "STABLEHLO_CONCATENATE",
+          "value": 169
+        },
+        {
+          "name": "STABLEHLO_BROADCAST_IN_DIM",
+          "value": 170
+        },
+        {
+          "name": "STABLEHLO_CONVOLUTION",
+          "value": 171
+        },
+        {
+          "name": "STABLEHLO_SLICE",
+          "value": 172
+        },
+        {
+          "name": "STABLEHLO_CUSTOM_CALL",
+          "value": 173
+        },
+        {
+          "name": "STABLEHLO_REDUCE",
+          "value": 174
+        },
+        {
+          "name": "STABLEHLO_ABS",
+          "value": 175
+        },
+        {
+          "name": "STABLEHLO_AND",
+          "value": 176
+        },
+        {
+          "name": "STABLEHLO_COSINE",
+          "value": 177
+        },
+        {
+          "name": "STABLEHLO_EXPONENTIAL",
+          "value": 178
+        },
+        {
+          "name": "STABLEHLO_FLOOR",
+          "value": 179
+        },
+        {
+          "name": "STABLEHLO_LOG",
+          "value": 180
+        },
+        {
+          "name": "STABLEHLO_MINIMUM",
+          "value": 181
+        },
+        {
+          "name": "STABLEHLO_NEGATE",
+          "value": 182
+        },
+        {
+          "name": "STABLEHLO_OR",
+          "value": 183
+        },
+        {
+          "name": "STABLEHLO_POWER",
+          "value": 184
+        },
+        {
+          "name": "STABLEHLO_REMAINDER",
+          "value": 185
+        },
+        {
+          "name": "STABLEHLO_RSQRT",
+          "value": 186
+        },
+        {
+          "name": "STABLEHLO_SELECT",
+          "value": 187
+        },
+        {
+          "name": "STABLEHLO_SUBTRACT",
+          "value": 188
+        },
+        {
+          "name": "STABLEHLO_TANH",
+          "value": 189
+        },
+        {
+          "name": "STABLEHLO_SCATTER",
+          "value": 190
+        },
+        {
+          "name": "STABLEHLO_COMPARE",
+          "value": 191
+        },
+        {
+          "name": "STABLEHLO_CONVERT",
+          "value": 192
+        },
+        {
+          "name": "STABLEHLO_DYNAMIC_SLICE",
+          "value": 193
+        },
+        {
+          "name": "STABLEHLO_DYNAMIC_UPDATE_SLICE",
+          "value": 194
+        },
+        {
+          "name": "STABLEHLO_PAD",
+          "value": 195
+        },
+        {
+          "name": "STABLEHLO_IOTA",
+          "value": 196
+        },
+        {
+          "name": "STABLEHLO_DOT_GENERAL",
+          "value": 197
+        },
+        {
+          "name": "STABLEHLO_REDUCE_WINDOW",
+          "value": 198
+        },
+        {
+          "name": "STABLEHLO_SORT",
+          "value": 199
+        },
+        {
+          "name": "STABLEHLO_WHILE",
+          "value": 200
+        },
+        {
+          "name": "STABLEHLO_GATHER",
+          "value": 201
+        },
+        {
+          "name": "STABLEHLO_TRANSPOSE",
+          "value": 202
+        },
+        {
+          "name": "DILATE",
+          "value": 203
+        },
+        {
+          "name": "STABLEHLO_RNG_BIT_GENERATOR",
+          "value": 204
+        },
+        {
+          "name": "REDUCE_WINDOW_DEPRECATED",
+          "value": 205,
+          "deprecated": true
+        },
+        {
+          "name": "STABLEHLO_COMPOSITE",
+          "value": 206
+        },
+        {
+          "name": "STABLEHLO_SHIFT_LEFT",
+          "value": 207
+        },
+        {
+          "name": "STABLEHLO_CBRT",
+          "value": 208
+        },
+        {
+          "name": "STABLEHLO_CASE",
+          "value": 209
+        }
+      ]
+    },
+    {
+      "name": "BuiltinOptions",
+      "type": "union",
+      "unions": [
+        {
+          "name": "Conv2DOptions",
+          "type": "Conv2DOptions"
+        },
+        {
+          "name": "DepthwiseConv2DOptions",
+          "type": "DepthwiseConv2DOptions"
+        },
+        {
+          "name": "ConcatEmbeddingsOptions",
+          "type": "ConcatEmbeddingsOptions"
+        },
+        {
+          "name": "LSHProjectionOptions",
+          "type": "LSHProjectionOptions"
+        },
+        {
+          "name": "Pool2DOptions",
+          "type": "Pool2DOptions"
+        },
+        {
+          "name": "SVDFOptions",
+          "type": "SVDFOptions"
+        },
+        {
+          "name": "RNNOptions",
+          "type": "RNNOptions"
+        },
+        {
+          "name": "FullyConnectedOptions",
+          "type": "FullyConnectedOptions"
+        },
+        {
+          "name": "SoftmaxOptions",
+          "type": "SoftmaxOptions"
+        },
+        {
+          "name": "ConcatenationOptions",
+          "type": "ConcatenationOptions"
+        },
+        {
+          "name": "AddOptions",
+          "type": "AddOptions"
+        },
+        {
+          "name": "L2NormOptions",
+          "type": "L2NormOptions"
+        },
+        {
+          "name": "LocalResponseNormalizationOptions",
+          "type": "LocalResponseNormalizationOptions"
+        },
+        {
+          "name": "LSTMOptions",
+          "type": "LSTMOptions"
+        },
+        {
+          "name": "ResizeBilinearOptions",
+          "type": "ResizeBilinearOptions"
+        },
+        {
+          "name": "CallOptions",
+          "type": "CallOptions"
+        },
+        {
+          "name": "ReshapeOptions",
+          "type": "ReshapeOptions"
+        },
+        {
+          "name": "SkipGramOptions",
+          "type": "SkipGramOptions"
+        },
+        {
+          "name": "SpaceToDepthOptions",
+          "type": "SpaceToDepthOptions"
+        },
+        {
+          "name": "EmbeddingLookupSparseOptions",
+          "type": "EmbeddingLookupSparseOptions"
+        },
+        {
+          "name": "MulOptions",
+          "type": "MulOptions"
+        },
+        {
+          "name": "PadOptions",
+          "type": "PadOptions"
+        },
+        {
+          "name": "GatherOptions",
+          "type": "GatherOptions"
+        },
+        {
+          "name": "BatchToSpaceNDOptions",
+          "type": "BatchToSpaceNDOptions"
+        },
+        {
+          "name": "SpaceToBatchNDOptions",
+          "type": "SpaceToBatchNDOptions"
+        },
+        {
+          "name": "TransposeOptions",
+          "type": "TransposeOptions"
+        },
+        {
+          "name": "ReducerOptions",
+          "type": "ReducerOptions"
+        },
+        {
+          "name": "SubOptions",
+          "type": "SubOptions"
+        },
+        {
+          "name": "DivOptions",
+          "type": "DivOptions"
+        },
+        {
+          "name": "SqueezeOptions",
+          "type": "SqueezeOptions"
+        },
+        {
+          "name": "SequenceRNNOptions",
+          "type": "SequenceRNNOptions"
+        },
+        {
+          "name": "StridedSliceOptions",
+          "type": "StridedSliceOptions"
+        },
+        {
+          "name": "ExpOptions",
+          "type": "ExpOptions"
+        },
+        {
+          "name": "TopKV2Options",
+          "type": "TopKV2Options"
+        },
+        {
+          "name": "SplitOptions",
+          "type": "SplitOptions"
+        },
+        {
+          "name": "LogSoftmaxOptions",
+          "type": "LogSoftmaxOptions"
+        },
+        {
+          "name": "CastOptions",
+          "type": "CastOptions"
+        },
+        {
+          "name": "DequantizeOptions",
+          "type": "DequantizeOptions"
+        },
+        {
+          "name": "MaximumMinimumOptions",
+          "type": "MaximumMinimumOptions"
+        },
+        {
+          "name": "ArgMaxOptions",
+          "type": "ArgMaxOptions"
+        },
+        {
+          "name": "LessOptions",
+          "type": "LessOptions"
+        },
+        {
+          "name": "NegOptions",
+          "type": "NegOptions"
+        },
+        {
+          "name": "PadV2Options",
+          "type": "PadV2Options"
+        },
+        {
+          "name": "GreaterOptions",
+          "type": "GreaterOptions"
+        },
+        {
+          "name": "GreaterEqualOptions",
+          "type": "GreaterEqualOptions"
+        },
+        {
+          "name": "LessEqualOptions",
+          "type": "LessEqualOptions"
+        },
+        {
+          "name": "SelectOptions",
+          "type": "SelectOptions"
+        },
+        {
+          "name": "SliceOptions",
+          "type": "SliceOptions"
+        },
+        {
+          "name": "TransposeConvOptions",
+          "type": "TransposeConvOptions"
+        },
+        {
+          "name": "SparseToDenseOptions",
+          "type": "SparseToDenseOptions"
+        },
+        {
+          "name": "TileOptions",
+          "type": "TileOptions"
+        },
+        {
+          "name": "ExpandDimsOptions",
+          "type": "ExpandDimsOptions"
+        },
+        {
+          "name": "EqualOptions",
+          "type": "EqualOptions"
+        },
+        {
+          "name": "NotEqualOptions",
+          "type": "NotEqualOptions"
+        },
+        {
+          "name": "ShapeOptions",
+          "type": "ShapeOptions"
+        },
+        {
+          "name": "PowOptions",
+          "type": "PowOptions"
+        },
+        {
+          "name": "ArgMinOptions",
+          "type": "ArgMinOptions"
+        },
+        {
+          "name": "FakeQuantOptions",
+          "type": "FakeQuantOptions"
+        },
+        {
+          "name": "PackOptions",
+          "type": "PackOptions"
+        },
+        {
+          "name": "LogicalOrOptions",
+          "type": "LogicalOrOptions"
+        },
+        {
+          "name": "OneHotOptions",
+          "type": "OneHotOptions"
+        },
+        {
+          "name": "LogicalAndOptions",
+          "type": "LogicalAndOptions"
+        },
+        {
+          "name": "LogicalNotOptions",
+          "type": "LogicalNotOptions"
+        },
+        {
+          "name": "UnpackOptions",
+          "type": "UnpackOptions"
+        },
+        {
+          "name": "FloorDivOptions",
+          "type": "FloorDivOptions"
+        },
+        {
+          "name": "SquareOptions",
+          "type": "SquareOptions"
+        },
+        {
+          "name": "ZerosLikeOptions",
+          "type": "ZerosLikeOptions"
+        },
+        {
+          "name": "FillOptions",
+          "type": "FillOptions"
+        },
+        {
+          "name": "BidirectionalSequenceLSTMOptions",
+          "type": "BidirectionalSequenceLSTMOptions"
+        },
+        {
+          "name": "BidirectionalSequenceRNNOptions",
+          "type": "BidirectionalSequenceRNNOptions"
+        },
+        {
+          "name": "UnidirectionalSequenceLSTMOptions",
+          "type": "UnidirectionalSequenceLSTMOptions"
+        },
+        {
+          "name": "FloorModOptions",
+          "type": "FloorModOptions"
+        },
+        {
+          "name": "RangeOptions",
+          "type": "RangeOptions"
+        },
+        {
+          "name": "ResizeNearestNeighborOptions",
+          "type": "ResizeNearestNeighborOptions"
+        },
+        {
+          "name": "LeakyReluOptions",
+          "type": "LeakyReluOptions"
+        },
+        {
+          "name": "SquaredDifferenceOptions",
+          "type": "SquaredDifferenceOptions"
+        },
+        {
+          "name": "MirrorPadOptions",
+          "type": "MirrorPadOptions"
+        },
+        {
+          "name": "AbsOptions",
+          "type": "AbsOptions"
+        },
+        {
+          "name": "SplitVOptions",
+          "type": "SplitVOptions"
+        },
+        {
+          "name": "UniqueOptions",
+          "type": "UniqueOptions"
+        },
+        {
+          "name": "ReverseV2Options",
+          "type": "ReverseV2Options"
+        },
+        {
+          "name": "AddNOptions",
+          "type": "AddNOptions"
+        },
+        {
+          "name": "GatherNdOptions",
+          "type": "GatherNdOptions"
+        },
+        {
+          "name": "CosOptions",
+          "type": "CosOptions"
+        },
+        {
+          "name": "WhereOptions",
+          "type": "WhereOptions"
+        },
+        {
+          "name": "RankOptions",
+          "type": "RankOptions"
+        },
+        {
+          "name": "ReverseSequenceOptions",
+          "type": "ReverseSequenceOptions"
+        },
+        {
+          "name": "MatrixDiagOptions",
+          "type": "MatrixDiagOptions"
+        },
+        {
+          "name": "QuantizeOptions",
+          "type": "QuantizeOptions"
+        },
+        {
+          "name": "MatrixSetDiagOptions",
+          "type": "MatrixSetDiagOptions"
+        },
+        {
+          "name": "HardSwishOptions",
+          "type": "HardSwishOptions"
+        },
+        {
+          "name": "IfOptions",
+          "type": "IfOptions"
+        },
+        {
+          "name": "WhileOptions",
+          "type": "WhileOptions"
+        },
+        {
+          "name": "DepthToSpaceOptions",
+          "type": "DepthToSpaceOptions"
+        },
+        {
+          "name": "NonMaxSuppressionV4Options",
+          "type": "NonMaxSuppressionV4Options"
+        },
+        {
+          "name": "NonMaxSuppressionV5Options",
+          "type": "NonMaxSuppressionV5Options"
+        },
+        {
+          "name": "ScatterNdOptions",
+          "type": "ScatterNdOptions"
+        },
+        {
+          "name": "SelectV2Options",
+          "type": "SelectV2Options"
+        },
+        {
+          "name": "DensifyOptions",
+          "type": "DensifyOptions"
+        },
+        {
+          "name": "SegmentSumOptions",
+          "type": "SegmentSumOptions"
+        },
+        {
+          "name": "BatchMatMulOptions",
+          "type": "BatchMatMulOptions"
+        },
+        {
+          "name": "CumsumOptions",
+          "type": "CumsumOptions"
+        },
+        {
+          "name": "CallOnceOptions",
+          "type": "CallOnceOptions"
+        },
+        {
+          "name": "BroadcastToOptions",
+          "type": "BroadcastToOptions"
+        },
+        {
+          "name": "Rfft2dOptions",
+          "type": "Rfft2dOptions"
+        },
+        {
+          "name": "Conv3DOptions",
+          "type": "Conv3DOptions"
+        },
+        {
+          "name": "HashtableOptions",
+          "type": "HashtableOptions"
+        },
+        {
+          "name": "HashtableFindOptions",
+          "type": "HashtableFindOptions"
+        },
+        {
+          "name": "HashtableImportOptions",
+          "type": "HashtableImportOptions"
+        },
+        {
+          "name": "HashtableSizeOptions",
+          "type": "HashtableSizeOptions"
+        },
+        {
+          "name": "VarHandleOptions",
+          "type": "VarHandleOptions"
+        },
+        {
+          "name": "ReadVariableOptions",
+          "type": "ReadVariableOptions"
+        },
+        {
+          "name": "AssignVariableOptions",
+          "type": "AssignVariableOptions"
+        },
+        {
+          "name": "RandomOptions",
+          "type": "RandomOptions"
+        },
+        {
+          "name": "BucketizeOptions",
+          "type": "BucketizeOptions"
+        },
+        {
+          "name": "GeluOptions",
+          "type": "GeluOptions"
+        },
+        {
+          "name": "DynamicUpdateSliceOptions",
+          "type": "DynamicUpdateSliceOptions"
+        },
+        {
+          "name": "UnsortedSegmentProdOptions",
+          "type": "UnsortedSegmentProdOptions"
+        },
+        {
+          "name": "UnsortedSegmentMaxOptions",
+          "type": "UnsortedSegmentMaxOptions"
+        },
+        {
+          "name": "UnsortedSegmentMinOptions",
+          "type": "UnsortedSegmentMinOptions"
+        },
+        {
+          "name": "UnsortedSegmentSumOptions",
+          "type": "UnsortedSegmentSumOptions"
+        },
+        {
+          "name": "ATan2Options",
+          "type": "ATan2Options"
+        },
+        {
+          "name": "SignOptions",
+          "type": "SignOptions"
+        },
+        {
+          "name": "BitcastOptions",
+          "type": "BitcastOptions"
+        },
+        {
+          "name": "BitwiseXorOptions",
+          "type": "BitwiseXorOptions"
+        },
+        {
+          "name": "RightShiftOptions",
+          "type": "RightShiftOptions"
+        }
+      ]
+    },
+    {
+      "name": "BuiltinOptions2",
+      "type": "union",
+      "unions": [
+        {
+          "name": "StablehloConcatenateOptions",
+          "type": "StablehloConcatenateOptions"
+        },
+        {
+          "name": "StablehloBroadcastInDimOptions",
+          "type": "StablehloBroadcastInDimOptions"
+        },
+        {
+          "name": "StablehloSliceOptions",
+          "type": "StablehloSliceOptions"
+        },
+        {
+          "name": "StablehloConvolutionOptions",
+          "type": "StablehloConvolutionOptions"
+        },
+        {
+          "name": "StablehloCustomCallOptions",
+          "type": "StablehloCustomCallOptions"
+        },
+        {
+          "name": "StablehloReduceOptions",
+          "type": "StablehloReduceOptions"
+        },
+        {
+          "name": "StablehloScatterOptions",
+          "type": "StablehloScatterOptions"
+        },
+        {
+          "name": "StablehloCompareOptions",
+          "type": "StablehloCompareOptions"
+        },
+        {
+          "name": "StablehloDynamicSliceOptions",
+          "type": "StablehloDynamicSliceOptions"
+        },
+        {
+          "name": "StablehloPadOptions",
+          "type": "StablehloPadOptions"
+        },
+        {
+          "name": "StablehloIotaOptions",
+          "type": "StablehloIotaOptions"
+        },
+        {
+          "name": "StablehloDotGeneralOptions",
+          "type": "StablehloDotGeneralOptions"
+        },
+        {
+          "name": "StablehloReduceWindowOptions",
+          "type": "StablehloReduceWindowOptions"
+        },
+        {
+          "name": "StablehloSortOptions",
+          "type": "StablehloSortOptions"
+        },
+        {
+          "name": "StablehloWhileOptions",
+          "type": "StablehloWhileOptions"
+        },
+        {
+          "name": "StablehloGatherOptions",
+          "type": "StablehloGatherOptions"
+        },
+        {
+          "name": "StablehloTransposeOptions",
+          "type": "StablehloTransposeOptions"
+        },
+        {
+          "name": "DilateOptions",
+          "type": "DilateOptions"
+        },
+        {
+          "name": "StablehloRngBitGeneratorOptions",
+          "type": "StablehloRngBitGeneratorOptions"
+        },
+        {
+          "name": "ReduceWindowOptions",
+          "type": "ReduceWindowOptions"
+        },
+        {
+          "name": "StableHLOCompositeOptions",
+          "type": "StableHLOCompositeOptions"
+        },
+        {
+          "name": "StablehloShiftLeftOptions",
+          "type": "StablehloShiftLeftOptions"
+        },
+        {
+          "name": "StablehloCaseOptions",
+          "type": "StablehloCaseOptions"
+        }
+      ]
+    },
+    {
+      "name": "StablehloGatherOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "offset_dims",
+          "type": "[int64]"
+        },
+        {
+          "name": "collapsed_slice_dims",
+          "type": "[int64]"
+        },
+        {
+          "name": "start_index_map",
+          "type": "[int64]"
+        },
+        {
+          "name": "index_vector_dim",
+          "type": "int64"
+        },
+        {
+          "name": "slice_sizes",
+          "type": "[int64]"
+        },
+        {
+          "name": "indices_are_sorted",
+          "type": "int8"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloTransposeOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "permutation",
+          "type": "[int64]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloPrecisionConfig",
+      "type": "enum",
+      "base_type": "uint32",
+      "enums": [
+        {
+          "name": "DEFAULT",
+          "value": 0
+        },
+        {
+          "name": "HIGH",
+          "value": 1
+        },
+        {
+          "name": "HIGHEST",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "StablehloDotGeneralOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "lhs_batching_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "rhs_batching_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "lhs_contracting_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "rhs_contracting_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "precision_config",
+          "type": "[StablehloPrecisionConfig]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloReduceWindowOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "window_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "window_strides",
+          "type": "[int64]"
+        },
+        {
+          "name": "base_dilations",
+          "type": "[int64]"
+        },
+        {
+          "name": "window_dilations",
+          "type": "[int64]"
+        },
+        {
+          "name": "padding",
+          "type": "[int64]"
+        },
+        {
+          "name": "body_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloWhileOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "cond_subgraph_index",
+          "type": "int32"
+        },
+        {
+          "name": "body_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "StablehloSortOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "dimension",
+          "type": "int64"
+        },
+        {
+          "name": "is_stable",
+          "type": "int8"
+        },
+        {
+          "name": "comparator_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloConcatenateOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "dimension",
+          "type": "int64"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloBroadcastInDimOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "broadcast_dimensions",
+          "type": "[int64]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloComparisonDirection",
+      "type": "enum",
+      "base_type": "uint32",
+      "enums": [
+        {
+          "name": "STABLEHLO_COMPARISON_DIRECTION_EQ",
+          "value": 0
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_DIRECTION_NE",
+          "value": 1
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_DIRECTION_GE",
+          "value": 2
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_DIRECTION_GT",
+          "value": 3
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_DIRECTION_LE",
+          "value": 4
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_DIRECTION_LT",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "name": "StablehloComparisonType",
+      "type": "enum",
+      "base_type": "uint32",
+      "enums": [
+        {
+          "name": "STABLEHLO_COMPARISON_TYPE_NOTYPE",
+          "value": 0
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_TYPE_FLOAT",
+          "value": 1
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_TYPE_FLOAT_TOTAL_ORDER",
+          "value": 2
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_TYPE_SIGNED",
+          "value": 3
+        },
+        {
+          "name": "STABLEHLO_COMPARISON_TYPE_UNSIGNED",
+          "value": 4
+        }
+      ]
+    },
+    {
+      "name": "StablehloCompareOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "comparison_direction",
+          "type": "StablehloComparisonDirection"
+        },
+        {
+          "name": "compare_type",
+          "type": "StablehloComparisonType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "StablehloDynamicSliceOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "slice_sizes",
+          "type": "[int64]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloPadOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "edge_padding_low",
+          "type": "[int64]"
+        },
+        {
+          "name": "edge_padding_high",
+          "type": "[int64]"
+        },
+        {
+          "name": "interior_padding",
+          "type": "[int64]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloIotaOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "iota_dimension",
+          "type": "int64"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloCustomCallOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "call_target_name",
+          "type": "string"
+        },
+        {
+          "name": "has_side_effect",
+          "type": "int8"
+        },
+        {
+          "name": "backend_config",
+          "type": "string"
+        },
+        {
+          "name": "api_version",
+          "type": "int32"
+        },
+        {
+          "name": "called_computations",
+          "type": "[int32]"
+        },
+        {
+          "name": "custom_attributes",
+          "type": "[uint8]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloReduceOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "body_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloSliceOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "start_indices",
+          "type": "[int64]"
+        },
+        {
+          "name": "limit_indices",
+          "type": "[int64]"
+        },
+        {
+          "name": "strides",
+          "type": "[int64]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloConvolutionOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "window_strides",
+          "type": "[int64]"
+        },
+        {
+          "name": "padding",
+          "type": "[int64]"
+        },
+        {
+          "name": "lhs_dilation",
+          "type": "[int64]"
+        },
+        {
+          "name": "rhs_dilation",
+          "type": "[int64]"
+        },
+        {
+          "name": "window_reversal",
+          "type": "int8"
+        },
+        {
+          "name": "input_batch_dimension",
+          "type": "int64"
+        },
+        {
+          "name": "input_feature_dimension",
+          "type": "int64"
+        },
+        {
+          "name": "input_spatial_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "kernel_input_feature_dimension",
+          "type": "int64"
+        },
+        {
+          "name": "kernel_output_feature_dimension",
+          "type": "int64"
+        },
+        {
+          "name": "kernel_spatial_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "output_batch_dimension",
+          "type": "int64"
+        },
+        {
+          "name": "output_feature_dimension",
+          "type": "int64"
+        },
+        {
+          "name": "output_spatial_dimensions",
+          "type": "[int64]"
+        },
+        {
+          "name": "feature_group_count",
+          "type": "int64"
+        },
+        {
+          "name": "batch_group_count",
+          "type": "int64"
+        },
+        {
+          "name": "precision_config",
+          "type": "[StablehloPrecisionConfig]"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloScatterOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "indices_are_sorted",
+          "type": "int8"
+        },
+        {
+          "name": "update_window_dims",
+          "type": "[int64]"
+        },
+        {
+          "name": "inserted_window_dims",
+          "type": "[int64]"
+        },
+        {
+          "name": "scatter_dims_to_operand_dims",
+          "type": "[int64]"
+        },
+        {
+          "name": "index_vector_dim",
+          "type": "int64"
+        },
+        {
+          "name": "unique_indices",
+          "type": "int8"
+        },
+        {
+          "name": "update_computation_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "StablehloCaseOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "branch_subgraph_indices",
+          "type": "[int32]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "RngAlgorithm",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "DEFAULT",
+          "value": 0
+        },
+        {
+          "name": "PHILOX",
+          "value": 1
+        },
+        {
+          "name": "THREEFRY",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "StablehloRngBitGeneratorOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "algorithm",
+          "type": "RngAlgorithm"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "Padding",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "SAME",
+          "value": 0
+        },
+        {
+          "name": "VALID",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "ActivationFunctionType",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "NONE",
+          "value": 0
+        },
+        {
+          "name": "RELU",
+          "value": 1
+        },
+        {
+          "name": "RELU_N1_TO_1",
+          "value": 2
+        },
+        {
+          "name": "RELU6",
+          "value": 3
+        },
+        {
+          "name": "TANH",
+          "value": 4
+        },
+        {
+          "name": "SIGN_BIT",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "name": "Conv2DOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "padding",
+          "type": "Padding"
+        },
+        {
+          "name": "stride_w",
+          "type": "int32"
+        },
+        {
+          "name": "stride_h",
+          "type": "int32"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "dilation_w_factor",
+          "type": "int32",
+          "default": 1
+        },
+        {
+          "name": "dilation_h_factor",
+          "type": "int32",
+          "default": 1
+        },
+        {
+          "name": "quantized_bias_type",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "Conv3DOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "padding",
+          "type": "Padding"
+        },
+        {
+          "name": "stride_d",
+          "type": "int32"
+        },
+        {
+          "name": "stride_w",
+          "type": "int32"
+        },
+        {
+          "name": "stride_h",
+          "type": "int32"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "dilation_d_factor",
+          "type": "int32",
+          "default": 1
+        },
+        {
+          "name": "dilation_w_factor",
+          "type": "int32",
+          "default": 1
+        },
+        {
+          "name": "dilation_h_factor",
+          "type": "int32",
+          "default": 1
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "Pool2DOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "padding",
+          "type": "Padding"
+        },
+        {
+          "name": "stride_w",
+          "type": "int32"
+        },
+        {
+          "name": "stride_h",
+          "type": "int32"
+        },
+        {
+          "name": "filter_width",
+          "type": "int32"
+        },
+        {
+          "name": "filter_height",
+          "type": "int32"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "DepthwiseConv2DOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "padding",
+          "type": "Padding"
+        },
+        {
+          "name": "stride_w",
+          "type": "int32"
+        },
+        {
+          "name": "stride_h",
+          "type": "int32"
+        },
+        {
+          "name": "depth_multiplier",
+          "type": "int32"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "dilation_w_factor",
+          "type": "int32",
+          "default": 1
+        },
+        {
+          "name": "dilation_h_factor",
+          "type": "int32",
+          "default": 1
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "ConcatEmbeddingsOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "num_channels",
+          "type": "int32"
+        },
+        {
+          "name": "num_columns_per_channel",
+          "type": "[int32]"
+        },
+        {
+          "name": "embedding_dim_per_channel",
+          "type": "[int32]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "LSHProjectionType",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "UNKNOWN",
+          "value": 0
+        },
+        {
+          "name": "SPARSE",
+          "value": 1
+        },
+        {
+          "name": "DENSE",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "LSHProjectionOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "type",
+          "type": "LSHProjectionType"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "SVDFOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "rank",
+          "type": "int32"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "RNNOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SequenceRNNOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "time_major",
+          "type": "int8"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "BidirectionalSequenceRNNOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "time_major",
+          "type": "int8"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "merge_outputs",
+          "type": "int8"
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "FullyConnectedOptionsWeightsFormat",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "DEFAULT",
+          "value": 0
+        },
+        {
+          "name": "SHUFFLED4x16INT8",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "FullyConnectedOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "weights_format",
+          "type": "FullyConnectedOptionsWeightsFormat",
+          "default": 0
+        },
+        {
+          "name": "keep_num_dims",
+          "type": "int8"
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        },
+        {
+          "name": "quantized_bias_type",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SoftmaxOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "beta",
+          "type": "float32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "ConcatenationOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "axis",
+          "type": "int32"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "AddOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "pot_scale_int16",
+          "type": "int8",
+          "default": true
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "MulOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "L2NormOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "LocalResponseNormalizationOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "radius",
+          "type": "int32"
+        },
+        {
+          "name": "bias",
+          "type": "float32"
+        },
+        {
+          "name": "alpha",
+          "type": "float32"
+        },
+        {
+          "name": "beta",
+          "type": "float32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "LSTMKernelType",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "FULL",
+          "value": 0
+        },
+        {
+          "name": "BASIC",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "LSTMOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "cell_clip",
+          "type": "float32"
+        },
+        {
+          "name": "proj_clip",
+          "type": "float32"
+        },
+        {
+          "name": "kernel_type",
+          "type": "LSTMKernelType",
+          "default": 0
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "UnidirectionalSequenceLSTMOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "cell_clip",
+          "type": "float32"
+        },
+        {
+          "name": "proj_clip",
+          "type": "float32"
+        },
+        {
+          "name": "time_major",
+          "type": "int8"
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        },
+        {
+          "name": "diagonal_recurrent_tensors",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "BidirectionalSequenceLSTMOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "cell_clip",
+          "type": "float32"
+        },
+        {
+          "name": "proj_clip",
+          "type": "float32"
+        },
+        {
+          "name": "merge_outputs",
+          "type": "int8"
+        },
+        {
+          "name": "time_major",
+          "type": "int8",
+          "default": true
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "ResizeBilinearOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "align_corners",
+          "type": "int8"
+        },
+        {
+          "name": "half_pixel_centers",
+          "type": "int8"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "ResizeNearestNeighborOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "align_corners",
+          "type": "int8"
+        },
+        {
+          "name": "half_pixel_centers",
+          "type": "int8"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "CallOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "subgraph",
+          "type": "uint32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "PadOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "PadV2Options",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ReshapeOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "new_shape",
+          "type": "[int32]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SpaceToBatchNDOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "BatchToSpaceNDOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SkipGramOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "ngram_size",
+          "type": "int32"
+        },
+        {
+          "name": "max_skip_size",
+          "type": "int32"
+        },
+        {
+          "name": "include_all_ngrams",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SpaceToDepthOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "block_size",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "DepthToSpaceOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "block_size",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SubOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        },
+        {
+          "name": "pot_scale_int16",
+          "type": "int8",
+          "default": true
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "DivOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "TopKV2Options",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "CombinerType",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "SUM",
+          "value": 0
+        },
+        {
+          "name": "MEAN",
+          "value": 1
+        },
+        {
+          "name": "SQRTN",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "EmbeddingLookupSparseOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "combiner",
+          "type": "CombinerType"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "GatherOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "axis",
+          "type": "int32"
+        },
+        {
+          "name": "batch_dims",
+          "type": "int32",
+          "default": 0
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "TransposeOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ExpOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "CosOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ReducerOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "keep_dims",
+          "type": "int8"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "SqueezeOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "squeeze_dims",
+          "type": "[int32]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SplitOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "num_splits",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SplitVOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "num_splits",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "StridedSliceOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "begin_mask",
+          "type": "int32"
+        },
+        {
+          "name": "end_mask",
+          "type": "int32"
+        },
+        {
+          "name": "ellipsis_mask",
+          "type": "int32"
+        },
+        {
+          "name": "new_axis_mask",
+          "type": "int32"
+        },
+        {
+          "name": "shrink_axis_mask",
+          "type": "int32"
+        },
+        {
+          "name": "offset",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "LogSoftmaxOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "CastOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "in_data_type",
+          "type": "TensorType"
+        },
+        {
+          "name": "out_data_type",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "DequantizeOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "MaximumMinimumOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "TileOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ArgMaxOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "output_type",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "ArgMinOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "output_type",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "GreaterOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "GreaterEqualOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "LessOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "LessEqualOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "NegOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SelectOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SliceOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "TransposeConvOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "padding",
+          "type": "Padding"
+        },
+        {
+          "name": "stride_w",
+          "type": "int32"
+        },
+        {
+          "name": "stride_h",
+          "type": "int32"
+        },
+        {
+          "name": "fused_activation_function",
+          "type": "ActivationFunctionType",
+          "default": 0
+        },
+        {
+          "name": "quantized_bias_type",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "ExpandDimsOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SparseToDenseOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "validate_indices",
+          "type": "int8"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "EqualOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "NotEqualOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ShapeOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "out_type",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "RankOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "PowOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "FakeQuantOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "min",
+          "type": "float32"
+        },
+        {
+          "name": "max",
+          "type": "float32"
+        },
+        {
+          "name": "num_bits",
+          "type": "int32"
+        },
+        {
+          "name": "narrow_range",
+          "type": "int8"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "PackOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "values_count",
+          "type": "int32"
+        },
+        {
+          "name": "axis",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "LogicalOrOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "OneHotOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "axis",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "AbsOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "HardSwishOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "LogicalAndOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "LogicalNotOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "UnpackOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "num",
+          "type": "int32"
+        },
+        {
+          "name": "axis",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "FloorDivOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SquareOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ZerosLikeOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "FillOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "FloorModOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "RangeOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "LeakyReluOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "alpha",
+          "type": "float32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "SquaredDifferenceOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "MirrorPadMode",
+      "type": "enum",
+      "base_type": "uint8",
+      "enums": [
+        {
+          "name": "REFLECT",
+          "value": 0
+        },
+        {
+          "name": "SYMMETRIC",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "MirrorPadOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "mode",
+          "type": "MirrorPadMode"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "UniqueOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "idx_out_type",
+          "type": "TensorType",
+          "default": "INT32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "ReverseV2Options",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "AddNOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "GatherNdOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "WhereOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ReverseSequenceOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "seq_dim",
+          "type": "int32"
+        },
+        {
+          "name": "batch_dim",
+          "type": "int32",
+          "default": 0
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "MatrixDiagOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "QuantizeOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "MatrixSetDiagOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "IfOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "then_subgraph_index",
+          "type": "int32"
+        },
+        {
+          "name": "else_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "CallOnceOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "init_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "WhileOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "cond_subgraph_index",
+          "type": "int32"
+        },
+        {
+          "name": "body_subgraph_index",
+          "type": "int32"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "NonMaxSuppressionV4Options",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "NonMaxSuppressionV5Options",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ScatterNdOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SelectV2Options",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "DensifyOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SegmentSumOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "BatchMatMulOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "adj_x",
+          "type": "int8"
+        },
+        {
+          "name": "adj_y",
+          "type": "int8"
+        },
+        {
+          "name": "asymmetric_quantize_inputs",
+          "type": "int8"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "CumsumOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "exclusive",
+          "type": "int8"
+        },
+        {
+          "name": "reverse",
+          "type": "int8"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "BroadcastToOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "Rfft2dOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "HashtableOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "table_id",
+          "type": "int32"
+        },
+        {
+          "name": "key_dtype",
+          "type": "TensorType"
+        },
+        {
+          "name": "value_dtype",
+          "type": "TensorType"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "HashtableFindOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "HashtableImportOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "HashtableSizeOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "VarHandleOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "container",
+          "type": "string"
+        },
+        {
+          "name": "shared_name",
+          "type": "string"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "ReadVariableOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "AssignVariableOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "RandomOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "seed",
+          "type": "int64"
+        },
+        {
+          "name": "seed2",
+          "type": "int64"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "BucketizeOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "boundaries",
+          "type": "[float32]"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "GeluOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "approximate",
+          "type": "int8"
+        }
+      ],
+      "alignment": 1
+    },
+    {
+      "name": "DynamicUpdateSliceOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "UnsortedSegmentProdOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "UnsortedSegmentMaxOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "UnsortedSegmentSumOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ATan2Options",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "UnsortedSegmentMinOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "SignOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "BitcastOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "BitwiseXorOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "RightShiftOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "DilateOptions",
+      "type": "class",
+      "members": [],
+      "alignment": 1
+    },
+    {
+      "name": "ReduceWindowFunction",
+      "type": "enum",
+      "base_type": "int32",
+      "enums": [
+        {
+          "name": "UNSUPPORTED",
+          "value": 0
+        },
+        {
+          "name": "ADD",
+          "value": 1
+        },
+        {
+          "name": "MUL",
+          "value": 2
+        },
+        {
+          "name": "MINIMUM",
+          "value": 3
+        },
+        {
+          "name": "MAXIMUM",
+          "value": 4
+        },
+        {
+          "name": "ALL",
+          "value": 5
+        },
+        {
+          "name": "ANY",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "name": "ReduceWindowOptions",
+      "type": "class",
+      "members": [
+        {
+          "name": "reduce_function",
+          "type": "ReduceWindowFunction",
+          "offset": 0
+        }
+      ],
+      "size": 4,
+      "alignment": 4
+    },
+    {
+      "name": "OperatorCode",
+      "type": "class",
+      "members": [
+        {
+          "name": "deprecated_builtin_code",
+          "type": "uint8"
+        },
+        {
+          "name": "custom_code",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "int32",
+          "default": 1
+        },
+        {
+          "name": "builtin_code",
+          "type": "BuiltinOperator"
+        }
+      ],
+      "alignment": 4
+    },
+    {
+      "name": "CustomOptionsFormat",
+      "type": "enum",
+      "base_type": "byte",
+      "enums": [
+        {
+          "name": "FLEXBUFFERS",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "StableHLOCompositeOptions",
+      "type": "class",
+      "alignment": 4,
+      "members": [
+        {
+          "name": "name",
+          "type": "string",
+          "offset": 0
+        },
+        {
+          "name": "decomposition_subgraph_index",
+          "type": "int32",
+          "offset": 8
+        },
+        {
+          "name": "composite_attributes",
+          "type": "[uint8]",
+          "offset": 12
+        },
+        {
+          "name": "composite_attributes_format",
+          "type": "CustomOptionsFormat",
+          "offset": 20
+        },
+        {
+          "name": "version",
+          "type": "int32",
+          "offset": 24
+        }
+      ]
+    },
+    {
+      "name": "StablehloShiftLeftOptions",
+      "type": "struct",
+      "members": [],
+      "size": 0,
+      "alignment": 1
+    },
+    {
+      "name": "Operator",
+      "type": "class",
+      "members": [
+        {
+          "name": "opcode_index",
+          "type": "uint32"
+        },
+        {
+          "name": "inputs",
+          "type": "[int32]"
+        },
+        {
+          "name": "outputs",
+          "type": "[int32]"
+        },
+        {
+          "name": "builtin_options",
+          "type": "BuiltinOptions"
+        },
+        {
+          "name": "custom_options",
+          "type": "[uint8]"
+        },
+        {
+          "name": "custom_options_format",
+          "type": "CustomOptionsFormat"
+        },
+        {
+          "name": "mutating_variable_inputs",
+          "type": "[int8]"
+        },
+        {
+          "name": "intermediates",
+          "type": "[int32]"
+        },
+        {
+          "name": "large_custom_options_offset",
+          "type": "uint64"
+        },
+        {
+          "name": "large_custom_options_size",
+          "type": "uint64"
+        },
+        {
+          "name": "builtin_options_2",
+          "type": "BuiltinOptions2"
+        },
+        {
+          "name": "debug_metadata_index",
+          "type": "int32",
+          "default": -1
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "SubGraph",
+      "type": "class",
+      "members": [
+        {
+          "name": "tensors",
+          "type": "[Tensor]"
+        },
+        {
+          "name": "inputs",
+          "type": "[int32]"
+        },
+        {
+          "name": "outputs",
+          "type": "[int32]"
+        },
+        {
+          "name": "operators",
+          "type": "[Operator]"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "debug_metadata_index",
+          "type": "int32",
+          "default": -1
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "Buffer",
+      "type": "class",
+      "members": [
+        {
+          "name": "data",
+          "type": "[uint8]",
+          "alignment": 16
+        },
+        {
+          "name": "offset",
+          "type": "uint64"
+        },
+        {
+          "name": "size",
+          "type": "uint64"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "Metadata",
+      "type": "class",
+      "members": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "buffer",
+          "type": "uint32"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "TensorMap",
+      "type": "class",
+      "members": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "tensor_index",
+          "type": "uint32"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "SignatureDef",
+      "type": "class",
+      "members": [
+        {
+          "name": "inputs",
+          "type": "[TensorMap]"
+        },
+        {
+          "name": "outputs",
+          "type": "[TensorMap]"
+        },
+        {
+          "name": "signature_key",
+          "type": "string"
+        },
+        {
+          "name": "deprecated_tag",
+          "type": "string"
+        },
+        {
+          "name": "subgraph_index",
+          "type": "uint32"
+        }
+      ],
+      "alignment": 8
+    },
+    {
+      "name": "Model",
+      "type": "class",
+      "members": [
+        {
+          "name": "version",
+          "type": "uint32"
+        },
+        {
+          "name": "operator_codes",
+          "type": "[OperatorCode]"
+        },
+        {
+          "name": "subgraphs",
+          "type": "[SubGraph]"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "buffers",
+          "type": "[Buffer]"
+        },
+        {
+          "name": "metadata_buffer",
+          "type": "[int32]"
+        },
+        {
+          "name": "metadata",
+          "type": "[Metadata]"
+        },
+        {
+          "name": "signature_defs",
+          "type": "[SignatureDef]"
+        }
+      ],
+      "alignment": 8
+    }
+  ]
+}

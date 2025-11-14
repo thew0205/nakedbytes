@@ -22,14 +22,14 @@ struct StringOffset
 #define STRING_LENGTH_OFFSET 0
     uint16_t length()
     {
-        uint16_t offset = *reinterpret_cast<uint16_t *>(data) + STRING_LENGTH_OFFSET;
+        int16_t offset = *reinterpret_cast<uint16_t *>(data) + STRING_LENGTH_OFFSET;
         return *reinterpret_cast<uint16_t *>(data[offset]);
     }
 
 #define STRING_VALUE_OFFSET 2
     const char *value()
     {
-        uint16_t offset = *reinterpret_cast<uint16_t *>(data) + STRING_VALUE_OFFSET;
+        int16_t offset = *reinterpret_cast<uint16_t *>(data) + STRING_VALUE_OFFSET;
         return reinterpret_cast<const char *>(&data[offset]);
     }
 
@@ -76,7 +76,6 @@ struct Vector
     T get(size_t index)
     {
         int offset = OFFSET_SIZE + index * OFFSET_SIZE;
-        // offset = *reinterpret_cast<uint16_t *>(&data[offset]) + offset;
 
         return T(&data[offset]);
     }

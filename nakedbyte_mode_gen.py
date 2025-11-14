@@ -277,7 +277,7 @@ def get_offset_type_int() -> str:
 def get_offset_type_desc_int() -> TypeDesc:
     type_desc = get_type_desc_from_types_desc(get_offset_type_int())
     if type_desc == None:
-        raise ValueError(f"The raw string type of {type_desc} is not allowed.")
+        raise ValueError(f"The offset type of {type_desc} is not allowed.")
     return type_desc
         
 def compute_type_desc(type_name: str) -> TypeDesc:

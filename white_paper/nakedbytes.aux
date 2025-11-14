@@ -1,0 +1,105 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Motivation}{2}{subsection.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Design Goals}{2}{subsection.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Application Scope}{2}{subsection.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Design Philosophy}{3}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Core Principles}{3}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Comparison with Existing Systems}{3}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{FlatBuffers.}{3}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cap’n Proto.}{3}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Simple Binary Encoding (SBE).}{3}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Unified Offset-Oriented Model}{4}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}No-Allocation Environments}{4}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Bit-Level Compactness}{4}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Design Summary}{4}{subsection.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Data Model and Type System}{5}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Type Categories}{5}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Offset Semantics}{5}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Struct Layout Rules}{5}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Nullable Structures}{6}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Union Representation}{6}{subsection.3.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Union representation using tag and offset fields in NakedBytes.}}{6}{figure.caption.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Bit-Field Arrays}{6}{subsection.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Fixed vs. Offsetable Type Composition}{6}{subsection.3.7}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Example NakedBytes structure with mixed type composition.}}{6}{lstlisting.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8}Root Object and Schema Versioning}{7}{subsection.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.9}Deterministic Validation}{7}{subsection.3.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.10}Summary}{8}{subsection.3.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Schema Definition and Language Independence}{8}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Motivation and Design Goals}{8}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Schema Representation Format}{8}{subsection.4.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Example NakedBytes schema definition in JSON format.}}{8}{lstlisting.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Schema Semantics}{9}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Language Independence and Code Generation}{10}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Serialization Without Dynamic Memory Allocation}{10}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Schema Evolution and Versioning}{10}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Summary}{10}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Binary Layout and Memory Model}{10}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Core Principles}{10}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Offset Computation Model}{11}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Structure Layout Example}{11}{subsection.5.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Simplified schema demonstrating offset referencing.}}{11}{lstlisting.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Example of in-place serialized structure with offset references.}}{12}{figure.caption.5}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:layout}{{2}{12}{Example of in-place serialized structure with offset references}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Arena-Based Serialization}{12}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Bitfield and Compact Storage}{12}{subsection.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Example: Object In-Place Serialization}{12}{subsection.5.6}\protected@file@percent }
+\newlabel{lst:inplace}{{4}{12}{In-place serialization example (simplified pseudocode)}{lstlisting.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces In-place serialization example (simplified pseudocode).}}{12}{lstlisting.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Relocation and Portability}{13}{subsection.5.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8}Summary}{13}{subsection.5.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Performance Characteristics and Comparisons}{13}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Evaluation Methodology}{13}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Memory Footprint and Compactness}{13}{subsection.6.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Serialized size comparison across frameworks.}}{14}{table.caption.6}\protected@file@percent }
+\newlabel{tab:size}{{1}{14}{Serialized size comparison across frameworks}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Serialization and Access Latency}{14}{subsection.6.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Serialization latency comparison for medium-complexity structures (average of 10 k samples).}}{14}{table.caption.7}\protected@file@percent }
+\newlabel{tab:latency}{{2}{14}{Serialization latency comparison for medium-complexity structures (average of 10 k samples)}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Cache and Memory Locality}{14}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Allocation Determinism}{15}{subsection.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6}Comparison with Reflection-Based Systems (Cista++)}{15}{subsection.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Applications and Use Cases}{15}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Embedded Systems and Microcontrollers}{15}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}SunSpec Model Representation}{16}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}TensorFlow Lite Micro Integration}{16}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Database and Storage Engines}{16}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Real-Time Communication Protocols}{16}{subsection.7.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}Cross-Platform Interoperability}{16}{subsection.7.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}Bit Array and Fine-Grained Data Packing}{17}{subsection.7.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.8}Summary}{17}{subsection.7.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Discussion and Future Work}{17}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Schema Evolution and Versioning}{17}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Empirical Evaluation on SunSpec Models}{18}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.1}Experimental Setup}{18}{subsubsection.8.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.2}Results}{18}{subsubsection.8.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Comparison of Serialized Binary Sizes for Selected SunSpec Models}}{18}{table.caption.8}\protected@file@percent }
+\newlabel{tab:sunspec_comparison}{{3}{18}{Comparison of Serialized Binary Sizes for Selected SunSpec Models}{table.caption.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.3}Statistical Summary}{18}{subsubsection.8.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.4}Interpretation}{19}{subsubsection.8.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Compression and Delta Encoding}{19}{subsection.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Toolchain Integration and Code Generation}{20}{subsection.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5}Formal Validation and Safety Models}{20}{subsection.8.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6}Language-Agnostic Reflection Interface}{20}{subsection.8.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.7}Parallel Serialization and Streaming}{20}{subsection.8.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.8}Future Research Directions}{21}{subsection.8.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.9}Summary}{21}{subsection.8.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Conclusion and References}{21}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Conclusion}{21}{subsection.9.1}\protected@file@percent }
+\bibcite{flatbuffers}{1}
+\bibcite{capnproto}{2}
+\bibcite{sbe}{3}
+\bibcite{cista}{4}
+\bibcite{protobuf}{5}
+\bibcite{boost}{6}
+\bibcite{tflite}{7}
+\bibcite{sunspec}{8}
+\bibcite{embedded-systems}{9}
+\bibcite{serialization-history}{10}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}References}{22}{subsection.9.2}\protected@file@percent }
+\gdef \@abspage@last{22}
