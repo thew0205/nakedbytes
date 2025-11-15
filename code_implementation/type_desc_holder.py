@@ -177,6 +177,7 @@ class TypeDesc:
     
     @staticmethod
     def generate_enum_type(name: str, base_type: str, enums: List, types_desc: set['TypeDesc']):
+        enums = [{'name': f"{name}_{enu['name']}"} for enu in enums]
         real_base_type = get_type_desc_from_types_desc(base_type, types_desc)
         if real_base_type is None:
             raise ValueError("Enum must be of a base type of one of the defined int types")

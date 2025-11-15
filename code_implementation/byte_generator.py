@@ -50,7 +50,7 @@ def generate_primitive_bytearray_number(value, type_desc: TypeDesc, offset_size:
 def generate_enum_type(model ,offset_size: int, current_type_desc: TypeDesc, types_desc: set[TypeDesc]) -> bytearray:
     if current_type_desc.type_type != 'enum':
         raise ValueError(f"The type must be of type union instead of {current_type_desc.type_type}")
-           
+    model = f"{current_type_desc.name}_{model}" 
     for i, item in enumerate(current_type_desc.e_members):
         if item.name == model:
             val = i
