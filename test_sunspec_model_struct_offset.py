@@ -8,7 +8,9 @@ from code_implementation.type_parsing import parsing, primitive_types
 # from pytest import *
 # 
 # 
-with open('/home/busoye_tm/Documents/matthew/nakedbytes/sunspec_model_struct_offset.json', 'r') as f:
+
+model_def_file = "/home/busoye_tm/Documents/matthew/nakedbytes/tflite/schema_nakedbyte.json"
+with open(model_def_file, 'r') as f:
     model_def = json.load(f)
 
     
@@ -16,7 +18,7 @@ def test_set_all_types():
     all_types= primitive_types.copy()
 
     set_all_types(model_def, all_types)
-    assert(all_types==  {'uint32', 'SunspecGroupPointDef', 'SunspecModelDef', 'int64', 'int32', 'SunspecPointData', 'float32', 'int8', 'SunspecPointDef', 'uint8', 'char', 'blob', 'uint64', 'float64', 'SunspecPointMandatoryType', 'string', 'uint16', 'int16', 'SunspecGroupType', 'SunspecPointAccessType'})
+    assert(all_types==  {'bool', 'uint32', 'SunspecGroupPointDef', 'SunspecModelDef', 'int64', 'int32', 'SunspecPointData', 'float32', 'int8', 'SunspecPointDef', 'uint8', 'char', 'blob', 'uint64', 'float64', 'SunspecPointMandatoryType', 'string', 'uint16', 'int16', 'SunspecGroupType', 'SunspecPointAccessType'})
 
 def test_set_needed_types():
     needed_types= primitive_types.copy()
@@ -43,7 +45,7 @@ offset_size = model_def['offset_size']
 root_type = get_type_from_json(root_type_name, model_def)
     
 set_needed_types(root_type, needed_types, model_def)
-types_desc = parsing('/home/busoye_tm/Documents/matthew/nakedbytes/sunspec_model_struct_offset.json')
+types_desc = parsing(model_def_file)
 # # model_ids = [1, 101, 102, 103, 111, 112, 113, 120, 126, 160]
 # model_ids = [id for id in range(0xffff)]
 
@@ -61,12 +63,15 @@ types_desc = parsing('/home/busoye_tm/Documents/matthew/nakedbytes/sunspec_model
 #     with open(f"binary/model_{id}.bin", 'wb') as f:
 #         f.write(bin)
         
+with open("tflite/tflite_generated.h", 'wt') as f:
+    f.write(generate_cpp_code(types_desc,root_type_name))
         
-with open(f'/home/busoye_tm/Documents/matthew/nakedbytes/model_1.json', 'r') as f:
+with open(f'/home/busoye_tm/Documents/matthew/nakedbytes/sunspec/model_1.json', 'r') as f:
     model_data = json.load(f)
     bin = (generate_byte(model=model_data, root_type_desc=cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc)), types_desc= types_desc, offset_size= offset_size, version= version))
 
-    with open(f"model_struct_offset.bin", 'wb') as f:
+    with open(f"sunspec/model_struct_offset.bin", 'wb') as f:
         f.write(bin)
-with open("sunspec_model_generated_struct_offset.h", 'wt') as f:
-        f.write(generate_cpp_code(types_desc,root_type_name))
+        
+with open("sunspec/sunspec_model_generated_struct_offset.h", 'wt') as f:
+    f.write(generate_cpp_code(types_desc,root_type_name))

@@ -33,7 +33,7 @@
           "value": 5
         },
         {
-          "name": "int8",
+          "name": "BOOL",
           "value": 6
         },
         {
@@ -283,7 +283,7 @@
         },
         {
           "name": "has_rank",
-          "type": "int8",
+          "type": "bool",
           "default": false
         }
       ],
@@ -317,7 +317,7 @@
         },
         {
           "name": "is_variable",
-          "type": "int8",
+          "type": "bool",
           "default": false
         },
         {
@@ -332,7 +332,7 @@
         },
         {
           "name": "has_rank",
-          "type": "int8",
+          "type": "bool",
           "default": false
         },
         {
@@ -1825,7 +1825,7 @@
         },
         {
           "name": "indices_are_sorted",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 8
@@ -1943,7 +1943,7 @@
         },
         {
           "name": "is_stable",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "comparator_subgraph_index",
@@ -2098,7 +2098,7 @@
         },
         {
           "name": "has_side_effect",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "backend_config",
@@ -2175,7 +2175,7 @@
         },
         {
           "name": "window_reversal",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "input_batch_dimension",
@@ -2234,7 +2234,7 @@
       "members": [
         {
           "name": "indices_are_sorted",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "update_window_dims",
@@ -2254,7 +2254,7 @@
         },
         {
           "name": "unique_indices",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "update_computation_subgraph_index",
@@ -2560,7 +2560,7 @@
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2575,7 +2575,7 @@
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2586,7 +2586,7 @@
       "members": [
         {
           "name": "time_major",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "fused_activation_function",
@@ -2594,7 +2594,7 @@
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2605,7 +2605,7 @@
       "members": [
         {
           "name": "time_major",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "fused_activation_function",
@@ -2613,11 +2613,11 @@
         },
         {
           "name": "merge_outputs",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2652,11 +2652,11 @@
         },
         {
           "name": "keep_num_dims",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "quantized_bias_type",
@@ -2701,7 +2701,7 @@
         },
         {
           "name": "pot_scale_int16",
-          "type": "int8",
+          "type": "bool",
           "default": true
         }
       ],
@@ -2790,7 +2790,7 @@
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2813,15 +2813,15 @@
         },
         {
           "name": "time_major",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "diagonal_recurrent_tensors",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2844,16 +2844,16 @@
         },
         {
           "name": "merge_outputs",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "time_major",
-          "type": "int8",
+          "type": "bool",
           "default": true
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2864,11 +2864,11 @@
       "members": [
         {
           "name": "align_corners",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "half_pixel_centers",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 1
@@ -2879,11 +2879,11 @@
       "members": [
         {
           "name": "align_corners",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "half_pixel_centers",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 1
@@ -2948,7 +2948,7 @@
         },
         {
           "name": "include_all_ngrams",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -2985,7 +2985,7 @@
         },
         {
           "name": "pot_scale_int16",
-          "type": "int8",
+          "type": "bool",
           "default": true
         }
       ],
@@ -3078,7 +3078,7 @@
       "members": [
         {
           "name": "keep_dims",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 1
@@ -3142,7 +3142,7 @@
         },
         {
           "name": "offset",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -3290,7 +3290,7 @@
       "members": [
         {
           "name": "validate_indices",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 1
@@ -3348,7 +3348,7 @@
         },
         {
           "name": "narrow_range",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 4
@@ -3660,11 +3660,11 @@
         },
         {
           "name": "adj_y",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "asymmetric_quantize_inputs",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 1
@@ -3675,11 +3675,11 @@
       "members": [
         {
           "name": "exclusive",
-          "type": "int8"
+          "type": "bool"
         },
         {
           "name": "reverse",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 1
@@ -3792,7 +3792,7 @@
       "members": [
         {
           "name": "approximate",
-          "type": "int8"
+          "type": "bool"
         }
       ],
       "alignment": 1
@@ -4015,7 +4015,7 @@
         },
         {
           "name": "mutating_variable_inputs",
-          "type": "vector[int8]"
+          "type": "vector[bool]"
         },
         {
           "name": "intermediates",

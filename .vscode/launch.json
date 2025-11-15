@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/busoye_tm/Documents/matthew/nakedbytes/sunspec_model_generated_struct_offset",
+            "program": "/home/busoye_tm/Documents/matthew/nakedbytes/sunspec/sunspec_model_generated_struct_offset",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -25,8 +25,8 @@
                     "description": "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
-                }
-            ]
+                },
+            ],"preLaunchTask": ""
         },
         {
             "name": "Python Debugger: Python File",

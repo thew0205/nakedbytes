@@ -10,7 +10,7 @@ from .type_utils import get_padding_size
 
 
 
-primitive_types = {'char', 'int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64', 'float32', 'float64', 'string', 'blob'}
+primitive_types = {'bool', 'char', 'int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64', 'float32', 'float64', 'string', 'blob'}
 
 
 def is_primitive_type(type_name):
@@ -166,7 +166,7 @@ class TypeDesc:
             
     def __str__(self) -> str:
         members = self.u_members if self.u_members != [] else self.members if self.members != [] else self.e_members
-        return f'TypeDesc(name={self.name}, size={self.size}, alignment={self.alignment}, is_primitive={self.is_primitive}, members=\n{[str(m)  for m in members]})'
+        return f'TypeDesc(name={self.name}, size={self.size}, type={self.type_type}, alignment={self.alignment}, is_primitive={self.is_primitive}, members=\n{[str(m)  for m in members]})'
     
     @staticmethod
     def gen_primitive_type(name: str, size: int, alignment: int) -> 'TypeDesc':
@@ -191,7 +191,7 @@ class TypeDesc:
         return type_desc
     
     @staticmethod
-    def gen_union_type(name: str, members: List, offset_size: int, types_desc: set['TypeDesc'], model_def: dict, parent_types: list[str]):
+    def gen_union_type(name: str, members: List, offset_size: int, types_desc: set['TypeDesc'], model_def: dict, parent_types: list[str]) -> 'TypeDesc':
         type_desc = TypeDesc(name=name, is_primitive= False,type_type='union')
         for mem in members:
             if mem['name'] == None:
@@ -205,6 +205,21 @@ class TypeDesc:
         return type_desc
     
     @staticmethod
+    def gen_struct_type(name: str, type_type: str, members: List, offset_size: int, types_desc: set['TypeDesc'], model_def: dict, parent_types: list[str])-> 'TypeDesc':
+        type_desc = TypeDesc(name=name, type_type=type_type, is_primitive=False)
+        for member in members:
+            type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
+        return type_desc
+    
+    @staticmethod
+    def gen_class_type(name: str, type_type: str, members: List, offset_size: int, types_desc: set['TypeDesc'], model_def: dict, parent_types: list[str])-> 'TypeDesc':
+        type_desc = TypeDesc(name=name, type_type=type_type, is_primitive=False)
+        type_desc.set_size(type_desc.size + offset_size)
+        for member in members:
+            type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
+        return type_desc
+    
+    @staticmethod
     def generate_pad(size: int) -> 'TypeDesc':
         type_desc = TypeDesc(name=f'pad{size}', is_primitive= True,type_type='struct')
         type_desc.set_size(size)
@@ -214,6 +229,7 @@ class TypeDesc:
     @staticmethod
     def get_primitive_types_desc(offset_size: int) -> set['TypeDesc']:
         return {
+            TypeDesc.gen_primitive_type(name='bool',size= 1, alignment=1),
             TypeDesc.gen_primitive_type(name='char',size= 1, alignment=1),
             TypeDesc.gen_primitive_type(name='int8',size= 1, alignment=1), 
             TypeDesc.gen_primitive_type(name='uint8',size= 1, alignment=1),
@@ -315,44 +331,31 @@ def compute_add_type_desc(type_name: str, types_desc: set['TypeDesc'], model_def
         type_desc =  TypeDesc.gen_union_type(type_def['name'],type_def['unions'],offset_size, types_desc, model_def,parent_types)
         types_desc.add(type_desc)
         return type_desc
-    elif type_def['type'] in ['struct', 'struct_offset', 'class']:
+    elif type_def['type'] in ['struct', 'struct_offset']:
         parent_types.append(type_def['name'])
         
-        type_desc = TypeDesc(name=type_def['name'], type_type=type_def['type'],is_primitive=False)
-        for member in type_def['members']:
-            type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
+        type_desc = TypeDesc.gen_struct_type(name=type_def['name'], type_type=type_def['type'], members=type_def['members'], offset_size=offset_size, model_def=model_def, parent_types=parent_types, types_desc=types_desc)
+        
+        types_desc.add(type_desc)
+        parent_types.pop()
+        
+        return type_desc
+    elif type_def['type'] == 'class':
+        parent_types.append(type_def['name'])
+        
+        type_desc = TypeDesc.gen_class_type(name=type_def['name'], type_type=type_def['type'], members=type_def['members'], offset_size=offset_size, model_def=model_def, parent_types=parent_types, types_desc=types_desc)
+        
         types_desc.add(type_desc)
         parent_types.pop()
         
         return type_desc
     else:
-        raise ValueError(f"The type of this type which is {type_def['type']}is not supported")  
+        raise ValueError(f"The type of this type which is {type_def['type']} is not supported")  
     
 
 def compute_all_types_desc(types: set[str], model_def: Dict, offset_size: int, parent_types: List[str], types_desc: set[TypeDesc]):
-    types_with_union: set[str] = set()
-    union_types: set[str] = set()
     for type_name in types:
         if is_primitive_type(type_name):
             continue
         compute_add_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
     return types_desc
-    
-    #     type_json = get_type_from_json(type_name, model_def)
-    #     if type_json["type"] == 'union':
-    #         union_types.add(type_name)
-    #         continue
-    #     if type_json["type"] != 'enum':
-    #         if members_contain_union_recursively(type_json, model_def, offset_size):
-    #             types_with_union.add(type_name)
-    #             continue
-    #     type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
-    #     types_desc.add(type_desc)
-    # for type_name in union_types:
-    #     type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
-    #     types_desc.add(type_desc)
-    # for type_name in types_with_union:
-    #     type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
-    #     types_desc.add(type_desc)
-    # return types_desc
-

@@ -9,6 +9,9 @@ def generate_primitive_bytearray_number(value, type_desc: TypeDesc, offset_size:
     if value == None:
         # raise ValueError("Don't know what to do yet")
         return bytearray(b'\x00' * type_desc.size)
+    elif type_desc.name == 'bool':
+        val = int(1 if value else 0)
+        return bytearray(struct.pack('b', val))
     elif type_desc.name == 'char':       
         return value.encode(encoding='ascii')[0:1]
     elif type_desc.name == 'int8':
@@ -148,8 +151,9 @@ def generate_string_type(model: str, root_array: bytearray, array_size: int, cur
 def generate_blob_type(model: str, root_array: bytearray, array_size: int, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int) ->Tuple[int, int]:
     pass
 
-def generate_class_type(model: Dict, root_array: bytearray, array_size: int, current_type_desc: TypeDesc, types_desc: set[TypeDesc], current_offset: int, tail_offset: int, offset_size: int):
-    pass
+def generate_class_type(model: Dict, root_array: bytearray, array_size: int, current_type_desc: TypeDesc, types_desc: set[TypeDesc], current_offset: int, tail_offset: int, offset_size: int) -> int:
+    root_array[current_offset: current_offset + offset_size] = generate_primitive_bytearray_number(value = current_type_desc.size ,offset_size= offset_size, type_desc= get_offset_type_desc_int(offset_size=offset_size, types_desc= types_desc), types_desc= types_desc)
+    return generate_struct_type(model=model, root_array=root_array,array_size= array_size, current_type_desc= current_type_desc,current_offset=current_offset,  tail_offset= tail_offset, offset_size= offset_size, types_desc= types_desc)
 
 def generate_offset_type(model, root_array: bytearray, array_size: int, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int,  true_union_type: str|None, is_array: bool ) -> Tuple[int|None, int]:
     if model == None:
@@ -174,7 +178,7 @@ def generate_offset_type(model, root_array: bytearray, array_size: int, current_
         while(array_size < tail_offset):
             root_array.extend(bytearray(1024))
             array_size += 1024
-        generate_class_type(model=model, root_array=root_array,array_size= array_size, current_type_desc= current_type_desc,current_offset=current_offset,  tail_offset= tail_offset, offset_size= offset_size, types_desc= types_desc)
+        tail_offset = generate_class_type(model=model, root_array=root_array,array_size= array_size, current_type_desc= current_type_desc,current_offset=current_offset,  tail_offset= tail_offset, offset_size= offset_size, types_desc= types_desc)
         return current_offset, tail_offset
     else:
         raise ValueError(f"Type of {current_type_desc.name} is not an offset type")
@@ -184,7 +188,7 @@ def generate_offset_type(model, root_array: bytearray, array_size: int, current_
      
 def generate_struct_type(model: Dict, root_array: bytearray, array_size: int, current_type_desc: TypeDesc, types_desc: set[TypeDesc], current_offset: int, tail_offset: int, offset_size: int) -> int:
     #Not really needed
-    current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
+    # current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
     offset_member_map:Dict[str, int|None] = {}
     for member in current_type_desc.members:
         if member.is_offset_type:
