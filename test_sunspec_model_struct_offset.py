@@ -8,7 +8,7 @@ from code_implementation.type_parsing import parsing, primitive_types
 # from pytest import *
 # 
 # 
-with open('/home/busoye_tm/Documents/matthew/nakedbytes/tflite/schema_nakedbyte.json', 'r') as f:
+with open('/home/busoye_tm/Documents/matthew/nakedbytes/sunspec_model_struct_offset.json', 'r') as f:
     model_def = json.load(f)
 
     
@@ -43,23 +43,30 @@ offset_size = model_def['offset_size']
 root_type = get_type_from_json(root_type_name, model_def)
     
 set_needed_types(root_type, needed_types, model_def)
-types_desc = parsing('/home/busoye_tm/Documents/matthew/nakedbytes/tflite/schema_nakedbyte.json')
-# model_ids = [1, 101, 102, 103, 111, 112, 113, 120, 126, 160]
-model_ids = [id for id in range(0xffff)]
+types_desc = parsing('/home/busoye_tm/Documents/matthew/nakedbytes/sunspec_model_struct_offset.json')
+# # model_ids = [1, 101, 102, 103, 111, 112, 113, 120, 126, 160]
+# model_ids = [id for id in range(0xffff)]
 
-for id in model_ids:
-    try:
-        open(f'models/nakedbytes/json/model_{id}.json', 'r')
-    except:
-        print(f"Error opening file model_{id}.json")
-        continue
+# for id in model_ids:
+#     try:
+#         open(f'models/nakedbytes/json/model_{id}.json', 'r')
+#     except:
+#         print(f"Error opening file model_{id}.json")
+#         continue
         
-    with open(f'models/nakedbytes/json/model_{id}.json', 'r') as f:
-        model_data = json.load(f)
+#     with open(f'models/nakedbytes/json/model_{id}.json', 'r') as f:
+#         model_data = json.load(f)
+#     bin = (generate_byte(model=model_data, root_type_desc=cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc)), types_desc= types_desc, offset_size= offset_size, version= version))
+
+#     with open(f"binary/model_{id}.bin", 'wb') as f:
+#         f.write(bin)
+        
+        
+with open(f'/home/busoye_tm/Documents/matthew/nakedbytes/model_1.json', 'r') as f:
+    model_data = json.load(f)
     bin = (generate_byte(model=model_data, root_type_desc=cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc)), types_desc= types_desc, offset_size= offset_size, version= version))
 
-    with open(f"binary/model_{id}.bin", 'wb') as f:
+    with open(f"model_struct_offset.bin", 'wb') as f:
         f.write(bin)
-        
 with open("sunspec_model_generated_struct_offset.h", 'wt') as f:
         f.write(generate_cpp_code(types_desc,root_type_name))

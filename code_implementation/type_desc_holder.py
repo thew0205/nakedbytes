@@ -91,6 +91,7 @@ class TypeDesc:
         if not self.can_contain_member():
             raise ValueError(f"This type must of either struct, struct_offset or class to be able to add a member but type is of {self.type_type}")
         else:
+            # Pop the last pad
             if self.members != [] and self.members[-1].name.startswith('pad'):
                 self.set_size(self.size - self.members[-1].size)
                 self.members.pop()
@@ -104,11 +105,11 @@ class TypeDesc:
                 else:
                      raise ValueError(f"Possibility of Cyclic Dependency exists which include these types {parent_types}.")
             else:
-                real_type: TypeDesc = compute_type_desc(type_type, types_desc, model_def, offset_size=offset_size, parent_types=parent_types)
+                real_type: TypeDesc = compute_add_type_desc(type_type, types_desc, model_def, offset_size=offset_size, parent_types=parent_types)
                 if real_type is None:
                     raise ValueError("Type must be specified for MemberDesc")
                 else: 
-                    if real_type.is_offset_type:
+                    if real_type.is_offset_type or is_array:
                         mem_size = offset_size
                         mem_alignment = offset_size
                     else:
@@ -190,12 +191,12 @@ class TypeDesc:
         return type_desc
     
     @staticmethod
-    def gen_union_type(name: str, members: List, offset_size: int, types_desc: set['TypeDesc']):
+    def gen_union_type(name: str, members: List, offset_size: int, types_desc: set['TypeDesc'], model_def: dict, parent_types: list[str]):
         type_desc = TypeDesc(name=name, is_primitive= False,type_type='union')
         for mem in members:
             if mem['name'] == None:
                 raise ValueError("Name of the union type member not specified.")
-            real_mem_type = get_type_desc_from_types_desc(mem['name'], types_desc)
+            real_mem_type = compute_add_type_desc(mem['name'], types_desc, model_def, offset_size=offset_size, parent_types=parent_types)
             if real_mem_type == None:
                 raise ValueError("Union member type doesn't exist")
             type_desc.add_u_members(real_mem_type)
@@ -298,7 +299,7 @@ def members_contain_union_recursively(type_json: Dict, model_def: Dict, offset_s
             return True
     return False
 
-def compute_type_desc(type_name: str, types_desc: set['TypeDesc'], model_def: Dict, offset_size: int, parent_types: List[str]) -> TypeDesc:
+def compute_add_type_desc(type_name: str, types_desc: set['TypeDesc'], model_def: Dict, offset_size: int, parent_types: List[str]) -> TypeDesc:
     type_desc_from_types_desc = get_type_desc_from_types_desc(type_name, types_desc)
     if type_desc_from_types_desc != None:
         return type_desc_from_types_desc
@@ -306,17 +307,21 @@ def compute_type_desc(type_name: str, types_desc: set['TypeDesc'], model_def: Di
     type_def = get_type_from_json(type_name, model_def)
 
     if type_def['type'] == 'enum':
-        return TypeDesc.generate_enum_type(type_def['name'], type_def['base_type'], type_def['enums'], types_desc)
+        type_desc = TypeDesc.generate_enum_type(type_def['name'], type_def['base_type'], type_def['enums'], types_desc)
+        types_desc.add(type_desc)
+        return type_desc
     elif type_def['type'] == 'union':
         types_desc.add(TypeDesc.generate_enum_type(f"{type_def['name']}_enum", get_offset_type_int(offset_size), type_def['unions'],types_desc))
-        return TypeDesc.gen_union_type(type_def['name'],type_def['unions'],offset_size, types_desc)
+        type_desc =  TypeDesc.gen_union_type(type_def['name'],type_def['unions'],offset_size, types_desc, model_def,parent_types)
+        types_desc.add(type_desc)
+        return type_desc
     elif type_def['type'] in ['struct', 'struct_offset', 'class']:
         parent_types.append(type_def['name'])
         
         type_desc = TypeDesc(name=type_def['name'], type_type=type_def['type'],is_primitive=False)
         for member in type_def['members']:
             type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
-           
+        types_desc.add(type_desc)
         parent_types.pop()
         
         return type_desc
@@ -330,21 +335,24 @@ def compute_all_types_desc(types: set[str], model_def: Dict, offset_size: int, p
     for type_name in types:
         if is_primitive_type(type_name):
             continue
-        type_json = get_type_from_json(type_name, model_def)
-        if type_json["type"] == 'union':
-            union_types.add(type_name)
-            continue
-        if type_json["type"] != 'enum':
-            if members_contain_union_recursively(type_json, model_def, offset_size):
-                types_with_union.add(type_name)
-                continue
-        type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
-        types_desc.add(type_desc)
-    for type_name in union_types:
-        type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
-        types_desc.add(type_desc)
-    for type_name in types_with_union:
-        type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
-        types_desc.add(type_desc)
+        compute_add_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
     return types_desc
+    
+    #     type_json = get_type_from_json(type_name, model_def)
+    #     if type_json["type"] == 'union':
+    #         union_types.add(type_name)
+    #         continue
+    #     if type_json["type"] != 'enum':
+    #         if members_contain_union_recursively(type_json, model_def, offset_size):
+    #             types_with_union.add(type_name)
+    #             continue
+    #     type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
+    #     types_desc.add(type_desc)
+    # for type_name in union_types:
+    #     type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
+    #     types_desc.add(type_desc)
+    # for type_name in types_with_union:
+    #     type_desc = compute_type_desc(type_name = type_name, types_desc=types_desc, model_def=model_def, offset_size=offset_size, parent_types=parent_types)
+    #     types_desc.add(type_desc)
+    # return types_desc
 

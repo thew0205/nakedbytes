@@ -58,8 +58,10 @@ int main()
         printf("  Count: %d\n", point.count());
         printf("  Size: %d\n", point.size());
         printf("  SF: %d\n", point.sf());
-        // printf("  Access: %d\n", point.access());
-        // printf("  Mandatory: %d\n", point.mandatory());
+        printf("  Access: %hhu\n", point.access());
+        printf("  Access: %s\n", SunspecPointAccessType_to_string(point.access()));
+        printf("  Mandatory: %hhu\n", point.mandatory());
+        printf("  Mandatory: %s\n", SunspecPointMandatoryType_to_string(point.mandatory()));
         if (point.data().type() == 0)
         {
             printf("  \t\t\tdata is: %d\n", *(uint16_t *)point.data().raw_data());

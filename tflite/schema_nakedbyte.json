@@ -33,7 +33,7 @@
           "value": 5
         },
         {
-          "name": "BOOL",
+          "name": "int8",
           "value": 6
         },
         {
@@ -92,7 +92,7 @@
       "members": [
         {
           "name": "custom",
-          "type": "[uint8]"
+          "type": "vector[uint8]"
         }
       ]
     },
@@ -137,19 +137,19 @@
       "members": [
         {
           "name": "min",
-          "type": "[float32]"
+          "type": "vector[float32]"
         },
         {
           "name": "max",
-          "type": "[float32]"
+          "type": "vector[float32]"
         },
         {
           "name": "scale",
-          "type": "[float32]"
+          "type": "vector[float32]"
         },
         {
           "name": "zero_point",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "details",
@@ -182,7 +182,7 @@
       "members": [
         {
           "name": "enums",
-          "type": "[int32]"
+          "type": "vector[int32]"
         }
       ],
       "alignment": 4
@@ -193,7 +193,7 @@
       "members": [
         {
           "name": "enums",
-          "type": "[uint16]"
+          "type": "vector[uint16]"
         }
       ],
       "alignment": 4
@@ -204,7 +204,7 @@
       "members": [
         {
           "name": "enums",
-          "type": "[uint8]"
+          "type": "vector[uint8]"
         }
       ],
       "alignment": 4
@@ -256,15 +256,15 @@
       "members": [
         {
           "name": "traversal_order",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "block_map",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "dim_metadata",
-          "type": "[DimensionMetadata]"
+          "type": "vector[DimensionMetadata]"
         }
       ],
       "alignment": 4
@@ -275,7 +275,7 @@
       "members": [
         {
           "name": "shape",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "type",
@@ -295,7 +295,7 @@
       "members": [
         {
           "name": "shape",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "type",
@@ -327,7 +327,7 @@
         },
         {
           "name": "shape_signature",
-          "type": "[int32]",
+          "type": "vector[int32]",
           "nullable": true
         },
         {
@@ -337,7 +337,7 @@
         },
         {
           "name": "variant_tensors",
-          "type": "[VariantSubType]",
+          "type": "vector[VariantSubType]",
           "nullable": true
         }
       ],
@@ -1805,15 +1805,15 @@
       "members": [
         {
           "name": "offset_dims",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "collapsed_slice_dims",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "start_index_map",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "index_vector_dim",
@@ -1821,7 +1821,7 @@
         },
         {
           "name": "slice_sizes",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "indices_are_sorted",
@@ -1836,7 +1836,7 @@
       "members": [
         {
           "name": "permutation",
-          "type": "[int64]"
+          "type": "vector[int64]"
         }
       ],
       "alignment": 8
@@ -1866,23 +1866,23 @@
       "members": [
         {
           "name": "lhs_batching_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "rhs_batching_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "lhs_contracting_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "rhs_contracting_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "precision_config",
-          "type": "[StablehloPrecisionConfig]"
+          "type": "vector[StablehloPrecisionConfig]"
         }
       ],
       "alignment": 8
@@ -1893,23 +1893,23 @@
       "members": [
         {
           "name": "window_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "window_strides",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "base_dilations",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "window_dilations",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "padding",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "body_subgraph_index",
@@ -1969,7 +1969,7 @@
       "members": [
         {
           "name": "broadcast_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         }
       ],
       "alignment": 8
@@ -2053,7 +2053,7 @@
       "members": [
         {
           "name": "slice_sizes",
-          "type": "[int64]"
+          "type": "vector[int64]"
         }
       ],
       "alignment": 8
@@ -2064,15 +2064,15 @@
       "members": [
         {
           "name": "edge_padding_low",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "edge_padding_high",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "interior_padding",
-          "type": "[int64]"
+          "type": "vector[int64]"
         }
       ],
       "alignment": 8
@@ -2110,11 +2110,11 @@
         },
         {
           "name": "called_computations",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "custom_attributes",
-          "type": "[uint8]"
+          "type": "vector[uint8]"
         }
       ],
       "alignment": 8
@@ -2125,7 +2125,7 @@
       "members": [
         {
           "name": "dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "body_subgraph_index",
@@ -2140,15 +2140,15 @@
       "members": [
         {
           "name": "start_indices",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "limit_indices",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "strides",
-          "type": "[int64]"
+          "type": "vector[int64]"
         }
       ],
       "alignment": 8
@@ -2159,19 +2159,19 @@
       "members": [
         {
           "name": "window_strides",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "padding",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "lhs_dilation",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "rhs_dilation",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "window_reversal",
@@ -2187,7 +2187,7 @@
         },
         {
           "name": "input_spatial_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "kernel_input_feature_dimension",
@@ -2199,7 +2199,7 @@
         },
         {
           "name": "kernel_spatial_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "output_batch_dimension",
@@ -2211,7 +2211,7 @@
         },
         {
           "name": "output_spatial_dimensions",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "feature_group_count",
@@ -2223,7 +2223,7 @@
         },
         {
           "name": "precision_config",
-          "type": "[StablehloPrecisionConfig]"
+          "type": "vector[StablehloPrecisionConfig]"
         }
       ],
       "alignment": 8
@@ -2238,15 +2238,15 @@
         },
         {
           "name": "update_window_dims",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "inserted_window_dims",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "scatter_dims_to_operand_dims",
-          "type": "[int64]"
+          "type": "vector[int64]"
         },
         {
           "name": "index_vector_dim",
@@ -2269,7 +2269,7 @@
       "members": [
         {
           "name": "branch_subgraph_indices",
-          "type": "[int32]"
+          "type": "vector[int32]"
         }
       ],
       "alignment": 4
@@ -2507,11 +2507,11 @@
         },
         {
           "name": "num_columns_per_channel",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "embedding_dim_per_channel",
-          "type": "[int32]"
+          "type": "vector[int32]"
         }
       ],
       "alignment": 4
@@ -2917,7 +2917,7 @@
       "members": [
         {
           "name": "new_shape",
-          "type": "[int32]"
+          "type": "vector[int32]"
         }
       ],
       "alignment": 4
@@ -3089,7 +3089,7 @@
       "members": [
         {
           "name": "squeeze_dims",
-          "type": "[int32]"
+          "type": "vector[int32]"
         }
       ],
       "alignment": 4
@@ -3781,7 +3781,7 @@
       "members": [
         {
           "name": "boundaries",
-          "type": "[float32]"
+          "type": "vector[float32]"
         }
       ],
       "alignment": 4
@@ -3938,7 +3938,7 @@
     {
       "name": "CustomOptionsFormat",
       "type": "enum",
-      "base_type": "byte",
+      "base_type": "int8",
       "enums": [
         {
           "name": "FLEXBUFFERS",
@@ -3963,7 +3963,7 @@
         },
         {
           "name": "composite_attributes",
-          "type": "[uint8]",
+          "type": "vector[uint8]",
           "offset": 12
         },
         {
@@ -3995,11 +3995,11 @@
         },
         {
           "name": "inputs",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "outputs",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "builtin_options",
@@ -4007,7 +4007,7 @@
         },
         {
           "name": "custom_options",
-          "type": "[uint8]"
+          "type": "vector[uint8]"
         },
         {
           "name": "custom_options_format",
@@ -4015,11 +4015,11 @@
         },
         {
           "name": "mutating_variable_inputs",
-          "type": "[int8]"
+          "type": "vector[int8]"
         },
         {
           "name": "intermediates",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "large_custom_options_offset",
@@ -4047,19 +4047,19 @@
       "members": [
         {
           "name": "tensors",
-          "type": "[Tensor]"
+          "type": "vector[Tensor]"
         },
         {
           "name": "inputs",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "outputs",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "operators",
-          "type": "[Operator]"
+          "type": "vector[Operator]"
         },
         {
           "name": "name",
@@ -4079,7 +4079,7 @@
       "members": [
         {
           "name": "data",
-          "type": "[uint8]",
+          "type": "vector[uint8]",
           "alignment": 16
         },
         {
@@ -4129,11 +4129,11 @@
       "members": [
         {
           "name": "inputs",
-          "type": "[TensorMap]"
+          "type": "vector[TensorMap]"
         },
         {
           "name": "outputs",
-          "type": "[TensorMap]"
+          "type": "vector[TensorMap]"
         },
         {
           "name": "signature_key",
@@ -4160,11 +4160,11 @@
         },
         {
           "name": "operator_codes",
-          "type": "[OperatorCode]"
+          "type": "vector[OperatorCode]"
         },
         {
           "name": "subgraphs",
-          "type": "[SubGraph]"
+          "type": "vector[SubGraph]"
         },
         {
           "name": "description",
@@ -4172,19 +4172,19 @@
         },
         {
           "name": "buffers",
-          "type": "[Buffer]"
+          "type": "vector[Buffer]"
         },
         {
           "name": "metadata_buffer",
-          "type": "[int32]"
+          "type": "vector[int32]"
         },
         {
           "name": "metadata",
-          "type": "[Metadata]"
+          "type": "vector[Metadata]"
         },
         {
           "name": "signature_defs",
-          "type": "[SignatureDef]"
+          "type": "vector[SignatureDef]"
         }
       ],
       "alignment": 8

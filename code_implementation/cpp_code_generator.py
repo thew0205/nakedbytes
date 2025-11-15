@@ -137,6 +137,13 @@ def kind_of_struct(type_desc: TypeDesc) -> bool:
     return type_desc.type_type in ['struct', 'struct_offset', 'class']
 
 
+def generate_struct_enum_number_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
+    ret_str = ""
+    ret_str += f"{mem.type_desc.name} {mem.name}() {{"
+    ret_str += f"return *reinterpret_cast<{mem.type_desc.name}*>(&data_[{parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2 * OFFSET_SIZE' if is_root_type else ''}]);"
+    ret_str += f"}}"
+    return ret_str
+
 def generate_struct_primitive_number_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     ret_str = ""
     type_name = convert_to_cpp_primitive_type(mem.type_desc.name)
@@ -225,6 +232,8 @@ def generate_struct_member_get_function(mem: MemberDesc, parent_type_desc: TypeD
         ret_str += generate_struct_offset_member_get_function(mem, parent_type_desc, is_root_type)
     elif mem.type_desc.is_primitive:
         ret_str += generate_struct_primitive_number_member_get_function(mem, parent_type_desc, is_root_type)
+    elif mem.type_desc.type_type == 'enum':
+        ret_str += generate_struct_enum_number_member_get_function(mem, parent_type_desc, is_root_type)
     elif mem.type_desc.type_type == 'struct':
         ret_str += generate_struct_struct_member_get_function(mem, parent_type_desc, is_root_type)
     return ret_str
@@ -241,6 +250,33 @@ def generate_define_offset_macro(type_desc: TypeDesc) -> str:
         ret_str += f"#define {type_desc.name.upper()}_{mem.name.upper()}_OFFSET {mem.offset}\n"
     return ret_str
 
+def generate_enum_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str]) -> str:
+    ret_str = ''
+    ret_str += f'enum {type_desc.name} : {convert_to_cpp_primitive_type(type_desc.basetype.name)} {{'
+    ret_str += '\n\n'
+    
+    for e_mem in type_desc.e_members:
+        ret_str += f'{e_mem.name},'
+        ret_str += '\n'
+        
+    ret_str += f'}};'
+    
+    ret_str += '\n\n'
+    
+    ret_str += 'const char * '
+    ret_str += f'{type_desc.name}_to_string({type_desc.name} value){{'
+    ret_str += 'switch (value){'
+    for e_mem in type_desc.e_members:
+        ret_str += f'case {e_mem.name}:'
+        ret_str += f'return "{e_mem.name}";'
+    
+        
+    ret_str += 'default: return NULL;'
+    ret_str += '}'
+    ret_str += f'}}'
+    
+    return ret_str
+        
 def generate_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str]) -> str:
     if type_desc.name in type_def_generated:
         return ''
@@ -251,14 +287,14 @@ def generate_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_g
         raise ValueError(f'Type of {type_desc.name} is a primitive type Type definition cannot to be generated.')
     
     if type_desc.type_type == 'enum':
-        ret_str += f'enum {type_desc.name} {{'
-        ret_str += '\n\n'
+        # ret_str += f'enum {type_desc.name} {{'
+        # ret_str += '\n\n'
         
-        for e_mem in type_desc.e_members:
-            ret_str += f'{e_mem.name},'
-            ret_str += '\n'
+        # for e_mem in type_desc.e_members:
+        #     ret_str += f'{e_mem.name},'
+        #     ret_str += '\n'
             
-        ret_str += f'}};'
+        ret_str += generate_enum_type_definition(type_desc=type_desc, is_root_type=is_root_type, type_def_generated=type_def_generated)
     else:
         ret_str += f"struct {type_desc.name} {{"
         ret_str += '\n\n'
