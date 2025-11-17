@@ -237,7 +237,6 @@ def generate_byte(model, root_type_desc: TypeDesc, offset_size: int, version: in
         
     tail_offset = generate_struct_type(model = model, offset_size= offset_size, tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= root_type_desc, types_desc = types_desc, current_offset = current_offset)
     root_array[0:offset_size] = generate_primitive_bytearray_number(tail_offset, type_desc=  get_offset_type_desc_int(offset_size=offset_size, types_desc= types_desc) , offset_size= offset_size, types_desc= types_desc)
-    tail_offset += get_padding_size(tail_offset, alignment=root_type_desc.alignment)
     return root_array[0:tail_offset]
     
     

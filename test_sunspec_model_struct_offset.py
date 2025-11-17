@@ -9,7 +9,7 @@ from code_implementation.type_parsing import parsing, primitive_types
 # 
 # 
 
-model_def_file = "/home/busoye_tm/Documents/matthew/nakedbytes/tflite/schema_nakedbyte.json"
+model_def_file = "/home/busoye_tm/Documents/matthew/nakedbytes/sunspec/sunspec_model_struct_offset.json"
 with open(model_def_file, 'r') as f:
     model_def = json.load(f)
 
@@ -46,25 +46,25 @@ root_type = get_type_from_json(root_type_name, model_def)
     
 set_needed_types(root_type, needed_types, model_def)
 types_desc = parsing(model_def_file)
-# # model_ids = [1, 101, 102, 103, 111, 112, 113, 120, 126, 160]
-# model_ids = [id for id in range(0xffff)]
+# model_ids = [1, 101, 102, 103, 111, 112, 113, 120, 126, 160]
+model_ids = [id for id in range(0xffff)]
 
-# for id in model_ids:
-#     try:
-#         open(f'models/nakedbytes/json/model_{id}.json', 'r')
-#     except:
-#         print(f"Error opening file model_{id}.json")
-#         continue
+for id in model_ids:
+    try:
+        open(f'models/nakedbytes/json/model_{id}.json', 'r')
+    except:
+        print(f"Error opening file model_{id}.json")
+        continue
         
-#     with open(f'models/nakedbytes/json/model_{id}.json', 'r') as f:
-#         model_data = json.load(f)
-#     bin = (generate_byte(model=model_data, root_type_desc=cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc)), types_desc= types_desc, offset_size= offset_size, version= version))
+    with open(f'models/nakedbytes/json/model_{id}.json', 'r') as f:
+        model_data = json.load(f)
+    bin = (generate_byte(model=model_data, root_type_desc=cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc)), types_desc= types_desc, offset_size= offset_size, version= version))
 
-#     with open(f"binary/model_{id}.bin", 'wb') as f:
-#         f.write(bin)
+    with open(f"models/nakedbytes/binary/nakedbytes_array_model_{id}.bin", 'wb') as f:
+        f.write(bin)
         
-with open("tflite/tflite_generated.h", 'wt') as f:
-    f.write(generate_cpp_code(types_desc,root_type_name))
+# with open("tflite/tflite_generated.h", 'wt') as f:
+#     f.write(generate_cpp_code(types_desc,root_type_name))
         
 with open(f'/home/busoye_tm/Documents/matthew/nakedbytes/sunspec/model_1.json', 'r') as f:
     model_data = json.load(f)

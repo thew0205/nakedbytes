@@ -9,7 +9,7 @@
             {
                 "id": "ID",
                 "data_type": "uint16",
-                "data": 10,
+                "data": 1,
                 "count": 1,
                 "count_point_id": null,
                 "size": 1,
@@ -121,7 +121,7 @@
             {
                 "id": "Pad",
                 "data_type": "uint16",
-                "data": 9,
+                "data": null,
                 "count": 1,
                 "count_point_id": null,
                 "size": 1,

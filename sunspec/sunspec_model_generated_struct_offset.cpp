@@ -5,10 +5,10 @@ int main()
     SunspecModelDef model = {modelDefinition};
 
     printf("Model ID: %d\n", model.id());
-    SunspecGroupPointDef group = model.group().value();
-    printf("Group ID: %s\n", group.id().value());
-    printf("Group Count Point ID: %s\n", group.count_point_id().value());
-    printf("Group Label: %s\n", group.label().value());
+    const SunspecGroupPointDef group = model.group().value();
+    printf("Group ID: %s\n", group.id().value().c_str());
+    printf("Group Count Point ID: %s\n", group.count_point_id().value().c_str());
+    printf("Group Label: %s\n", group.label().value().c_str());
     printf("Group Count: %d\n", group.count());
     // printf("Group Type: %d\n", group.type());
     int sip = group.points().size();
@@ -50,11 +50,12 @@ int main()
         printf("Point %zu:\n", i);
         SunspecPointDef point = group.points().get(i).value();
         // printf("  ID: %s\n", point.id().value());
-        printf("  ID: %s\n", point.id().value());
-        printf("  SF ID: %s\n", point.sf_id().value());
-        printf("  Units: %s\n", point.units().value());
-        printf("  Label: %s\n", point.label().value());
+        printf("  ID: %s\n", point.id().value().c_str());
+        printf("  SF ID: %s\n", point.sf_id().value().c_str());
+        printf("  Units: %s\n", point.units().value().c_str());
+        printf("  Label: %s\n", point.label().value().c_str());
         printf("  Data Type: %d\n", point.data().type());
+        printf("  Data Type: %s\n", SunspecPointData_enum_to_string(point.data().type()));
         printf("  Count: %d\n", point.count());
         printf("  Size: %d\n", point.size());
         printf("  SF: %d\n", point.sf());
@@ -62,12 +63,34 @@ int main()
         printf("  Access: %s\n", SunspecPointAccessType_to_string(point.access()));
         printf("  Mandatory: %hhu\n", point.mandatory());
         printf("  Mandatory: %s\n", SunspecPointMandatoryType_to_string(point.mandatory()));
-        if (point.data().type() == 0)
+
+        switch (point.data().type())
         {
-            printf("  \t\t\tdata is: %d\n", *(uint16_t *)point.data().raw_data());
+        case SunspecPointData_enum_uint16:
+        case SunspecPointData_enum_int16:
+            printf("\t\tdata is: %d\n", point.data().data_as_uint16());
+            break;
+        case SunspecPointData_enum_uint32:
+        case SunspecPointData_enum_int32:
+            printf("\t\tdata is: %d\n", point.data().data_as_uint32());
+            break;
+        case SunspecPointData_enum_uint64:
+        case SunspecPointData_enum_int64:
+            printf("\t\tdata is: %d\n", point.data().data_as_uint64());
+            break;
+        case SunspecPointData_enum_float32:
+        case SunspecPointData_enum_float64:
+            printf("\t\tdata is: %lf\n", point.data().data_as_uint16());
+            break;
+        case SunspecPointData_enum_string:
+            printf("\t\tdata is: %s\n", point.data().data_as_string().value().c_str());
+            break;
+            break;
+
+        default:
+            break;
         }
     }
 
-    
     return 0;
 }
