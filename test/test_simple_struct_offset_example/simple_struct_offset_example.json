@@ -1,5 +1,6 @@
 {
     "offset_size": 2,
+    "version": 0,
     "root_type": "Packet",
     "types": [
         {
@@ -22,12 +23,12 @@
                 },
                 {
                     "name": "damage",
-                    "type": "int16"
+                    "type": "uint32"
                 }
             ]
         },
         {
-            "name": "AnyMessage",
+            "name": "AnyPower",
             "type": "union",
             "unions": [
                 {
@@ -47,9 +48,16 @@
                     "type": "int16"
                 },
                 {
-                    "name": "data",
-                    "type": "AnyMessage",
-                    "is_array": true
+                    "name": "power",
+                    "type": "AnyPower"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                },
+                {
+                    "name": "length",
+                    "type": "uint32"
                 }
             ]
         }

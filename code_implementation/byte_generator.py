@@ -5,47 +5,70 @@ from code_implementation.type_desc_holder import TypeDesc, get_offset_type_desc_
 from code_implementation.type_utils import get_padding_size
 
 
-def generate_primitive_bytearray_number(value, type_desc: TypeDesc, offset_size: int, types_desc: set[TypeDesc]) -> bytearray:
+def generate_primitive_bytearray_number(value: str|int|float|bool, type_desc: TypeDesc, offset_size: int, types_desc: set[TypeDesc]) -> bytearray:
+   
+
     if value == None:
         # raise ValueError("Don't know what to do yet")
         return bytearray(b'\x00' * type_desc.size)
     elif type_desc.name == 'bool':
-        val = int(1 if value else 0)
-        return bytearray(struct.pack('b', val))
-    elif type_desc.name == 'char':       
-        return value.encode(encoding='ascii')[0:1]
-    elif type_desc.name == 'int8':
-        val = int(value)
-        return bytearray(struct.pack('b', val))
-    elif type_desc.name == 'uint8':
-        val = int(value)
-        return bytearray(struct.pack('B', val))
-    elif type_desc.name == 'int16':
-        val = int(value)
-        return bytearray(struct.pack('<h', val))
-    elif type_desc.name == 'uint16':
-        val = int(value)
-        return bytearray(struct.pack('<H', val))
-    elif type_desc.name == 'int32':
-        val = int(value)
-        return bytearray(struct.pack('<i', val))
-    elif type_desc.name == 'uint32':
-        val = int(value)
-        return bytearray(struct.pack('<I', val))
-    elif type_desc.name == 'int64':
-        val = int(value)
-        return bytearray(struct.pack('<q', val))
-    elif type_desc.name == 'uint64':
-        val = int(value)
-        return bytearray(struct.pack('<Q', val))
-    elif type_desc.name == 'float32':
-        val = float(value)
-        return bytearray(struct.pack('<f', val))
-    elif type_desc.name == 'float64':
-        val = float(value)
-        return bytearray(struct.pack('<d', val))
-    else:
-        raise ValueError(f"Unsupported primitive type: {type_desc.name}")
+        value_bool: bool =  False
+        if(isinstance(value, str)):
+            value_bool = value.lower() == 'true'
+        elif(isinstance(value, int)):
+            value_bool = value == 1
+        elif(isinstance(value, bool)):
+            value_bool = value
+        return bytearray(struct.pack('b', value_bool))
+    elif type_desc.name == 'char':  
+        return bytearray(str(value).encode(encoding='utf-8')[0:1])
+    
+    elif type_desc.name in ['int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64']:
+        base = 10
+        
+        if(isinstance(value, str)):
+            if value.lower().startswith('0x'):
+                base = 16
+            elif value.lower().startswith('0o'):
+                base = 8
+            elif value.lower().startswith('0b'):
+                base = 2
+            else:
+                base = 10
+                
+            value_int: int = int(value, base)
+            
+        elif(isinstance(value, int)):
+            value_int = value
+ 
+        if type_desc.name == 'uint8':
+            return bytearray(struct.pack('b', value_int))
+        elif type_desc.name == 'int8':
+            return bytearray(struct.pack('b', value_int))
+        elif type_desc.name == 'uint8':
+            return bytearray(struct.pack('B', value_int))
+        elif type_desc.name == 'int16':
+            return bytearray(struct.pack('<h', value_int))
+        elif type_desc.name == 'uint16':
+            return bytearray(struct.pack('<H', value_int))
+        elif type_desc.name == 'int32':
+            return bytearray(struct.pack('<i', value_int))
+        elif type_desc.name == 'uint32':
+            return bytearray(struct.pack('<I', value_int))
+        elif type_desc.name == 'int64':
+            return bytearray(struct.pack('<q', value_int))
+        elif type_desc.name == 'uint64':
+            return bytearray(struct.pack('<Q', value_int))
+    
+    elif type_desc.name in ['float32', 'float64']:
+        value_float: float = float(value)
+        if type_desc.name == 'float64':
+            return bytearray(struct.pack('<f', value_float))
+        elif type_desc.name == 'float64':
+            value_float = float(value)
+            return bytearray(struct.pack('<d', value_float))
+    
+    raise ValueError(f"Unsupported primitive type: {type_desc.name}")
 
 def generate_enum_type(model ,offset_size: int, current_type_desc: TypeDesc, types_desc: set[TypeDesc]) -> bytearray:
     if current_type_desc.type_type != 'enum':
@@ -111,10 +134,10 @@ def generate_vector_type(model: List, root_array: bytearray, array_size: int, cu
         
     return current_offset, tail_offset
 
-def generate_union_type(model, root_array: bytearray, array_size: int, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int, true_union_type: str) ->Tuple[int, int]:
+def generate_union_type(model, root_array: bytearray, array_size: int, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int, true_union_type: TypeDesc) ->Tuple[int, int]:
     if current_type_desc.type_type != 'union':
         raise ValueError(f"The type must be of type union instead of {current_type_desc.type_type}")
-    true_union_type_desc = cast(TypeDesc, get_type_desc_from_types_desc(true_union_type, types_desc))
+    true_union_type_desc = cast(TypeDesc, get_type_desc_from_types_desc(true_union_type.name, types_desc))
     current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
     tail_offset = current_offset + true_union_type_desc.size 
     while(array_size < tail_offset):
@@ -128,9 +151,9 @@ def generate_union_type(model, root_array: bytearray, array_size: int, current_t
         root_array[current_offset: current_offset + offset_size] = generate_primitive_bytearray_number(value, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  offset_size=offset_size, types_desc= types_desc)
     elif true_union_type_desc.is_primitive:
         root_array[current_offset: current_offset + true_union_type_desc.size] = generate_primitive_bytearray_number(value= model, type_desc= true_union_type_desc, types_desc= types_desc, offset_size=offset_size)   
-    elif current_type_desc.type_type == 'enum':
+    elif true_union_type_desc.type_type == 'enum':
         root_array[current_offset : current_offset+ true_union_type_desc.size] = generate_enum_type(model= model, types_desc= types_desc, offset_size=offset_size, current_type_desc=true_union_type_desc)  
-    elif current_type_desc.type_type == 'struct':
+    elif true_union_type_desc.type_type == 'struct':
         tail_offset = generate_struct_type(model=model, root_array= root_array, current_offset= current_offset, offset_size= offset_size, array_size= array_size, current_type_desc= true_union_type_desc,tail_offset= tail_offset, types_desc= types_desc)
     return current_offset, tail_offset
         
@@ -161,7 +184,7 @@ def generate_offset_type(model, root_array: bytearray, array_size: int, current_
     if is_array:
         return generate_vector_type(model= model, root_array= root_array, array_size= array_size, current_type_desc= current_type_desc, types_desc= types_desc, current_offset= current_offset, offset_size= offset_size)
     elif current_type_desc.type_type == 'union':
-        return generate_union_type(model=model, root_array=root_array, array_size= array_size, current_type_desc=  current_type_desc, types_desc= types_desc, current_offset= current_offset, true_union_type= cast(str, true_union_type), offset_size= offset_size)
+        return generate_union_type(model=model, root_array=root_array, array_size= array_size, current_type_desc=  current_type_desc, types_desc= types_desc, current_offset= current_offset, true_union_type = cast(TypeDesc , get_type_desc_from_types_desc(type_name = cast(str, true_union_type), types_desc= types_desc)), offset_size= offset_size)
     elif current_type_desc.name == 'string':
         return generate_string_type(model=model, root_array= root_array, array_size= array_size, current_type_desc= current_type_desc, offset_size= offset_size, types_desc= types_desc, current_offset= current_offset )
     elif current_type_desc.type_type == 'struct_offset':
@@ -208,7 +231,7 @@ def generate_struct_type(model: Dict, root_array: bytearray, array_size: int, cu
         elif member.type_desc.type_type == 'enum':
             root_array[member_offset : member_offset + member.size] = generate_enum_type(model= model[member.name],offset_size= offset_size, current_type_desc= member.type_desc, types_desc= types_desc)
         elif member.type_desc.type_type == 'struct':
-            tail_offset = generate_struct_type(model = model[member.name], offset_size= offset_size,  tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= current_type_desc, types_desc = types_desc, current_offset = current_offset)
+            tail_offset = generate_struct_type(model = model[member.name], offset_size= offset_size,  tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= member.type_desc, types_desc = types_desc, current_offset = current_offset)
         else:
             raise ValueError(f"Type of {current_type_desc.name} is unknown")
     return tail_offset

@@ -571,7 +571,7 @@ def generate_union_type_access_offset_type_definition(type_desc: TypeDesc, paren
     
     if type_desc.name == 'string':
         type_name = 'String'
-    elif type_desc.name in  ['struct_offset', 'class']:
+    elif type_desc.type_type in  ['struct_offset', 'class']:
         type_name = type_desc.name
     else:
         raise ValueError(f"Type of {type_desc.name} is not an offset type")

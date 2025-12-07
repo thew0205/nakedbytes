@@ -8,6 +8,17 @@
 
 
 
+struct SunspecModelDef; 
+struct pad; 
+struct enum16; 
+struct enum32; 
+struct SunspecGroupPointDef; 
+struct enum64; 
+struct bitfield16; 
+struct SunspecPointDef; 
+struct bitfield32; 
+struct bitfield64; 
+struct sunssf; 
 struct acc16; 
 struct SunspecPointData; 
 struct SunspecPointDataOffset; 
@@ -16,20 +27,6 @@ struct acc64;
 struct eui48; 
 struct ipaddr; 
 struct ipv6addr; 
-struct SunspecModelDef; 
-struct SunspecModelDefOffset; 
-struct pad; 
-struct enum16; 
-struct SunspecGroupPointDef; 
-struct SunspecGroupPointDefOffset; 
-struct enum32; 
-struct enum64; 
-struct SunspecPointDef; 
-struct SunspecPointDefOffset; 
-struct bitfield16; 
-struct bitfield32; 
-struct bitfield64; 
-struct sunssf; 
 
 
 
@@ -138,27 +135,103 @@ struct Vector
 };
 
 
+enum SunspecPointMandatoryType : uint8_t {
 
-
-struct acc16 {
-
-unsigned char * data_;
-
-acc16(unsigned char * data) : data_(data) {}
-
-#define ACC16_VALUE_OFFSET 0
-
-
-uint16_t value() const {
-return *reinterpret_cast<uint16_t*>(&data_[ACC16_VALUE_OFFSET ]);
-}
-
+SunspecPointMandatoryType_kM,
+SunspecPointMandatoryType_kO,
 };
 
+const char * SunspecPointMandatoryType_to_string(SunspecPointMandatoryType value){
+switch (value){
+case SunspecPointMandatoryType_kM:
+return "SunspecPointMandatoryType_kM";
+case SunspecPointMandatoryType_kO:
+return "SunspecPointMandatoryType_kO";
+default:
+return NULL;
+}
+}
 
 
+enum SunspecPointData_enum : uint16_t {
 
+SunspecPointData_enum_uint16,
+SunspecPointData_enum_int16,
+SunspecPointData_enum_uint32,
+SunspecPointData_enum_int32,
+SunspecPointData_enum_uint64,
+SunspecPointData_enum_int64,
+SunspecPointData_enum_float32,
+SunspecPointData_enum_float64,
+SunspecPointData_enum_string,
+SunspecPointData_enum_pad,
+SunspecPointData_enum_enum16,
+SunspecPointData_enum_enum32,
+SunspecPointData_enum_enum64,
+SunspecPointData_enum_bitfield16,
+SunspecPointData_enum_bitfield32,
+SunspecPointData_enum_bitfield64,
+SunspecPointData_enum_sunssf,
+SunspecPointData_enum_acc16,
+SunspecPointData_enum_acc32,
+SunspecPointData_enum_acc64,
+SunspecPointData_enum_eui48,
+SunspecPointData_enum_ipaddr,
+SunspecPointData_enum_ipv6addr,
+};
 
+const char * SunspecPointData_enum_to_string(SunspecPointData_enum value){
+switch (value){
+case SunspecPointData_enum_uint16:
+return "SunspecPointData_enum_uint16";
+case SunspecPointData_enum_int16:
+return "SunspecPointData_enum_int16";
+case SunspecPointData_enum_uint32:
+return "SunspecPointData_enum_uint32";
+case SunspecPointData_enum_int32:
+return "SunspecPointData_enum_int32";
+case SunspecPointData_enum_uint64:
+return "SunspecPointData_enum_uint64";
+case SunspecPointData_enum_int64:
+return "SunspecPointData_enum_int64";
+case SunspecPointData_enum_float32:
+return "SunspecPointData_enum_float32";
+case SunspecPointData_enum_float64:
+return "SunspecPointData_enum_float64";
+case SunspecPointData_enum_string:
+return "SunspecPointData_enum_string";
+case SunspecPointData_enum_pad:
+return "SunspecPointData_enum_pad";
+case SunspecPointData_enum_enum16:
+return "SunspecPointData_enum_enum16";
+case SunspecPointData_enum_enum32:
+return "SunspecPointData_enum_enum32";
+case SunspecPointData_enum_enum64:
+return "SunspecPointData_enum_enum64";
+case SunspecPointData_enum_bitfield16:
+return "SunspecPointData_enum_bitfield16";
+case SunspecPointData_enum_bitfield32:
+return "SunspecPointData_enum_bitfield32";
+case SunspecPointData_enum_bitfield64:
+return "SunspecPointData_enum_bitfield64";
+case SunspecPointData_enum_sunssf:
+return "SunspecPointData_enum_sunssf";
+case SunspecPointData_enum_acc16:
+return "SunspecPointData_enum_acc16";
+case SunspecPointData_enum_acc32:
+return "SunspecPointData_enum_acc32";
+case SunspecPointData_enum_acc64:
+return "SunspecPointData_enum_acc64";
+case SunspecPointData_enum_eui48:
+return "SunspecPointData_enum_eui48";
+case SunspecPointData_enum_ipaddr:
+return "SunspecPointData_enum_ipaddr";
+case SunspecPointData_enum_ipv6addr:
+return "SunspecPointData_enum_ipv6addr";
+default:
+return NULL;
+}
+}
 
 
 struct pad {
@@ -305,6 +378,25 @@ sunssf(unsigned char * data) : data_(data) {}
 
 uint16_t value() const {
 return *reinterpret_cast<uint16_t*>(&data_[SUNSSF_VALUE_OFFSET ]);
+}
+
+};
+
+
+
+
+
+struct acc16 {
+
+unsigned char * data_;
+
+acc16(unsigned char * data) : data_(data) {}
+
+#define ACC16_VALUE_OFFSET 0
+
+
+uint16_t value() const {
+return *reinterpret_cast<uint16_t*>(&data_[ACC16_VALUE_OFFSET ]);
 }
 
 };
@@ -571,115 +663,6 @@ return type() == SunspecPointData_enum_ipv6addr ? ipv6addr(raw_data()) : 0;
 
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-enum SunspecGroupType : uint8_t {
-
-SunspecGroupType_kGroup,
-SunspecGroupType_kSync,
-};
-
-const char * SunspecGroupType_to_string(SunspecGroupType value){
-switch (value){
-case SunspecGroupType_kGroup:
-return "SunspecGroupType_kGroup";
-case SunspecGroupType_kSync:
-return "SunspecGroupType_kSync";
-default:
-return NULL;
-}
-}
-
-
-enum SunspecPointData_enum : uint16_t {
-
-SunspecPointData_enum_uint16,
-SunspecPointData_enum_int16,
-SunspecPointData_enum_uint32,
-SunspecPointData_enum_int32,
-SunspecPointData_enum_uint64,
-SunspecPointData_enum_int64,
-SunspecPointData_enum_float32,
-SunspecPointData_enum_float64,
-SunspecPointData_enum_string,
-SunspecPointData_enum_pad,
-SunspecPointData_enum_enum16,
-SunspecPointData_enum_enum32,
-SunspecPointData_enum_enum64,
-SunspecPointData_enum_bitfield16,
-SunspecPointData_enum_bitfield32,
-SunspecPointData_enum_bitfield64,
-SunspecPointData_enum_sunssf,
-SunspecPointData_enum_acc16,
-SunspecPointData_enum_acc32,
-SunspecPointData_enum_acc64,
-SunspecPointData_enum_eui48,
-SunspecPointData_enum_ipaddr,
-SunspecPointData_enum_ipv6addr,
-};
-
-const char * SunspecPointData_enum_to_string(SunspecPointData_enum value){
-switch (value){
-case SunspecPointData_enum_uint16:
-return "SunspecPointData_enum_uint16";
-case SunspecPointData_enum_int16:
-return "SunspecPointData_enum_int16";
-case SunspecPointData_enum_uint32:
-return "SunspecPointData_enum_uint32";
-case SunspecPointData_enum_int32:
-return "SunspecPointData_enum_int32";
-case SunspecPointData_enum_uint64:
-return "SunspecPointData_enum_uint64";
-case SunspecPointData_enum_int64:
-return "SunspecPointData_enum_int64";
-case SunspecPointData_enum_float32:
-return "SunspecPointData_enum_float32";
-case SunspecPointData_enum_float64:
-return "SunspecPointData_enum_float64";
-case SunspecPointData_enum_string:
-return "SunspecPointData_enum_string";
-case SunspecPointData_enum_pad:
-return "SunspecPointData_enum_pad";
-case SunspecPointData_enum_enum16:
-return "SunspecPointData_enum_enum16";
-case SunspecPointData_enum_enum32:
-return "SunspecPointData_enum_enum32";
-case SunspecPointData_enum_enum64:
-return "SunspecPointData_enum_enum64";
-case SunspecPointData_enum_bitfield16:
-return "SunspecPointData_enum_bitfield16";
-case SunspecPointData_enum_bitfield32:
-return "SunspecPointData_enum_bitfield32";
-case SunspecPointData_enum_bitfield64:
-return "SunspecPointData_enum_bitfield64";
-case SunspecPointData_enum_sunssf:
-return "SunspecPointData_enum_sunssf";
-case SunspecPointData_enum_acc16:
-return "SunspecPointData_enum_acc16";
-case SunspecPointData_enum_acc32:
-return "SunspecPointData_enum_acc32";
-case SunspecPointData_enum_acc64:
-return "SunspecPointData_enum_acc64";
-case SunspecPointData_enum_eui48:
-return "SunspecPointData_enum_eui48";
-case SunspecPointData_enum_ipaddr:
-return "SunspecPointData_enum_ipaddr";
-case SunspecPointData_enum_ipv6addr:
-return "SunspecPointData_enum_ipv6addr";
-default:
-return NULL;
-}
-}
 enum SunspecPointAccessType : uint8_t {
 
 SunspecPointAccessType_kR,
@@ -692,22 +675,6 @@ case SunspecPointAccessType_kR:
 return "SunspecPointAccessType_kR";
 case SunspecPointAccessType_kRW:
 return "SunspecPointAccessType_kRW";
-default:
-return NULL;
-}
-}
-enum SunspecPointMandatoryType : uint8_t {
-
-SunspecPointMandatoryType_kM,
-SunspecPointMandatoryType_kO,
-};
-
-const char * SunspecPointMandatoryType_to_string(SunspecPointMandatoryType value){
-switch (value){
-case SunspecPointMandatoryType_kM:
-return "SunspecPointMandatoryType_kM";
-case SunspecPointMandatoryType_kO:
-return "SunspecPointMandatoryType_kO";
 default:
 return NULL;
 }
@@ -787,24 +754,23 @@ return *reinterpret_cast<SunspecPointMandatoryType*>(&data_[SUNSPECPOINTDEF_MAND
 
 
 
-struct SunspecPointDefOffset {
+enum SunspecGroupType : uint8_t {
 
-unsigned char * data_;
-
-SunspecPointDefOffset (unsigned char * data) : data_(data) {}
-
-
-     bool is_null()
-    {
-        return *reinterpret_cast<uint16_t *>(data_) == 0;
-    }
-    
-
-SunspecPointDef value(){
- const int16_t offset = *reinterpret_cast<int16_t *>(data_);
-return SunspecPointDef(&data_[offset]);
-}
+SunspecGroupType_kGroup,
+SunspecGroupType_kSync,
 };
+
+const char * SunspecGroupType_to_string(SunspecGroupType value){
+switch (value){
+case SunspecGroupType_kGroup:
+return "SunspecGroupType_kGroup";
+case SunspecGroupType_kSync:
+return "SunspecGroupType_kSync";
+default:
+return NULL;
+}
+}
+
 
 struct SunspecGroupPointDef {
 
@@ -831,14 +797,14 @@ const int16_t offset = SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET ;
 return Offset<String>(&data_[offset]);
 }
 
-Vector<Offset<SunspecPointDef>> points() const {
+Vector<SunspecPointDef> points() const {
 const int16_t offset = SUNSPECGROUPPOINTDEF_POINTS_OFFSET ;
-return Vector<Offset<SunspecPointDef>>(&data_[offset]);
+return Vector<SunspecPointDef>(&data_[offset]);
 }
 
-Vector<Offset<SunspecGroupPointDef>> groups() const {
+Vector<SunspecGroupPointDef> groups() const {
 const int16_t offset = SUNSPECGROUPPOINTDEF_GROUPS_OFFSET ;
-return Vector<Offset<SunspecGroupPointDef>>(&data_[offset]);
+return Vector<SunspecGroupPointDef>(&data_[offset]);
 }
 
 Offset<String> label() const {
@@ -858,24 +824,7 @@ return *reinterpret_cast<SunspecGroupType*>(&data_[SUNSPECGROUPPOINTDEF_TYPE_OFF
 
 
 
-struct SunspecGroupPointDefOffset {
 
-unsigned char * data_;
-
-SunspecGroupPointDefOffset (unsigned char * data) : data_(data) {}
-
-
-     bool is_null()
-    {
-        return *reinterpret_cast<uint16_t *>(data_) == 0;
-    }
-    
-
-SunspecGroupPointDef value(){
- const int16_t offset = *reinterpret_cast<int16_t *>(data_);
-return SunspecGroupPointDef(&data_[offset]);
-}
-};
 
 struct SunspecModelDef {
 
@@ -891,30 +840,27 @@ uint16_t id() const {
 return *reinterpret_cast<uint16_t*>(&data_[SUNSPECMODELDEF_ID_OFFSET + 2* OFFSET_SIZE]);
 }
 
-Offset<SunspecGroupPointDef> group() const {const int16_t offset =SUNSPECMODELDEF_GROUP_OFFSET + 2* OFFSET_SIZE;return Offset<SunspecGroupPointDef>(&data_[offset]);}
+SunspecGroupPointDef group() const {return SunspecGroupPointDef(&data_[SUNSPECMODELDEF_GROUP_OFFSET + 2* OFFSET_SIZE]);}
 
 };
 
 
 
-struct SunspecModelDefOffset {
-
-unsigned char * data_;
-
-SunspecModelDefOffset (unsigned char * data) : data_(data) {}
 
 
-     bool is_null()
-    {
-        return *reinterpret_cast<uint16_t *>(data_) == 0;
-    }
-    
 
-SunspecModelDef value(){
- const int16_t offset = *reinterpret_cast<int16_t *>(data_);
-return SunspecModelDef(&data_[offset]);
-}
-};
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
