@@ -8,11 +8,11 @@
 
 
 
-struct Monster; 
-struct Weapon; 
 struct AnyPower; 
 struct AnyPowerOffset; 
 struct Packet; 
+struct Monster; 
+struct Weapon; 
 
 
 
@@ -28,7 +28,7 @@ struct String
     uint16_t length() const
     {
         int16_t offset = STRING_LENGTH_OFFSET;
-        return *reinterpret_cast<uint16_t *>(data[offset]);
+        return *reinterpret_cast<uint16_t *>(&data[offset]);
     }
 
 #define STRING_VALUE_OFFSET 2
@@ -55,7 +55,7 @@ struct Offset
 
     T value() const
     {
-        int16_t offset = *reinterpret_cast<int16_t *>(data);
+        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
         return T(&data[offset]);
     }
 };
@@ -121,6 +121,24 @@ struct Vector
 };
 
 
+enum AnyPower_enum : uint16_t {
+
+AnyPower_enum_Monster,
+AnyPower_enum_Weapon,
+};
+
+const char * AnyPower_enum_to_string(AnyPower_enum value){
+switch (value){
+case AnyPower_enum_Monster:
+return "AnyPower_enum_Monster";
+case AnyPower_enum_Weapon:
+return "AnyPower_enum_Weapon";
+default:
+return NULL;
+}
+}
+
+
 
 
 struct Monster {
@@ -138,8 +156,6 @@ return Offset<String>(&data_[offset]);
 }
 
 };
-
-
 
 
 
@@ -171,26 +187,6 @@ return *reinterpret_cast<uint32_t*>(&data_[WEAPON_DAMAGE_OFFSET ]);
 
 
 
-enum AnyPower_enum : uint16_t {
-
-AnyPower_enum_Monster,
-AnyPower_enum_Weapon,
-};
-
-const char * AnyPower_enum_to_string(AnyPower_enum value){
-switch (value){
-case AnyPower_enum_Monster:
-return "AnyPower_enum_Monster";
-case AnyPower_enum_Weapon:
-return "AnyPower_enum_Weapon";
-default:
-return NULL;
-}
-}
-
-
-
-
 struct AnyPower{
 
 unsigned char * data_;
@@ -199,9 +195,7 @@ AnyPower(unsigned char * data) : data_(data) {}
 
 #define ANYPOWER_TYPE_OFFSET 0
 #define ANYPOWER_DATA_OFFSET 2
-AnyPower_enum type() const {
-return *reinterpret_cast<AnyPower_enum *>(&data_[ANYPOWER_TYPE_OFFSET]);
-}
+
 
 bool is_null() const {
 return (type() == 0) or (*reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) == 0);
@@ -210,6 +204,10 @@ return (type() == 0) or (*reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFS
 unsigned char *raw_data() const {const int16_t offset = *reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) + ANYPOWER_DATA_OFFSET;
 return (&data_[offset]);
 }
+AnyPower_enum type() const {
+return *reinterpret_cast<AnyPower_enum *>(&data_[ANYPOWER_TYPE_OFFSET]);
+}
+
 Monster data_as_Monster() const {
 return type() == AnyPower_enum_Monster ? Monster(raw_data()) : 0;
 }
@@ -246,7 +244,7 @@ return *reinterpret_cast<AnyPower_enum*>(&data_[PACKET_POWER_TYPE_OFFSET + 2 * O
 }
 
 AnyPower power() const {
-const int16_t offset = PACKET_POWER_OFFSET - 2;
+const int16_t offset = PACKET_POWER_OFFSET - 2 + 2* OFFSET_SIZE;
 return AnyPower(&data_[offset]);
 }
 
@@ -260,6 +258,10 @@ return *reinterpret_cast<uint32_t*>(&data_[PACKET_LENGTH_OFFSET + 2* OFFSET_SIZE
 }
 
 };
+
+
+
+
 
 
 

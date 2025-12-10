@@ -6,20 +6,5 @@
     "power": {
         "name": "Most dangerous weapon!!!",
         "damage": "0xdeadadde"
-    },
-    "data": [
-        {
-            "type": "Monster",
-            "value": {
-                "name": "Orc"
-            }
-        },
-        {
-            "type": "Weapon",
-            "value": {
-                "name": "Sword",
-                "damage": 10
-            }
-        }
-    ]
+    }
 }

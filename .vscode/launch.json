@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "Python Debugger: Current File",
             "type": "debugpy",
@@ -15,7 +16,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/busoye_tm/Documents/matthew/nakedbytes/sunspec/sunspec_model_generated_struct_offset",
+            "program": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/test/test_simple_class_example/simple_class_example",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

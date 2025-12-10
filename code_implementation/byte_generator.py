@@ -220,7 +220,7 @@ def generate_struct_type(model: Dict, root_array: bytearray, array_size: int, cu
     for member in current_type_desc.members:
         member_offset = current_offset + member.offset
         if member.name.startswith('pad'):
-                root_array[member.offset: member.offset + member.size] = b'\xa5' * member.size
+                root_array[member_offset: member_offset + member.size] = b'\xa5' * member.size
         elif member.is_offset_type:
             value = 0
             if offset_member_map[member.name]  != None:

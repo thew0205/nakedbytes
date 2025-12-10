@@ -8,14 +8,14 @@
 
 
 
+struct Weapon; 
+struct WeaponOffset; 
 struct Packet; 
 struct PacketOffset; 
 struct AnyPower; 
 struct AnyPowerOffset; 
 struct Monster; 
 struct MonsterOffset; 
-struct Weapon; 
-struct WeaponOffset; 
 
 
 
@@ -31,7 +31,7 @@ struct String
     uint16_t length() const
     {
         int16_t offset = STRING_LENGTH_OFFSET;
-        return *reinterpret_cast<uint16_t *>(data[offset]);
+        return *reinterpret_cast<uint16_t *>(&data[offset]);
     }
 
 #define STRING_VALUE_OFFSET 2
@@ -58,7 +58,7 @@ struct Offset
 
     T value() const
     {
-        int16_t offset = *reinterpret_cast<int16_t *>(data);
+        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
         return T(&data[offset]);
     }
 };
@@ -124,6 +124,51 @@ struct Vector
 };
 
 
+
+
+struct Weapon {
+
+unsigned char * data_;
+
+Weapon(unsigned char * data) : data_(data) {}
+
+#define WEAPON_NAME_OFFSET 0
+#define WEAPON_PAD2_OFFSET 2
+#define WEAPON_DAMAGE_OFFSET 4
+
+
+Offset<String> name() const {
+const int16_t offset = WEAPON_NAME_OFFSET ;
+return Offset<String>(&data_[offset]);
+}
+
+uint32_t damage() const {
+return *reinterpret_cast<uint32_t*>(&data_[WEAPON_DAMAGE_OFFSET ]);
+}
+
+};
+
+
+
+struct WeaponOffset {
+
+unsigned char * data_;
+
+WeaponOffset (unsigned char * data) : data_(data) {}
+
+
+     bool is_null()
+    {
+        return *reinterpret_cast<uint16_t *>(data_) == 0;
+    }
+    
+
+Weapon value(){
+ const int16_t offset = *reinterpret_cast<int16_t *>(data_);
+return Weapon(&data_[offset]);
+}
+};
+
 enum AnyPower_enum : uint16_t {
 
 AnyPower_enum_Monster,
@@ -179,49 +224,6 @@ return Monster(&data_[offset]);
 }
 };
 
-struct Weapon {
-
-unsigned char * data_;
-
-Weapon(unsigned char * data) : data_(data) {}
-
-#define WEAPON_NAME_OFFSET 0
-#define WEAPON_PAD2_OFFSET 2
-#define WEAPON_DAMAGE_OFFSET 4
-
-
-Offset<String> name() const {
-const int16_t offset = WEAPON_NAME_OFFSET ;
-return Offset<String>(&data_[offset]);
-}
-
-uint32_t damage() const {
-return *reinterpret_cast<uint32_t*>(&data_[WEAPON_DAMAGE_OFFSET ]);
-}
-
-};
-
-
-
-struct WeaponOffset {
-
-unsigned char * data_;
-
-WeaponOffset (unsigned char * data) : data_(data) {}
-
-
-     bool is_null()
-    {
-        return *reinterpret_cast<uint16_t *>(data_) == 0;
-    }
-    
-
-Weapon value(){
- const int16_t offset = *reinterpret_cast<int16_t *>(data_);
-return Weapon(&data_[offset]);
-}
-};
-
 struct AnyPower{
 
 unsigned char * data_;
@@ -230,9 +232,7 @@ AnyPower(unsigned char * data) : data_(data) {}
 
 #define ANYPOWER_TYPE_OFFSET 0
 #define ANYPOWER_DATA_OFFSET 2
-AnyPower_enum type() const {
-return *reinterpret_cast<AnyPower_enum *>(&data_[ANYPOWER_TYPE_OFFSET]);
-}
+
 
 bool is_null() const {
 return (type() == 0) or (*reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) == 0);
@@ -241,6 +241,10 @@ return (type() == 0) or (*reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFS
 unsigned char *raw_data() const {const int16_t offset = *reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) + ANYPOWER_DATA_OFFSET;
 return (&data_[offset]);
 }
+AnyPower_enum type() const {
+return *reinterpret_cast<AnyPower_enum *>(&data_[ANYPOWER_TYPE_OFFSET]);
+}
+
 Offset<Monster> data_as_Monster() const {
 return type() == AnyPower_enum_Monster ? Offset<Monster>(raw_data()) : 0;
 }
@@ -275,7 +279,7 @@ return *reinterpret_cast<AnyPower_enum*>(&data_[PACKET_POWER_TYPE_OFFSET + 2 * O
 }
 
 AnyPower power() const {
-const int16_t offset = PACKET_POWER_OFFSET - 2;
+const int16_t offset = PACKET_POWER_OFFSET - 2 + 2* OFFSET_SIZE;
 return AnyPower(&data_[offset]);
 }
 
@@ -310,8 +314,6 @@ Packet value(){
 return Packet(&data_[offset]);
 }
 };
-
-
 
 
 

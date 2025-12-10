@@ -1,33 +1,5 @@
-# struct StringOffset
-# {
-#     unsigned char *data;
-#     StringOffset(unsigned char *dataPtr)
-#     {
-#         data = dataPtr;
-#     }
-
-# #define STRING_LENGTH_OFFSET 0
-#     uint16_t length()
-#     {
-#         uint16_t offset = *reinterpret_cast<uint16_t *>(data) + STRING_LENGTH_OFFSET;
-#         return *reinterpret_cast<uint16_t *>(data[offset]);
-#     }
-
-# #define STRING_VALUE_OFFSET 2
-#     const char *value()
-#     {
-#         uint16_t offset = *reinterpret_cast<uint16_t *>(data) + STRING_VALUE_OFFSET;
-#         return reinterpret_cast<const char *>(&data[offset]);
-#     }
-
-#     bool is_null()
-#     {
-#         return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
-#     }
-# };
-
-from typing import List
-from code_implementation.type_desc_holder import MemberDesc, TypeDesc
+from typing import List, cast
+from code_implementation.type_desc_holder import MemberDesc, TypeDesc, get_type_desc_from_types_desc
 
 
 def get_header_files() -> str:
@@ -55,7 +27,7 @@ struct String
     uint16_t length() const
     {
         int16_t offset = STRING_LENGTH_OFFSET;
-        return *reinterpret_cast<uint16_t *>(data[offset]);
+        return *reinterpret_cast<uint16_t *>(&data[offset]);
     }
 
 #define STRING_VALUE_OFFSET 2
@@ -82,7 +54,7 @@ struct Offset
 
     T value() const
     {
-        int16_t offset = *reinterpret_cast<int16_t *>(data);
+        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
         return T(&data[offset]);
     }
 };
@@ -294,7 +266,7 @@ def generate_struct_union_member_get_function(mem: MemberDesc, parent_type_desc:
         ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])){{'
         ret_str += '\n'
         
-    ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET - 2;'
+    ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET - 2 {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
     ret_str += '\n'
     
     ret_str += f'return {mem.type_desc.name}(&data_[offset]);'
@@ -582,7 +554,7 @@ def generate_union_type_access_offset_type_definition(type_desc: TypeDesc, paren
     
     return ret_str
     
-def generate_union_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str]) -> str:
+def generate_union_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str], types_desc: set[TypeDesc], ) -> str:
     
     ret_str = ''
     ret_str += f'struct {type_desc.name}{{'
@@ -593,11 +565,9 @@ def generate_union_type_definition(type_desc: TypeDesc, is_root_type: bool, type
     ret_str += '\n\n'
     ret_str += f'#define {type_desc.name.upper()}_TYPE_OFFSET 0\n'
     ret_str += f'#define {type_desc.name.upper()}_DATA_OFFSET 2\n'
-    
-    ret_str += f'{type_desc.name}_enum type() const {{\n'
-    ret_str += f'return *reinterpret_cast<{type_desc.name}_enum *>(&data_[{type_desc.name.upper()}_TYPE_OFFSET]);\n'
-    ret_str += f'}}'
     ret_str += '\n\n'
+    
+
     
     ret_str += 'bool is_null() const {\n'
     ret_str += f'return (type() == 0) or (*reinterpret_cast<uint16_t *>(&data_[{type_desc.name.upper()}_DATA_OFFSET]) == 0);\n'
@@ -610,11 +580,18 @@ def generate_union_type_definition(type_desc: TypeDesc, is_root_type: bool, type
     ret_str += '}\n'
     
     mem_str_type_definition = ''
+    if not f'{type_desc.name}_enum' in type_def_generated:
+            mem_str_type_definition += generate_type_definition(type_desc = cast(TypeDesc, get_type_desc_from_types_desc(f'{type_desc.name}_enum' , types_desc)),is_root_type= False, type_def_generated= type_def_generated, types_desc= types_desc)
+        
     
+    ret_str += f'{type_desc.name}_enum type() const {{\n'
+    ret_str += f'return *reinterpret_cast<{type_desc.name}_enum *>(&data_[{type_desc.name.upper()}_TYPE_OFFSET]);\n'
+    ret_str += f'}}'
+    ret_str += '\n\n'
     
     for u_type_desc in type_desc.u_members:
         if not u_type_desc.is_primitive and not u_type_desc.name in type_def_generated:
-            mem_str_type_definition += generate_type_definition(u_type_desc, False, type_def_generated)
+            mem_str_type_definition += generate_type_definition(type_desc = u_type_desc, is_root_type =False, type_def_generated= type_def_generated, types_desc= types_desc)
         if u_type_desc.is_offset_type:
             ret_str += generate_union_type_access_offset_type_definition(u_type_desc, type_desc, is_root_type,type_def_generated)
         elif u_type_desc.is_primitive:
@@ -634,7 +611,7 @@ def generate_union_type_definition(type_desc: TypeDesc, is_root_type: bool, type
     
     return ret_str
         
-def generate_struct_offset_struct_class_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str]) -> str:
+def generate_struct_offset_struct_class_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str], types_desc: set[TypeDesc]) -> str:
     ret_str = ''
     ret_str += f"struct {type_desc.name} {{"
     ret_str += '\n\n'
@@ -652,7 +629,7 @@ def generate_struct_offset_struct_class_type_definition(type_desc: TypeDesc, is_
         if mem.name.startswith('pad'):
             continue
         if not mem.type_desc.is_primitive and not mem.type_desc.name in type_def_generated:
-            mem_str_type_definition += generate_type_definition(mem.type_desc, False, type_def_generated)
+            mem_str_type_definition += generate_type_definition(type_desc = mem.type_desc, is_root_type= False, type_def_generated= type_def_generated, types_desc= types_desc)
         ret_str += generate_struct_class_member_get_function(mem, type_desc, is_root_type)
         ret_str += '\n\n'
         
@@ -668,7 +645,7 @@ def generate_struct_offset_struct_class_type_definition(type_desc: TypeDesc, is_
 
 
 
-def generate_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str]) -> str:
+def generate_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_generated: set[str], types_desc: set[TypeDesc], ) -> str:
     if type_desc.name in type_def_generated:
         return ''
     type_def_generated.add(type_desc.name)
@@ -679,10 +656,13 @@ def generate_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_g
     
     elif type_desc.type_type == 'enum':           
         ret_str += generate_enum_type_definition(type_desc=type_desc, is_root_type=is_root_type, type_def_generated=type_def_generated)
+        #? A union can't be a root type
     elif type_desc.type_type == 'union':
-        ret_str += generate_union_type_definition(type_desc=type_desc, is_root_type=is_root_type, type_def_generated=type_def_generated)
+        if is_root_type == True:
+            raise ValueError("A union type can be the root type")
+        ret_str += generate_union_type_definition(type_desc=type_desc, is_root_type=is_root_type, type_def_generated=type_def_generated, types_desc= types_desc)
     elif type_desc.type_type in ['struct', 'struct_offset', 'class']:
-        ret_str += generate_struct_offset_struct_class_type_definition(type_desc=type_desc, is_root_type= is_root_type, type_def_generated= type_def_generated)
+        ret_str += generate_struct_offset_struct_class_type_definition(type_desc=type_desc, is_root_type= is_root_type, type_def_generated= type_def_generated, types_desc= types_desc)
     return ret_str
 
 def generate_type_definition_of_struct_offset_type(type_desc: TypeDesc) -> str:
@@ -713,7 +693,7 @@ def get_all_type_definition(types_desc: set[TypeDesc], root_type_name: str, defi
     for type_desc in types_desc:
         if type_desc.is_primitive:
             continue
-        ret_str += generate_type_definition(type_desc, is_root_type= type_desc.name == root_type_name, type_def_generated = type_def_generated)
+        ret_str += generate_type_definition(type_desc, is_root_type= type_desc.name == root_type_name, type_def_generated = type_def_generated, types_desc= types_desc)
         
         ret_str += '\n\n'
     return ret_str
