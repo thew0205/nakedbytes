@@ -5,7 +5,7 @@
     "types": [
         {
             "name": "Monster",
-            "type": "struct_offset",
+            "type": "struct",
             "members": [
                 {
                     "name": "name",
@@ -41,7 +41,7 @@
         },
         {
             "name": "Packet",
-            "type": "class",
+            "type": "struct",
             "members": [
                 {
                     "name": "id",
@@ -58,6 +58,18 @@
                 {
                     "name": "length",
                     "type": "uint32"
+                },
+                {
+                    "name": "pos",
+                    "type": "vector[uint16]"
+                },
+                {
+                    "name": "you",
+                    "type": "Monster"
+                },
+                {
+                    "name": "arsenal",
+                    "type": "vector[Weapon]"
                 }
             ]
         }

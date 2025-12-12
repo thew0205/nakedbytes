@@ -16,5 +16,15 @@
     ],
     "you": {
         "name": "Humans!!!"
-    }
+    },
+    "arsenal": [
+        {
+            "name": "Chelsea",
+            "damage": 55
+        },
+        {
+            "name": "Liverppol",
+            "damage": 90
+        }
+    ]
 }

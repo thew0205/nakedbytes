@@ -7,19 +7,24 @@
         "name": "Most dangerous weapon!!!",
         "damage": "0xdeadadde"
     },
-    "data": [
+    "pos": [
+        1,
+        2,
+        3,
+        4,
+        5
+    ],
+    "you": {
+        "name": "Humans!!!"
+    },
+    "arsenal": [
         {
-            "type": "Monster",
-            "value": {
-                "name": "Orc"
-            }
+            "name": "Chelsea",
+            "damage": 55
         },
         {
-            "type": "Weapon",
-            "value": {
-                "name": "Sword",
-                "damage": 10
-            }
+            "name": "Liverppol",
+            "damage": 90
         }
     ]
 }

@@ -115,11 +115,11 @@ int main()
 
     MonsterStruct you{.name = name};
 
-    auto pos = serializer.serialize_vector<uint16_t>({1, 4, 7});
+    auto pos = serializer.serialize_vector(std::vector<uint16_t>{1, 4, 7});
     auto wepField = WeaponStruct{.name = desc, .damage = 2345};
 
     auto arr_wep = serialize_vector_weapon_struct(&serializer, {wepField});
-    auto buf = finish_serialize_packet(&serializer, 5, AnyPower_enum_Weapon, wep, desc, 0x55aa, pos, you, arr_wep);
+    auto buf = serialize_packet_root(&serializer, 5, AnyPower_enum_Weapon, wep, desc, 0x55aa, pos, you, arr_wep);
     const char *file_name = "simple_struct_example.bin";
 
     FILE *file = fopen(file_name, "rb");
@@ -137,7 +137,7 @@ int main()
         return -1;
     }
 
-    Packet packet{buf};
+    PacketRoot packet{buf};
     printf("Packet\n");
     printf("id: %d\n", packet.id());
     printf("length: %d\n", packet.length());
@@ -164,7 +164,7 @@ int main()
 
     for (int i = 0; i < packet.arsenal().size(); i++)
     {
-        printf("name %d %d, %s\n",i, packet.arsenal().get(i).damage(), packet.arsenal().get(i).name().value().c_str());
+        printf("name %d %d, %s\n", i, packet.arsenal().get(i).damage(), packet.arsenal().get(i).name().value().c_str());
     }
 
     fclose(file);
