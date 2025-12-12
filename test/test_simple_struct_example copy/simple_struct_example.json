@@ -66,10 +66,6 @@
                 {
                     "name": "you",
                     "type": "Monster"
-                },
-                {
-                    "name": "arsenal",
-                    "type": "vector[Weapon]"
                 }
             ]
         }

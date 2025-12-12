@@ -10,12 +10,17 @@
 
 
 
-struct Monster; 
 struct Packet; 
-struct Weapon; 
 struct AnyPower; 
+struct Monster; 
+struct Weapon; 
 
 
+
+
+template<typename T> struct is_Offset_Type : false_type {};
+template<typename T>
+struct is_Offset_Type<Offset<T>> : true_type {};
 
 struct String
 {
@@ -227,6 +232,22 @@ struct Vector<T, typename std::enable_if<std::is_integral<T>::value>::type>
 };
 
 
+enum AnyPower_enum : uint16_t {
+
+AnyPower_enum_Monster,
+AnyPower_enum_Weapon,
+};
+
+const char * AnyPower_enum_to_string(AnyPower_enum value){
+switch (value){
+case AnyPower_enum_Monster:
+return "AnyPower_enum_Monster";
+case AnyPower_enum_Weapon:
+return "AnyPower_enum_Weapon";
+default:
+return NULL;
+}
+}
 
 
 struct Monster {
@@ -249,24 +270,6 @@ return Offset<String>(&data_[offset]);
 
 
 
-
-
-enum AnyPower_enum : uint16_t {
-
-AnyPower_enum_Monster,
-AnyPower_enum_Weapon,
-};
-
-const char * AnyPower_enum_to_string(AnyPower_enum value){
-switch (value){
-case AnyPower_enum_Monster:
-return "AnyPower_enum_Monster";
-case AnyPower_enum_Weapon:
-return "AnyPower_enum_Weapon";
-default:
-return NULL;
-}
-}
 
 
 struct Weapon {
@@ -392,6 +395,8 @@ Monster you() const {return Monster(&data_[PACKET_YOU_OFFSET + 2* OFFSET_SIZE]);
 
 
 
+
+
 size_t get_padding_size(size_t offset, uint16_t alignment)
 {
     return (alignment - (offset % alignment)) % alignment;
@@ -480,7 +485,7 @@ struct Serializer
         return data_offset;
     }
     
-    template <typename T>
+    template <typename T, typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value || is_Offset_Type<T>::value)>::type>
     SerializeOffset<Vector<T>> serialize_vector(std::vector<T> data_array)
     {
         SerializeOffset<Vector<T>> data_array_offset;
@@ -501,18 +506,16 @@ struct Serializer
 
 
 
-struct MonsterField {
-SerializeOffset<String> name;
-};
-
-
-
-
 struct AnyPower_enumField {
 };
 
 
 struct AnyPowerField {
+};
+
+
+struct MonsterField {
+SerializeOffset<String> name;
 };
 
 
@@ -529,6 +532,8 @@ MonsterField you;
 
 
 
+
+
 struct WeaponField {
 SerializeOffset<String> name;
 uint32_t damage;
@@ -536,18 +541,6 @@ uint32_t damage;
 
 
 
-
-SerializeOffset<Monster> serialize_monster(Serializer *const serializer,
- const SerializeOffset<String> name){
-SerializeOffset<Monster> monster_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, MONSTER_ALIGNMENT);
-serializer->make_buffer_adequate();
-monster_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + MONSTER_NAME_OFFSET])) = name.offset - (serializer->_tail_offset  +MONSTER_NAME_OFFSET);
-serializer->_tail_offset += MONSTER_SIZE;
-return monster_offset;
-}
 
 SerializeOffset<Packet> serialize_packet(Serializer *const serializer,
  const int16_t id,
@@ -575,6 +568,28 @@ serializer->_tail_offset += PACKET_SIZE;
 return packet_offset;
 }
 
+SerializeOffset<AnyPower> serialize_anypower(Serializer *const serializer){
+SerializeOffset<AnyPower> anypower_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);
+serializer->make_buffer_adequate();
+anypower_offset.offset = serializer->_tail_offset;
+
+serializer->_tail_offset += ANYPOWER_SIZE;
+return anypower_offset;
+}
+
+SerializeOffset<Monster> serialize_monster(Serializer *const serializer,
+ const SerializeOffset<String> name){
+SerializeOffset<Monster> monster_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, MONSTER_ALIGNMENT);
+serializer->make_buffer_adequate();
+monster_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + MONSTER_NAME_OFFSET])) = name.offset - (serializer->_tail_offset  +MONSTER_NAME_OFFSET);
+serializer->_tail_offset += MONSTER_SIZE;
+return monster_offset;
+}
+
 SerializeOffset<Weapon> serialize_weapon(Serializer *const serializer,
  const SerializeOffset<String> name,
  const uint32_t damage){
@@ -587,16 +602,6 @@ weapon_offset.offset = serializer->_tail_offset;
 *reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + WEAPON_DAMAGE_OFFSET])) = damage;
 serializer->_tail_offset += WEAPON_SIZE;
 return weapon_offset;
-}
-
-SerializeOffset<AnyPower> serialize_anypower(Serializer *const serializer){
-SerializeOffset<AnyPower> anypower_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);
-serializer->make_buffer_adequate();
-anypower_offset.offset = serializer->_tail_offset;
-
-serializer->_tail_offset += ANYPOWER_SIZE;
-return anypower_offset;
 }
 
 

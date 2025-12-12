@@ -17,6 +17,9 @@ def get_header_files() -> str:
 
 def get_base_offset_types() -> str:
     return '''
+
+
+
 struct String
 {
     unsigned char *data;
@@ -62,7 +65,7 @@ struct Offset
 };
 
 template<typename T>
-struct Offset<T, typename std::enable_if<std::is_integral<T>::value>::type>
+struct Offset<T, typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value)>::type>
 {
     unsigned char *data;
     Offset(unsigned char *dataPtr)
@@ -82,28 +85,9 @@ struct Offset<T, typename std::enable_if<std::is_integral<T>::value>::type>
     }
 };
 
-
+template<typename T> struct is_Offset_Type : std::false_type {};
 template<typename T>
-struct Offset<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
-{
-    unsigned char *data;
-    Offset(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-
-    bool is_null() const
-    {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
-    }
-
-    T value() const
-    {
-        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
-        return static_cast<T>(data[offset]);
-    }
-};
-
+struct is_Offset_Type<Offset<T>> : std::true_type {};
 
 
 template <typename T>
@@ -166,7 +150,7 @@ struct Vector
 };
 
 template<typename T>
-struct Vector<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || std::is_integral<T>::value || is_Offset_Type<T>::value)>::type>
 {
     unsigned char *data;
 
@@ -195,36 +179,6 @@ struct Vector<T, typename std::enable_if<std::is_floating_point<T>::value>::type
     }
 };
 
-
-template<typename T>
-struct Vector<T, typename std::enable_if<std::is_integral<T>::value>::type>
-{
-    unsigned char *data;
-
-    bool is_null() const
-    {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
-    }
-    
-    uint16_t size() const
-    {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]);
-        return *reinterpret_cast<uint16_t *>(&data[offset]);
-    }
-
-    T get(size_t index) const
-    {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
-       
-
-        return static_cast<T>(data[offset]);
-    }
-
-    Vector(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-};
 '''
 
 
@@ -306,8 +260,8 @@ struct Serializer
         return str_offset;
     }
     
-     template <typename T, typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value)>::type>
-    SerializeOffset<T> serialize_primitive(T data)
+    template <typename T>
+    typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_enum<T>::value), SerializeOffset<T>>::type serialize_primitive(T data)
     {
         SerializeOffset<T> data_offset;
         _tail_offset += get_padding_size(_tail_offset, sizeof(T));
@@ -321,7 +275,7 @@ struct Serializer
     }
     
     template <typename T>
-    SerializeOffset<Vector<T>> serialize_vector(std::vector<T> data_array)
+    typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_enum<T>::value || is_Offset_Type<T>::value), SerializeOffset<Vector<T>>>::type serialize_vector(std::vector<T> data_array)
     {
         SerializeOffset<Vector<T>> data_array_offset;
         size_t len = data_array.size();
@@ -824,15 +778,7 @@ def generate_union_type_definition(type_desc: TypeDesc, is_root_type: bool, type
         if not u_type_desc.is_primitive and not u_type_desc.name in type_def_generated:
             mem_str_type_definition += generate_type_definition(type_desc = u_type_desc, is_root_type =False, type_def_generated= type_def_generated, types_desc= types_desc)
         ret_str += generate_union_type_access_offset_type_definition(u_type_desc, type_desc, is_root_type,type_def_generated)
-        # if u_type_desc.is_offset_type:
-        #     ret_str += generate_union_type_access_offset_type_definition(u_type_desc, type_desc, is_root_type,type_def_generated)
-        # elif u_type_desc.is_primitive:
-        #     ret_str += generate_union_type_access_primitive_definition(u_type_desc, type_desc, is_root_type,type_def_generated)
-        # elif u_type_desc.type_type == 'enum':
-        #     ret_str += generate_union_type_access_enum_definition(u_type_desc, type_desc, is_root_type,type_def_generated)
-        # elif u_type_desc.type_type == 'struct':
-        #     ret_str += generate_union_type_access_struct_definition(u_type_desc, type_desc, is_root_type,type_def_generated)
-            
+                   
         ret_str += '\n\n'
         
     ret_str += f'}};'
@@ -954,7 +900,7 @@ def generate_offset_serialization_function(type_desc: TypeDesc) -> str:
         if mem.type_desc.type_type == 'union':
             type_name = 'void'
         elif mem.type_desc.type_type == 'struct' and (not mem.type_desc.is_primitive) and (not mem.type_desc.name == 'string'):
-            type_name = f"{type_name}Field"
+            type_name = f"{type_name}Struct"
             
         if mem.is_array:
             type_name = f"Vector<{type_name}>"
@@ -969,7 +915,7 @@ def generate_offset_serialization_function(type_desc: TypeDesc) -> str:
     ret_str += "serializer->make_buffer_adequate();\n"
     ret_str += f"{type_desc.name.lower()}_offset.offset = serializer->_tail_offset;\n\n"
     
-    ret_str += generate_temp(type_desc, is_root_type= False, additional_prefix= "", access_prefix = "")
+    ret_str += generate_struct_serializer_fields(type_desc, is_root_type= False, additional_prefix= "", access_prefix = "")
            
     ret_str += f"serializer->_tail_offset += {type_desc.name.upper()}_SIZE;"
     
@@ -994,7 +940,7 @@ def generate_struct_offset_struct_field_struct(type_desc: TypeDesc, type_def_gen
     type_def_generated.add(type_desc.name)
     
     ret_str = ""
-    ret_str = f"struct {type_desc.name}Field {{\n"
+    ret_str = f"struct {type_desc.name}Struct {{\n"
     
     mem_str_type_definition = ''
     
@@ -1009,7 +955,7 @@ def generate_struct_offset_struct_field_struct(type_desc: TypeDesc, type_def_gen
         if mem.type_desc.type_type == 'union':
             type_name = 'void'
         elif mem.type_desc.type_type == 'struct' and (not mem.type_desc.is_primitive) and (not mem.type_desc.name == 'string'):
-            type_name = f"{type_name}Field"
+            type_name = f"{type_name}Struct"
             
         if mem.is_array:
             type_name = f"Vector<{type_name}>"
@@ -1034,7 +980,7 @@ def get_all_type_struct_offset_struct_field_struct(types_desc: set[TypeDesc]) ->
         ret_str += '\n\n'
     return ret_str
 
-def generate_temp(type_desc: TypeDesc, is_root_type: bool, additional_prefix: str, access_prefix: str) -> str:
+def generate_struct_serializer_fields(type_desc: TypeDesc, is_root_type: bool, additional_prefix: str, access_prefix: str) -> str:
     ret_str = ""
     
     for mem in type_desc.members:
@@ -1046,7 +992,7 @@ def generate_temp(type_desc: TypeDesc, is_root_type: bool, additional_prefix: st
         elif mem.type_desc.is_primitive or mem.type_desc.type_type == 'enum':
             ret_str += f"*reinterpret_cast<{type_name} *>(&(serializer->_buffer[{"current_offset" if is_root_type else "serializer->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = {access_prefix}{mem.name};\n"
         elif mem.type_desc.type_type == 'struct':
-            ret_str += "\n\n" + generate_temp(mem.type_desc, is_root_type= is_root_type, additional_prefix= additional_prefix + f"  + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET", access_prefix= access_prefix + f"{mem.name}.")
+            ret_str += "\n\n" + generate_struct_serializer_fields(mem.type_desc, is_root_type= is_root_type, additional_prefix= additional_prefix + f"  + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET", access_prefix= access_prefix + f"{mem.name}.")
         
         else:
             raise ValueError("")
@@ -1069,7 +1015,7 @@ def generate_root_type_serialization_function(types_desc:
         if mem.type_desc.type_type == 'union':
             type_name = 'void'
         elif mem.type_desc.type_type == 'struct' and (not mem.type_desc.is_primitive) and (not mem.type_desc.name == 'string'):
-            type_name = f"{type_name}Field"
+            type_name = f"{type_name}Struct"
             
         if mem.is_array:
             type_name = f"Vector<{type_name}>"
@@ -1082,13 +1028,46 @@ def generate_root_type_serialization_function(types_desc:
     ret_str += f"uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);"
     ret_str += '\n\n'
     
-    ret_str += generate_temp(root_type_desc, is_root_type= True, additional_prefix= "", access_prefix = "")
+    ret_str += generate_struct_serializer_fields(root_type_desc, is_root_type= True, additional_prefix= "", access_prefix = "")
            
     
     ret_str += "\n"
     ret_str += "return serializer->_buffer;\n"
     ret_str += "}"
     
+    return ret_str
+
+def generate_serialize_vector_struct(type_desc: TypeDesc) -> str:
+    ret_str = ""
+    ret_str += f"SerializeOffset<Vector<{type_desc.name}Struct>> "
+    ret_str += f"serialize_vector_{type_desc.name.lower()}_struct("
+    ret_str += f"Serializer *const serializer, std::vector<{type_desc.name}Struct> data_array){{\n"
+    ret_str += f"SerializeOffset<Vector<{type_desc.name}Struct>> data_array_offset;\n"
+    ret_str += "uint16_t len = data_array.size();\n"
+    ret_str += "serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);\n"
+    ret_str += "serializer->make_buffer_adequate();\n"
+    ret_str += "data_array_offset.offset = serializer->_tail_offset;\n"
+    ret_str += "*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;\n"
+    ret_str += "serializer->_tail_offset += OFFSET_SIZE;"
+    ret_str += f"serializer->_tail_offset += get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);"
+    ret_str += "for (uint16_t i = 0; i < len; i++){"
+    ret_str += generate_struct_serializer_fields(type_desc=type_desc, is_root_type= False, additional_prefix= f" + ({type_desc.name.upper()}_SIZE * i)", access_prefix = "data_array[i].")
+    ret_str += f"serializer->_tail_offset += ({type_desc.name.upper()}_SIZE * len);\n"
+    ret_str += "}"
+    
+    ret_str += "return data_array_offset;"
+    ret_str += f"}}"
+    return ret_str
+
+
+def generate_all_types_serialize_vector_struct(types_desc: set[TypeDesc]) -> str :
+    ret_str = ""
+    for type_desc in types_desc:
+        if type_desc.is_primitive or type_desc.type_type == 'enum':
+            continue
+        ret_str += generate_serialize_vector_struct(type_desc)
+        
+        ret_str += '\n\n'
     return ret_str
 
 def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str):
@@ -1110,8 +1089,31 @@ def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str):
     str_file += '\n\n'
     str_file += get_all_types_offset_serialization_function(types_desc)
     str_file += '\n\n'
+    str_file += generate_all_types_serialize_vector_struct(types_desc= types_desc)
+    str_file += '\n\n'
     str_file += generate_root_type_serialization_function(types_desc, root_type_name)
     return str_file
     
 
 
+# SerializeOffset<Vector<WeaponField>> serialize_vector_weapon(Serializer *const serializer, std::vector<WeaponField> data_array)
+# {
+#     SerializeOffset<Vector<WeaponField>> data_array_offset;
+#     size_t len = data_array.size();
+#     serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+
+#     serializer->make_buffer_adequate();
+#     data_array_offset.offset = serializer->_tail_offset;
+
+#     *reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+#     serializer->_tail_offset += OFFSET_SIZE;
+#     serializer->_tail_offset += get_padding_size(serializer->_tail_offset, WEAPON_ALIGNMENT);
+
+#     for (size_t i = 0; i < len; i++)
+#     {
+#         *reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset + WEAPON_NAME_OFFSET])) = data_array[i].name.offset - (serializer->_tail_offset + WEAPON_NAME_OFFSET);
+#         *reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset + WEAPON_DAMAGE_OFFSET])) = data_array[i].damage;
+#         serializer->_tail_offset += WEAPON_SIZE;
+#     }
+#     return data_array_offset;
+# }
