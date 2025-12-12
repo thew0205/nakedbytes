@@ -331,7 +331,7 @@ def generate_struct_enum_number_member_get_function(mem: MemberDesc, parent_type
     ret_str += f"{mem.type_desc.name} {mem.name}() const {{"
     ret_str += '\n'
     if parent_type_desc.type_type == 'class':
-        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])){{'
+        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
         ret_str += '\n'
         
     ret_str += f"return *reinterpret_cast<{mem.type_desc.name}*>(&data_[{parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2 * OFFSET_SIZE' if is_root_type else ''}]);"
@@ -351,7 +351,7 @@ def generate_struct_primitive_number_member_get_function(mem: MemberDesc, parent
     ret_str += '\n'
     
     if parent_type_desc.type_type == 'class':
-        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])){{'
+        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
         ret_str += '\n'
         
     ret_str += f"return *reinterpret_cast<{type_name}*>(&data_[{parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}]);"
@@ -370,7 +370,7 @@ def generate_struct_string_member_get_function(mem: MemberDesc, parent_type_desc
     ret_str += '\n'
     
     if parent_type_desc.type_type == 'class':
-        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])){{'
+        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
         ret_str += '\n'
         
         
@@ -413,7 +413,7 @@ def generate_struct_vector_member_get_function(mem: MemberDesc, parent_type_desc
     ret_str += '\n'
     
     if parent_type_desc.type_type == 'class':
-        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])){{'
+        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
         ret_str += '\n'
         
     ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
@@ -435,7 +435,7 @@ def generate_struct_union_member_get_function(mem: MemberDesc, parent_type_desc:
     ret_str += '\n'
     
     if parent_type_desc.type_type == 'class':
-        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])){{'
+        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
         ret_str += '\n'
         
     ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET - 2 {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
@@ -455,7 +455,7 @@ def generate_struct_class_struct_offset_member_get_function(mem: MemberDesc, par
     ret_str = ''
     ret_str += f'Offset<{mem.type_desc.name}> {mem.name}() const {{'
     if parent_type_desc.type_type == 'class':
-        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])){{'
+        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
     ret_str += f'const int16_t offset ={parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
     ret_str += f'return Offset<{mem.type_desc.name}>(&data_[offset]);'
     if parent_type_desc.type_type == 'class':
@@ -475,9 +475,16 @@ def generate_struct_offset_member_get_function(mem: MemberDesc, parent_type_desc
     else:
         raise ValueError(f"Type of {mem.type_desc.name} is not an offset type")
     
-def generate_struct_struct_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
+def generate_struct_class_struct_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     ret_str = f'{mem.type_desc.name} {mem.name}() const {{'
-    ret_str += f'return {mem.type_desc.name}(&data_[{parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}]);'
+    if parent_type_desc.type_type == 'class':
+        ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
+        ret_str += '\n'
+        
+    ret_str += f'return {mem.type_desc.name}(&data_[{parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}]);\n'
+    if parent_type_desc.type_type == 'class':
+        ret_str += f'}}'
+        ret_str += '\n'
     ret_str += f"}}"
     return ret_str
        
@@ -490,7 +497,7 @@ def generate_struct_class_member_get_function(mem: MemberDesc, parent_type_desc:
     elif mem.type_desc.type_type == 'enum':
         ret_str += generate_struct_enum_number_member_get_function(mem, parent_type_desc, is_root_type)
     elif mem.type_desc.type_type == 'struct':
-        ret_str += generate_struct_struct_member_get_function(mem, parent_type_desc, is_root_type)
+        ret_str += generate_struct_class_struct_member_get_function(mem, parent_type_desc, is_root_type)
     return ret_str
 
 
@@ -818,8 +825,8 @@ def generate_struct_offset_struct_class_type_definition(type_desc: TypeDesc, is_
     ret_str =  mem_str_type_definition + '\n\n' + ret_str
     ret_str += '\n\n'
     
-    if type_desc.type_type in ['struct_offset', 'class']:
-        ret_str += generate_type_definition_of_struct_offset_type(type_desc)
+    # if type_desc.type_type in ['struct_offset', 'class']:
+    #     ret_str += generate_type_definition_of_struct_offset_type(type_desc)
     return ret_str
 
 
@@ -842,6 +849,40 @@ def generate_type_definition(type_desc: TypeDesc, is_root_type: bool, type_def_g
         ret_str += generate_union_type_definition(type_desc=type_desc, is_root_type=is_root_type, type_def_generated=type_def_generated, types_desc= types_desc)
     elif type_desc.type_type in ['struct', 'struct_offset', 'class']:
         ret_str += generate_struct_offset_struct_class_type_definition(type_desc=type_desc, is_root_type= is_root_type, type_def_generated= type_def_generated, types_desc= types_desc)
+    return ret_str
+
+
+def get_root_type_definition(types_desc: set[TypeDesc], root_type_name: str) -> str:
+    ret_str = ""
+    root_type_desc =cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc))
+    if not root_type_desc.type_type in ['struct', 'struct_offset', 'class']:
+        raise ValueError("Only a structable type can be a root type")
+    ret_str += f"struct {root_type_desc.name}Root {{"
+    ret_str += '\n\n'
+    ret_str += f"unsigned char * data_;"
+    ret_str += '\n\n'
+    ret_str += f"{root_type_desc.name}Root(unsigned char * data) : data_(data) {{}}"
+    ret_str += '\n\n'
+    if root_type_desc.type_type == 'class':
+        ret_str += f"#define {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET 0\n"
+    ret_str += generate_define_offset_macro(root_type_desc)
+    ret_str += '\n\n'
+    
+    mem_str_type_definition = ''
+    for mem in root_type_desc.members:
+        if mem.name.startswith('pad'):
+            continue
+        # if not mem.root_type_desc.is_primitive and not mem.root_type_desc.name in type_def_generated:
+        #     mem_str_type_definition += generate_type_definition(root_type_desc = mem.root_type_desc, is_root_type= False, type_def_generated= type_def_generated, types_desc= types_desc)
+        ret_str += generate_struct_class_member_get_function(mem, root_type_desc, True)
+        ret_str += '\n\n'
+        
+    ret_str += f"}};"
+    ret_str += '\n\n'
+    
+    ret_str =  mem_str_type_definition + '\n\n' + ret_str
+    ret_str += '\n\n'
+
     return ret_str
 
 def generate_type_definition_of_struct_offset_type(type_desc: TypeDesc) -> str:
@@ -915,6 +956,9 @@ def generate_offset_serialization_function(type_desc: TypeDesc) -> str:
     ret_str += "serializer->make_buffer_adequate();\n"
     ret_str += f"{type_desc.name.lower()}_offset.offset = serializer->_tail_offset;\n\n"
     
+    if type_desc.type_type == 'class':
+        ret_str += f"*reinterpret_cast<int16_t *>(&(serializer->_buffer[serializer->_tail_offset + {type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = {type_desc.name.upper()}_SIZE;"
+        
     ret_str += generate_struct_serializer_fields(type_desc, is_root_type= False, additional_prefix= "", access_prefix = "")
            
     ret_str += f"serializer->_tail_offset += {type_desc.name.upper()}_SIZE;"
@@ -1006,7 +1050,7 @@ def generate_root_type_serialization_function(types_desc:
     ret_str = ""
     root_type_desc =cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc))
     ret_str += "unsigned char *"
-    ret_str += f"finish_serialize_{root_type_desc.name.lower()}"
+    ret_str += f"serialize_{root_type_desc.name.lower()}_root"
     ret_str += "(Serializer *const serializer"
     for mem in root_type_desc.members:
         if mem.name.startswith('pad'):
@@ -1025,7 +1069,10 @@ def generate_root_type_serialization_function(types_desc:
             ret_str += f",\n const {type_name} {mem.name}"
     ret_str += "){\n"
     
-    ret_str += f"uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);"
+    ret_str += f"uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);\n"
+    if root_type_desc.type_type == 'class':
+        ret_str += f"*reinterpret_cast<int16_t *>(&(serializer->_buffer[current_offset + {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = {root_type_desc.name.upper()}_SIZE;"
+    
     ret_str += '\n\n'
     
     ret_str += generate_struct_serializer_fields(root_type_desc, is_root_type= True, additional_prefix= "", access_prefix = "")
@@ -1081,7 +1128,7 @@ def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str):
     str_file += '\n\n'
     defined_type: List[str] = []
     str_file += get_all_type_definition(types_desc, root_type_name, defined_type)
-    # str_file += get_root_type_definition(types_desc)
+    str_file += get_root_type_definition(types_desc, root_type_name)
     
     str_file += get_base_serializer_class_function()
     str_file += '\n\n'
@@ -1095,25 +1142,3 @@ def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str):
     return str_file
     
 
-
-# SerializeOffset<Vector<WeaponField>> serialize_vector_weapon(Serializer *const serializer, std::vector<WeaponField> data_array)
-# {
-#     SerializeOffset<Vector<WeaponField>> data_array_offset;
-#     size_t len = data_array.size();
-#     serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-
-#     serializer->make_buffer_adequate();
-#     data_array_offset.offset = serializer->_tail_offset;
-
-#     *reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-#     serializer->_tail_offset += OFFSET_SIZE;
-#     serializer->_tail_offset += get_padding_size(serializer->_tail_offset, WEAPON_ALIGNMENT);
-
-#     for (size_t i = 0; i < len; i++)
-#     {
-#         *reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset + WEAPON_NAME_OFFSET])) = data_array[i].name.offset - (serializer->_tail_offset + WEAPON_NAME_OFFSET);
-#         *reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset + WEAPON_DAMAGE_OFFSET])) = data_array[i].damage;
-#         serializer->_tail_offset += WEAPON_SIZE;
-#     }
-#     return data_array_offset;
-# }

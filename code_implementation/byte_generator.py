@@ -257,8 +257,10 @@ def generate_byte(model, root_type_desc: TypeDesc, offset_size: int, version: in
     while(array_size < tail_offset):
         root_array.extend(bytearray(1024))
         array_size += 1024
-        
-    tail_offset = generate_struct_type(model = model, offset_size= offset_size, tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= root_type_desc, types_desc = types_desc, current_offset = current_offset)
+    if root_type_desc.type_type in ['struct', 'struct_offset']:
+        tail_offset = generate_struct_type(model = model, offset_size= offset_size, tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= root_type_desc, types_desc = types_desc, current_offset = current_offset)
+    elif root_type_desc.type_type in ['class']:
+        tail_offset = generate_class_type(model = model, offset_size= offset_size, tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= root_type_desc, types_desc = types_desc, current_offset = current_offset)
     root_array[0:offset_size] = generate_primitive_bytearray_number(tail_offset, type_desc=  get_offset_type_desc_int(offset_size=offset_size, types_desc= types_desc) , offset_size= offset_size, types_desc= types_desc)
     return root_array[0:tail_offset]
     
