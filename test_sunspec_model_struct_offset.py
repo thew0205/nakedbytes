@@ -1,7 +1,7 @@
 import json
 from typing import cast
 from code_implementation.byte_generator import generate_byte
-from code_implementation.cpp_code_generator import generate_cpp_code
+from code_implementation.cpp_code_generator_deserializer import generate_cpp_code
 from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_types_desc, get_type_from_json, set_all_types, set_needed_types
 from code_implementation.type_parsing import parsing, primitive_types
 

@@ -215,7 +215,7 @@ def generate_struct_type(model: Dict, root_array: bytearray, array_size: int, cu
     offset_member_map:Dict[str, int|None] = {}
     for member in current_type_desc.members:
         if member.is_offset_type:
-            offset_member_map[member.name],tail_offset = generate_offset_type(model[member.name], root_array= root_array, array_size= array_size, current_type_desc= member.type_desc, types_desc=types_desc, current_offset= tail_offset, offset_size= offset_size, is_array= member.is_array,true_union_type= model.get(f'{member.name}_type', None))
+            offset_member_map[member.name], tail_offset = generate_offset_type(model[member.name], root_array= root_array, array_size= array_size, current_type_desc= member.type_desc, types_desc=types_desc, current_offset= tail_offset, offset_size= offset_size, is_array= member.is_array,true_union_type= model.get(f'{member.name}_type', None))
     
     for member in current_type_desc.members:
         member_offset = current_offset + member.offset

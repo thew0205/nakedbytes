@@ -3,6 +3,19 @@
 
 int main()
 {
+
+    Serializer serializer;
+    serializer.init(1024);
+
+    auto name = serializer.serialize_string("Matthew :()");
+    auto desc = serializer.serialize_string("Nobody can be somebody");
+    auto pos = serializer.serialize_vector<uint16_t>({1, 4, 7});
+
+    auto wep = serialize_weapon(&serializer, name, 0xdeadadde);
+    MonsterField you{.name = name};
+
+    auto buf = finish_serialize_packet(&serializer, 5, AnyPower_enum_Weapon, wep, desc, 0x55aa, pos, you);
+
     const char *file_name = "simple_struct_offset_example.bin";
     FILE *file = fopen(file_name, "rb");
 
@@ -19,7 +32,7 @@ int main()
         return -1;
     }
 
-    Packet packet{buffer};
+    Packet packet{buf};
     printf("Packet\n");
     printf("id: %d\n", packet.id());
     printf("length: %d\n", packet.length());
@@ -35,5 +48,12 @@ int main()
         auto weapon = packet.power().data_as_Weapon();
         printf("name %s\n", weapon.value().name().value().c_str());
     }
+    for (int i = 0; i < packet.pos().size(); i++)
+    {
+        printf("%d, ", packet.pos().get(i));
+    }
+    printf("\n");
+
+    printf("A monster named%s\n", packet.you().name().value().c_str());
     fclose(file);
 }

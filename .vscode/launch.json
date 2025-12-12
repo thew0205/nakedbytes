@@ -16,7 +16,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/test/test_simple_class_example/simple_class_example",
+            "program": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/test/test_simple_struct_example/simple_struct_example",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

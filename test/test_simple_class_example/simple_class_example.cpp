@@ -3,6 +3,15 @@
 
 int main()
 {
+
+      Serializer serializer;
+    serializer.init(1024);
+
+    auto name = serializer.serialize_string("Matthew :()");
+    auto desc = serializer.serialize_string("Nobody can be somebody");
+    auto wep = serialize_weapon(&serializer, name, 0xdeadadde);
+    auto buf = finish_serialize_packet(&serializer, 5, AnyPower_enum_Weapon, wep, desc, 0x55aa);
+
     const char *file_name = "simple_class_example.bin";
     FILE *file = fopen(file_name, "rb");
 
@@ -19,7 +28,7 @@ int main()
         return -1;
     }
 
-    Packet packet{buffer};
+    Packet packet{buf};
     printf("Packet\n");
     printf("id: %d\n", packet.id());
     printf("length: %d\n", packet.length());
