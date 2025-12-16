@@ -41,9 +41,7 @@ def generate_primitive_bytearray_number(value: str|int|float|bool, type_desc: Ty
         elif(isinstance(value, int)):
             value_int = value
  
-        if type_desc.name == 'uint8':
-            return bytearray(struct.pack('b', value_int))
-        elif type_desc.name == 'int8':
+        if type_desc.name == 'int8':
             return bytearray(struct.pack('b', value_int))
         elif type_desc.name == 'uint8':
             return bytearray(struct.pack('B', value_int))
@@ -83,47 +81,56 @@ def generate_enum_type(model ,offset_size: int, current_type_desc: TypeDesc, typ
 
 def generate_vector_type(model: List, root_array: bytearray, array_size: int, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int) ->Tuple[int, int]:
     item_count =  len(model)
-    current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
+    current_offset += get_padding_size(current_offset, alignment= offset_size)
+    root_array[current_offset: current_offset + offset_size] = generate_primitive_bytearray_number(item_count, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  offset_size=offset_size, types_desc= types_desc)
+    temp_current_offset = current_offset
+    current_offset += offset_size 
+    
     
     if current_type_desc.is_offset_type:
+        current_offset += get_padding_size(current_offset, alignment= offset_size)
         
-        tail_offset = current_offset + offset_size + item_count * offset_size
+        tail_offset = current_offset + item_count * offset_size
         while(array_size < tail_offset):
             root_array.extend(bytearray(1024))
             array_size += 1024
-        root_array[current_offset: current_offset + offset_size] = generate_primitive_bytearray_number(item_count, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  offset_size=offset_size, types_desc= types_desc)
         
         for i, item in enumerate(model):
-            item_offset = current_offset + offset_size + offset_size * i
+            item_offset = current_offset + offset_size * i
             real_item_offset, tail_offset = generate_offset_type(model=item, root_array=root_array, current_type_desc=current_type_desc, types_desc= types_desc, current_offset= tail_offset, offset_size=offset_size, array_size= array_size, is_array= False, true_union_type= None)
             value = 0
             if real_item_offset != None:
                 value = real_item_offset - item_offset
             root_array[item_offset: item_offset + offset_size] = generate_primitive_bytearray_number(value, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  offset_size=offset_size, types_desc= types_desc)
     elif current_type_desc.is_primitive:
-        tail_offset = current_offset + offset_size + current_type_desc.size * item_count
+        current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
+        tail_offset = current_offset + current_type_desc.size * item_count
+    
         while(array_size < tail_offset):
             root_array.extend(bytearray(1024))
             array_size += 1024
-        root_array[current_offset: current_offset + offset_size] = generate_primitive_bytearray_number(item_count, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  offset_size=offset_size, types_desc= types_desc)
+        
         for i, item in enumerate(model):
             item_offset = current_offset + current_type_desc.size * i
             root_array[item_offset : item_offset+ current_type_desc.size] = generate_primitive_bytearray_number(value= item, type_desc= current_type_desc, types_desc= types_desc, offset_size=offset_size)
     elif current_type_desc.type_type == 'enum':
-        tail_offset = current_offset + offset_size + current_type_desc.size * item_count
+        current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
+        tail_offset = current_offset + current_type_desc.size * item_count
         while(array_size < tail_offset):
             root_array.extend(bytearray(1024))
             array_size += 1024
-        root_array[current_offset: current_offset + offset_size] = generate_primitive_bytearray_number(item_count, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  offset_size=offset_size, types_desc= types_desc)
+
         for i, item in enumerate(model):
             item_offset = current_offset + current_type_desc.size * i
             root_array[item_offset : item_offset+ current_type_desc.size] = generate_enum_type(model= item, types_desc= types_desc, offset_size=offset_size, current_type_desc=current_type_desc)
     elif current_type_desc.type_type == 'struct':
-        tail_offset = current_offset + offset_size + current_type_desc.size * item_count
+        current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
+        
+        tail_offset = current_offset  + current_type_desc.size * item_count
         while(array_size < tail_offset):
             root_array.extend(bytearray(1024))
             array_size += 1024
-        root_array[current_offset: current_offset + offset_size] = generate_primitive_bytearray_number(item_count, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  offset_size=offset_size, types_desc= types_desc)
+        
         for i, item in enumerate(model):
             item_offset = current_offset + current_type_desc.size * i
             tail_offset = generate_struct_type(model= item, root_array= root_array, array_size= array_size, current_type_desc= current_type_desc, types_desc= types_desc, current_offset= item_offset, tail_offset= tail_offset, offset_size=offset_size)
@@ -132,7 +139,7 @@ def generate_vector_type(model: List, root_array: bytearray, array_size: int, cu
             
         
         
-    return current_offset, tail_offset
+    return temp_current_offset, tail_offset
 
 def generate_union_type(model, root_array: bytearray, array_size: int, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int, true_union_type: TypeDesc) ->Tuple[int, int]:
     if current_type_desc.type_type != 'union':
@@ -211,7 +218,7 @@ def generate_offset_type(model, root_array: bytearray, array_size: int, current_
      
 def generate_struct_type(model: Dict, root_array: bytearray, array_size: int, current_type_desc: TypeDesc, types_desc: set[TypeDesc], current_offset: int, tail_offset: int, offset_size: int) -> int:
     #Not really needed
-    # current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
+    current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
     offset_member_map:Dict[str, int|None] = {}
     for member in current_type_desc.members:
         if member.is_offset_type:
@@ -231,7 +238,7 @@ def generate_struct_type(model: Dict, root_array: bytearray, array_size: int, cu
         elif member.type_desc.type_type == 'enum':
             root_array[member_offset : member_offset + member.size] = generate_enum_type(model= model[member.name],offset_size= offset_size, current_type_desc= member.type_desc, types_desc= types_desc)
         elif member.type_desc.type_type == 'struct':
-            tail_offset = generate_struct_type(model = model[member.name], offset_size= offset_size,  tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= member.type_desc, types_desc = types_desc, current_offset = current_offset)
+            tail_offset = generate_struct_type(model = model[member.name], offset_size= offset_size,  tail_offset=tail_offset, root_array=root_array, array_size=array_size, current_type_desc= member.type_desc, types_desc = types_desc, current_offset = member_offset)
         else:
             raise ValueError(f"Type of {current_type_desc.name} is unknown")
     return tail_offset

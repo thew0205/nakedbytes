@@ -4,6 +4,8 @@ from code_implementation.type_desc_holder import MemberDesc, TypeDesc, get_type_
 
 def get_header_files() -> str:
     return '''
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,6 +48,7 @@ struct String
 template<typename T, typename Enable = void>
 struct Offset
 {
+    static constexpr size_t nakedbytes_sizeof = 2;
     unsigned char *data;
     Offset(unsigned char *dataPtr)
     {
@@ -67,6 +70,8 @@ struct Offset
 template<typename T>
 struct Offset<T, typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value)>::type>
 {
+    static constexpr size_t nakedbytes_sizeof = sizeof(T);
+    
     unsigned char *data;
     Offset(unsigned char *dataPtr)
     {
@@ -137,7 +142,7 @@ struct Vector
 
     T get(size_t index) const
     {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
        
 
         return T(&data[offset]);
@@ -186,7 +191,7 @@ struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || st
 def get_base_serializer_class_function() -> str:
     return """
 
-size_t get_padding_size(size_t offset, uint16_t alignment)
+inline size_t get_padding_size(size_t offset, uint16_t alignment)
 {
     return (alignment - (offset % alignment)) % alignment;
 }
@@ -196,9 +201,10 @@ struct SerializeOffset
 {
     uint16_t offset = 0;
 
-    operator SerializeOffset<void>() const
+    template<typename U = void>
+    operator SerializeOffset<U>() const
     {
-        SerializeOffset<void> ret;
+        SerializeOffset<U> ret;
         ret.offset = this->offset;
         return ret;
     }
@@ -224,15 +230,16 @@ struct Serializer
     // uint16_t _current_offset = 0;
     uint16_t _tail_offset = 0;
 
-    void init(uint16_t buffer_size)
+    void init(uint16_t buffer_size, const uint16_t root_type_size, uint16_t root_type_alignment)
     {
         _buffer = reinterpret_cast<unsigned char *>(malloc(buffer_size));
         _buffer_size = buffer_size;
         *reinterpret_cast<uint16_t *>(&_buffer[OFFSET_SIZE]) = VERSION;
 
-        _tail_offset = get_padding_size(OFFSET_SIZE * 2, PACKET_ALIGNMENT) + OFFSET_SIZE * 2 + PACKET_SIZE;
+        _tail_offset = get_padding_size(OFFSET_SIZE * 2, root_type_alignment) + OFFSET_SIZE * 2 + root_type_size;
         make_buffer_adequate();
     }
+
 
     inline void make_buffer_adequate()
     {
@@ -694,7 +701,7 @@ def generate_enum_type_definition(type_desc: TypeDesc, is_root_type: bool, type_
     
     ret_str += '\n\n'
     
-    ret_str += 'const char * '
+    ret_str += 'inline const char * '
     ret_str += f'{type_desc.name}_to_string({type_desc.name} value){{\n'
     ret_str += 'switch (value){\n'
     
@@ -844,6 +851,7 @@ def generate_struct_offset_struct_class_type_definition(type_desc: TypeDesc, is_
     ret_str = ''
     ret_str += f"struct {type_desc.name} {{"
     ret_str += '\n\n'
+    ret_str += f"static constexpr size_t nakedbytes_sizeof = {type_desc.size};\n\n"
     ret_str += f"unsigned char * data_;"
     ret_str += '\n\n'
     ret_str += generate_constructor(type_desc)
@@ -975,7 +983,7 @@ def get_all_type_declaration(types_desc: set[TypeDesc]) -> str:
 def generate_offset_serialization_function(type_desc: TypeDesc) -> str:
 
     ret_str = ""
-    ret_str += f"SerializeOffset<{type_desc.name}> serialize_{type_desc.name.lower()}"
+    ret_str += f"inline SerializeOffset<{type_desc.name}> serialize_{type_desc.name.lower()}"
     ret_str += "(Serializer *const serializer"
     
     ret_str += generate_serialization_function_parameters(type_desc= type_desc)
@@ -1100,7 +1108,7 @@ def generate_root_type_serialization_function(types_desc:
     set[TypeDesc], root_type_name: str) -> str:
     ret_str = ""
     root_type_desc =cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc))
-    ret_str += "unsigned char *"
+    ret_str += "inline unsigned char *"
     ret_str += f"serialize_{root_type_desc.name.lower()}_root"
     ret_str += "(Serializer *const serializer"
     
@@ -1115,8 +1123,9 @@ def generate_root_type_serialization_function(types_desc:
     ret_str += '\n\n'
     
     ret_str += generate_struct_serializer_fields(root_type_desc, is_root_type= True, additional_prefix= "", access_prefix = "")
+    ret_str += "\n"
            
-    
+    ret_str += "*reinterpret_cast<uint16_t*>(&(serializer->_buffer[0])) = serializer->_tail_offset;\n"
     ret_str += "\n"
     ret_str += "return serializer->_buffer;\n"
     ret_str += "}"
@@ -1125,7 +1134,7 @@ def generate_root_type_serialization_function(types_desc:
 
 def generate_serialize_vector_struct(type_desc: TypeDesc) -> str:
     ret_str = ""
-    ret_str += f"SerializeOffset<Vector<{type_desc.name}Struct>> "
+    ret_str += f"inline SerializeOffset<Vector<{type_desc.name}Struct>> "
     ret_str += f"serialize_vector_{type_desc.name.lower()}_struct("
     ret_str += f"Serializer *const serializer, std::vector<{type_desc.name}Struct> data_array){{\n"
     ret_str += f"SerializeOffset<Vector<{type_desc.name}Struct>> data_array_offset;\n"

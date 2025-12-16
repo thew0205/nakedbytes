@@ -1,6 +1,4 @@
 
-#pragma once
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,24 +10,24 @@
 
 
 
-struct SunspecPointDef; 
-struct eui48; 
-struct ipaddr; 
-struct SunspecPointData; 
-struct pad; 
-struct acc16; 
-struct ipv6addr; 
-struct enum64; 
-struct sunssf; 
-struct bitfield64; 
-struct enum16; 
 struct enum32; 
+struct enum64; 
+struct SunspecPointDef; 
 struct bitfield16; 
 struct bitfield32; 
-struct SunspecGroupPointDef; 
+struct bitfield64; 
+struct sunssf; 
+struct acc16; 
 struct acc32; 
-struct SunspecModelDef; 
+struct SunspecPointData; 
+struct pad; 
 struct acc64; 
+struct eui48; 
+struct ipaddr; 
+struct ipv6addr; 
+struct SunspecModelDef; 
+struct enum16; 
+struct SunspecGroupPointDef; 
 
 
 
@@ -197,6 +195,29 @@ struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || st
 
 
 
+
+
+struct enum32 {
+
+unsigned char * data_;
+
+enum32(unsigned char * data) : data_(data) {}
+
+#define ENUM32_VALUE_OFFSET 0
+#define ENUM32_ALIGNMENT 4
+#define ENUM32_SIZE 4
+
+
+uint32_t value() const {
+return *reinterpret_cast<uint32_t*>(&data_[ENUM32_VALUE_OFFSET ]);
+}
+
+};
+
+
+
+
+
 enum SunspecPointData_enum : uint16_t {
 
 SunspecPointData_enum_uint16,
@@ -224,7 +245,7 @@ SunspecPointData_enum_ipaddr,
 SunspecPointData_enum_ipv6addr,
 };
 
-inline const char * SunspecPointData_enum_to_string(SunspecPointData_enum value){
+const char * SunspecPointData_enum_to_string(SunspecPointData_enum value){
 switch (value){
 case SunspecPointData_enum_uint16:
 return "SunspecPointData_enum_uint16";
@@ -278,6 +299,31 @@ return NULL;
 }
 
 
+
+
+struct enum64 {
+
+unsigned char * data_;
+
+enum64(unsigned char * data) : data_(data) {}
+
+#define ENUM64_VALUE_OFFSET 0
+#define ENUM64_ALIGNMENT 8
+#define ENUM64_SIZE 8
+
+
+uint64_t value() const {
+return *reinterpret_cast<uint64_t*>(&data_[ENUM64_VALUE_OFFSET ]);
+}
+
+};
+
+
+
+
+
+
+
 struct pad {
 
 unsigned char * data_;
@@ -312,48 +358,6 @@ enum16(unsigned char * data) : data_(data) {}
 
 uint16_t value() const {
 return *reinterpret_cast<uint16_t*>(&data_[ENUM16_VALUE_OFFSET ]);
-}
-
-};
-
-
-
-
-
-struct enum32 {
-
-unsigned char * data_;
-
-enum32(unsigned char * data) : data_(data) {}
-
-#define ENUM32_VALUE_OFFSET 0
-#define ENUM32_ALIGNMENT 4
-#define ENUM32_SIZE 4
-
-
-uint32_t value() const {
-return *reinterpret_cast<uint32_t*>(&data_[ENUM32_VALUE_OFFSET ]);
-}
-
-};
-
-
-
-
-
-struct enum64 {
-
-unsigned char * data_;
-
-enum64(unsigned char * data) : data_(data) {}
-
-#define ENUM64_VALUE_OFFSET 0
-#define ENUM64_ALIGNMENT 8
-#define ENUM64_SIZE 8
-
-
-uint64_t value() const {
-return *reinterpret_cast<uint64_t*>(&data_[ENUM64_VALUE_OFFSET ]);
 }
 
 };
@@ -745,7 +749,7 @@ SunspecPointAccessType_kR,
 SunspecPointAccessType_kRW,
 };
 
-inline const char * SunspecPointAccessType_to_string(SunspecPointAccessType value){
+const char * SunspecPointAccessType_to_string(SunspecPointAccessType value){
 switch (value){
 case SunspecPointAccessType_kR:
 return "SunspecPointAccessType_kR";
@@ -761,7 +765,7 @@ SunspecPointMandatoryType_kM,
 SunspecPointMandatoryType_kO,
 };
 
-inline const char * SunspecPointMandatoryType_to_string(SunspecPointMandatoryType value){
+const char * SunspecPointMandatoryType_to_string(SunspecPointMandatoryType value){
 switch (value){
 case SunspecPointMandatoryType_kM:
 return "SunspecPointMandatoryType_kM";
@@ -866,13 +870,25 @@ return *reinterpret_cast<SunspecPointMandatoryType*>(&data_[SUNSPECPOINTDEF_MAND
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 enum SunspecGroupType : uint8_t {
 
 SunspecGroupType_kGroup,
 SunspecGroupType_kSync,
 };
 
-inline const char * SunspecGroupType_to_string(SunspecGroupType value){
+const char * SunspecGroupType_to_string(SunspecGroupType value){
 switch (value){
 case SunspecGroupType_kGroup:
 return "SunspecGroupType_kGroup";
@@ -882,22 +898,6 @@ default:
 return NULL;
 }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -929,14 +929,14 @@ const int16_t offset = SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET ;
 return Offset<String>(&data_[offset]);
 }
 
-Vector<SunspecPointDef> points() const {
+Vector<Offset<SunspecPointDef>> points() const {
 const int16_t offset = SUNSPECGROUPPOINTDEF_POINTS_OFFSET ;
-return Vector<SunspecPointDef>(&data_[offset]);
+return Vector<Offset<SunspecPointDef>>(&data_[offset]);
 }
 
-Vector<SunspecGroupPointDef> groups() const {
+Vector<Offset<SunspecGroupPointDef>> groups() const {
 const int16_t offset = SUNSPECGROUPPOINTDEF_GROUPS_OFFSET ;
-return Vector<SunspecGroupPointDef>(&data_[offset]);
+return Vector<Offset<SunspecGroupPointDef>>(&data_[offset]);
 }
 
 Offset<String> label() const {
@@ -958,10 +958,6 @@ return *reinterpret_cast<SunspecGroupType*>(&data_[SUNSPECGROUPPOINTDEF_TYPE_OFF
 
 
 
-
-
-
-
 struct SunspecModelDef {
 
 unsigned char * data_;
@@ -971,17 +967,18 @@ SunspecModelDef(unsigned char * data) : data_(data) {}
 #define SUNSPECMODELDEF_ID_OFFSET 0
 #define SUNSPECMODELDEF_GROUP_OFFSET 2
 #define SUNSPECMODELDEF_ALIGNMENT 2
-#define SUNSPECMODELDEF_SIZE 14
+#define SUNSPECMODELDEF_SIZE 4
 
 
 uint16_t id() const {
 return *reinterpret_cast<uint16_t*>(&data_[SUNSPECMODELDEF_ID_OFFSET ]);
 }
 
-SunspecGroupPointDef group() const {return SunspecGroupPointDef(&data_[SUNSPECMODELDEF_GROUP_OFFSET ]);
-}
+Offset<SunspecGroupPointDef> group() const {const int16_t offset =SUNSPECMODELDEF_GROUP_OFFSET ;return Offset<SunspecGroupPointDef>(&data_[offset]);}
 
 };
+
+
 
 
 
@@ -1000,15 +997,14 @@ SunspecModelDefRoot(unsigned char * data) : data_(data) {}
 #define SUNSPECMODELDEF_ID_OFFSET 0
 #define SUNSPECMODELDEF_GROUP_OFFSET 2
 #define SUNSPECMODELDEF_ALIGNMENT 2
-#define SUNSPECMODELDEF_SIZE 14
+#define SUNSPECMODELDEF_SIZE 4
 
 
 uint16_t id() const {
 return *reinterpret_cast<uint16_t*>(&data_[SUNSPECMODELDEF_ID_OFFSET + 2* OFFSET_SIZE]);
 }
 
-SunspecGroupPointDef group() const {return SunspecGroupPointDef(&data_[SUNSPECMODELDEF_GROUP_OFFSET + 2* OFFSET_SIZE]);
-}
+Offset<SunspecGroupPointDef> group() const {const int16_t offset =SUNSPECMODELDEF_GROUP_OFFSET + 2* OFFSET_SIZE;return Offset<SunspecGroupPointDef>(&data_[offset]);}
 
 };
 
@@ -1016,7 +1012,7 @@ SunspecGroupPointDef group() const {return SunspecGroupPointDef(&data_[SUNSPECMO
 
 
 
-inline size_t get_padding_size(size_t offset, uint16_t alignment)
+size_t get_padding_size(size_t offset, uint16_t alignment)
 {
     return (alignment - (offset % alignment)) % alignment;
 }
@@ -1055,16 +1051,15 @@ struct Serializer
     // uint16_t _current_offset = 0;
     uint16_t _tail_offset = 0;
 
-    void init(uint16_t buffer_size, const uint16_t root_type_size, uint16_t root_type_alignment)
+    void init(uint16_t buffer_size)
     {
         _buffer = reinterpret_cast<unsigned char *>(malloc(buffer_size));
         _buffer_size = buffer_size;
         *reinterpret_cast<uint16_t *>(&_buffer[OFFSET_SIZE]) = VERSION;
 
-        _tail_offset = get_padding_size(OFFSET_SIZE * 2, root_type_alignment) + OFFSET_SIZE * 2 + root_type_size;
+        _tail_offset = get_padding_size(OFFSET_SIZE * 2, PACKET_ALIGNMENT) + OFFSET_SIZE * 2 + PACKET_SIZE;
         make_buffer_adequate();
     }
-
 
     inline void make_buffer_adequate()
     {
@@ -1170,6 +1165,20 @@ struct Serializer
 
 
 
+struct enum32Struct {
+uint32_t value;
+};
+
+
+
+
+struct enum64Struct {
+uint64_t value;
+};
+
+
+
+
 struct SunspecPointData_enumStruct {
 };
 
@@ -1203,6 +1212,62 @@ SunspecPointMandatoryType mandatory;
 
 
 
+struct bitfield16Struct {
+uint16_t value;
+};
+
+
+
+
+struct bitfield32Struct {
+uint32_t value;
+};
+
+
+
+
+struct bitfield64Struct {
+uint64_t value;
+};
+
+
+
+
+struct sunssfStruct {
+uint16_t value;
+};
+
+
+
+
+struct acc16Struct {
+uint16_t value;
+};
+
+
+
+
+struct acc32Struct {
+uint32_t value;
+};
+
+
+
+
+struct padStruct {
+uint16_t value;
+};
+
+
+
+
+struct acc64Struct {
+uint64_t value;
+};
+
+
+
+
 struct eui48Struct {
 uint16_t value0;
 uint16_t value1;
@@ -1222,20 +1287,6 @@ uint16_t value3;
 
 
 
-struct padStruct {
-uint16_t value;
-};
-
-
-
-
-struct acc16Struct {
-uint16_t value;
-};
-
-
-
-
 struct ipv6addrStruct {
 uint16_t value0;
 uint16_t value1;
@@ -1248,22 +1299,24 @@ uint16_t value5;
 
 
 
-struct enum64Struct {
-uint64_t value;
+struct SunspecGroupTypeStruct {
 };
 
 
-
-
-struct sunssfStruct {
-uint16_t value;
+struct SunspecGroupPointDefStruct {
+SerializeOffset<String> id;
+SerializeOffset<String> count_point_id;
+SerializeOffset<Vector<SunspecPointDef>> points;
+SerializeOffset<Vector<SunspecGroupPointDef>> groups;
+SerializeOffset<String> label;
+uint8_t count;
+SunspecGroupType type;
 };
 
 
-
-
-struct bitfield64Struct {
-uint64_t value;
+struct SunspecModelDefStruct {
+uint16_t id;
+SerializeOffset<SunspecGroupPointDef> group;
 };
 
 
@@ -1276,67 +1329,33 @@ uint16_t value;
 
 
 
-struct enum32Struct {
-uint32_t value;
-};
 
 
+SerializeOffset<enum32> serialize_enum32(Serializer *const serializer,
+ const uint32_t value){
+SerializeOffset<enum32> enum32_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM32_ALIGNMENT);
+serializer->make_buffer_adequate();
+enum32_offset.offset = serializer->_tail_offset;
 
+*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + ENUM32_VALUE_OFFSET])) = value;
+serializer->_tail_offset += ENUM32_SIZE;
+return enum32_offset;
+}
 
-struct bitfield16Struct {
-uint16_t value;
-};
+SerializeOffset<enum64> serialize_enum64(Serializer *const serializer,
+ const uint64_t value){
+SerializeOffset<enum64> enum64_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM64_ALIGNMENT);
+serializer->make_buffer_adequate();
+enum64_offset.offset = serializer->_tail_offset;
 
+*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + ENUM64_VALUE_OFFSET])) = value;
+serializer->_tail_offset += ENUM64_SIZE;
+return enum64_offset;
+}
 
-
-
-struct bitfield32Struct {
-uint32_t value;
-};
-
-
-
-
-struct SunspecGroupTypeStruct {
-};
-
-
-struct SunspecGroupPointDefStruct {
-SerializeOffset<String> id;
-SerializeOffset<String> count_point_id;
-SerializeOffset<Vector<SunspecPointDefStruct>> points;
-SerializeOffset<Vector<SunspecGroupPointDefStruct>> groups;
-SerializeOffset<String> label;
-uint8_t count;
-SunspecGroupType type;
-};
-
-
-
-
-struct acc32Struct {
-uint32_t value;
-};
-
-
-
-
-struct SunspecModelDefStruct {
-uint16_t id;
-SunspecGroupPointDefStruct group;
-};
-
-
-
-
-struct acc64Struct {
-uint64_t value;
-};
-
-
-
-
-inline SerializeOffset<SunspecPointDef> serialize_sunspecpointdef(Serializer *const serializer,
+SerializeOffset<SunspecPointDef> serialize_sunspecpointdef(Serializer *const serializer,
  const SerializeOffset<String> id,
  const SerializeOffset<String> sf_id,
  const SerializeOffset<String> units,
@@ -1368,7 +1387,113 @@ serializer->_tail_offset += SUNSPECPOINTDEF_SIZE;
 return sunspecpointdef_offset;
 }
 
-inline SerializeOffset<eui48> serialize_eui48(Serializer *const serializer,
+SerializeOffset<bitfield16> serialize_bitfield16(Serializer *const serializer,
+ const uint16_t value){
+SerializeOffset<bitfield16> bitfield16_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD16_ALIGNMENT);
+serializer->make_buffer_adequate();
+bitfield16_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + BITFIELD16_VALUE_OFFSET])) = value;
+serializer->_tail_offset += BITFIELD16_SIZE;
+return bitfield16_offset;
+}
+
+SerializeOffset<bitfield32> serialize_bitfield32(Serializer *const serializer,
+ const uint32_t value){
+SerializeOffset<bitfield32> bitfield32_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD32_ALIGNMENT);
+serializer->make_buffer_adequate();
+bitfield32_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + BITFIELD32_VALUE_OFFSET])) = value;
+serializer->_tail_offset += BITFIELD32_SIZE;
+return bitfield32_offset;
+}
+
+SerializeOffset<bitfield64> serialize_bitfield64(Serializer *const serializer,
+ const uint64_t value){
+SerializeOffset<bitfield64> bitfield64_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD64_ALIGNMENT);
+serializer->make_buffer_adequate();
+bitfield64_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + BITFIELD64_VALUE_OFFSET])) = value;
+serializer->_tail_offset += BITFIELD64_SIZE;
+return bitfield64_offset;
+}
+
+SerializeOffset<sunssf> serialize_sunssf(Serializer *const serializer,
+ const uint16_t value){
+SerializeOffset<sunssf> sunssf_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSSF_ALIGNMENT);
+serializer->make_buffer_adequate();
+sunssf_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + SUNSSF_VALUE_OFFSET])) = value;
+serializer->_tail_offset += SUNSSF_SIZE;
+return sunssf_offset;
+}
+
+SerializeOffset<acc16> serialize_acc16(Serializer *const serializer,
+ const uint16_t value){
+SerializeOffset<acc16> acc16_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC16_ALIGNMENT);
+serializer->make_buffer_adequate();
+acc16_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + ACC16_VALUE_OFFSET])) = value;
+serializer->_tail_offset += ACC16_SIZE;
+return acc16_offset;
+}
+
+SerializeOffset<acc32> serialize_acc32(Serializer *const serializer,
+ const uint32_t value){
+SerializeOffset<acc32> acc32_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC32_ALIGNMENT);
+serializer->make_buffer_adequate();
+acc32_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + ACC32_VALUE_OFFSET])) = value;
+serializer->_tail_offset += ACC32_SIZE;
+return acc32_offset;
+}
+
+SerializeOffset<SunspecPointData> serialize_sunspecpointdata(Serializer *const serializer){
+SerializeOffset<SunspecPointData> sunspecpointdata_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECPOINTDATA_ALIGNMENT);
+serializer->make_buffer_adequate();
+sunspecpointdata_offset.offset = serializer->_tail_offset;
+
+serializer->_tail_offset += SUNSPECPOINTDATA_SIZE;
+return sunspecpointdata_offset;
+}
+
+SerializeOffset<pad> serialize_pad(Serializer *const serializer,
+ const uint16_t value){
+SerializeOffset<pad> pad_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PAD_ALIGNMENT);
+serializer->make_buffer_adequate();
+pad_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + PAD_VALUE_OFFSET])) = value;
+serializer->_tail_offset += PAD_SIZE;
+return pad_offset;
+}
+
+SerializeOffset<acc64> serialize_acc64(Serializer *const serializer,
+ const uint64_t value){
+SerializeOffset<acc64> acc64_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC64_ALIGNMENT);
+serializer->make_buffer_adequate();
+acc64_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + ACC64_VALUE_OFFSET])) = value;
+serializer->_tail_offset += ACC64_SIZE;
+return acc64_offset;
+}
+
+SerializeOffset<eui48> serialize_eui48(Serializer *const serializer,
  const uint16_t value0,
  const uint16_t value1,
  const uint16_t value2){
@@ -1384,7 +1509,7 @@ serializer->_tail_offset += EUI48_SIZE;
 return eui48_offset;
 }
 
-inline SerializeOffset<ipaddr> serialize_ipaddr(Serializer *const serializer,
+SerializeOffset<ipaddr> serialize_ipaddr(Serializer *const serializer,
  const uint16_t value0,
  const uint16_t value1,
  const uint16_t value2,
@@ -1402,41 +1527,7 @@ serializer->_tail_offset += IPADDR_SIZE;
 return ipaddr_offset;
 }
 
-inline SerializeOffset<SunspecPointData> serialize_sunspecpointdata(Serializer *const serializer){
-SerializeOffset<SunspecPointData> sunspecpointdata_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECPOINTDATA_ALIGNMENT);
-serializer->make_buffer_adequate();
-sunspecpointdata_offset.offset = serializer->_tail_offset;
-
-serializer->_tail_offset += SUNSPECPOINTDATA_SIZE;
-return sunspecpointdata_offset;
-}
-
-inline SerializeOffset<pad> serialize_pad(Serializer *const serializer,
- const uint16_t value){
-SerializeOffset<pad> pad_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PAD_ALIGNMENT);
-serializer->make_buffer_adequate();
-pad_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + PAD_VALUE_OFFSET])) = value;
-serializer->_tail_offset += PAD_SIZE;
-return pad_offset;
-}
-
-inline SerializeOffset<acc16> serialize_acc16(Serializer *const serializer,
- const uint16_t value){
-SerializeOffset<acc16> acc16_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC16_ALIGNMENT);
-serializer->make_buffer_adequate();
-acc16_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + ACC16_VALUE_OFFSET])) = value;
-serializer->_tail_offset += ACC16_SIZE;
-return acc16_offset;
-}
-
-inline SerializeOffset<ipv6addr> serialize_ipv6addr(Serializer *const serializer,
+SerializeOffset<ipv6addr> serialize_ipv6addr(Serializer *const serializer,
  const uint16_t value0,
  const uint16_t value1,
  const uint16_t value2,
@@ -1458,43 +1549,21 @@ serializer->_tail_offset += IPV6ADDR_SIZE;
 return ipv6addr_offset;
 }
 
-inline SerializeOffset<enum64> serialize_enum64(Serializer *const serializer,
- const uint64_t value){
-SerializeOffset<enum64> enum64_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM64_ALIGNMENT);
+SerializeOffset<SunspecModelDef> serialize_sunspecmodeldef(Serializer *const serializer,
+ const uint16_t id,
+ const SerializeOffset<SunspecGroupPointDef> group){
+SerializeOffset<SunspecModelDef> sunspecmodeldef_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECMODELDEF_ALIGNMENT);
 serializer->make_buffer_adequate();
-enum64_offset.offset = serializer->_tail_offset;
+sunspecmodeldef_offset.offset = serializer->_tail_offset;
 
-*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + ENUM64_VALUE_OFFSET])) = value;
-serializer->_tail_offset += ENUM64_SIZE;
-return enum64_offset;
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + SUNSPECMODELDEF_ID_OFFSET])) = id;
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + SUNSPECMODELDEF_GROUP_OFFSET])) = group.offset - (serializer->_tail_offset  +SUNSPECMODELDEF_GROUP_OFFSET);
+serializer->_tail_offset += SUNSPECMODELDEF_SIZE;
+return sunspecmodeldef_offset;
 }
 
-inline SerializeOffset<sunssf> serialize_sunssf(Serializer *const serializer,
- const uint16_t value){
-SerializeOffset<sunssf> sunssf_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSSF_ALIGNMENT);
-serializer->make_buffer_adequate();
-sunssf_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + SUNSSF_VALUE_OFFSET])) = value;
-serializer->_tail_offset += SUNSSF_SIZE;
-return sunssf_offset;
-}
-
-inline SerializeOffset<bitfield64> serialize_bitfield64(Serializer *const serializer,
- const uint64_t value){
-SerializeOffset<bitfield64> bitfield64_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD64_ALIGNMENT);
-serializer->make_buffer_adequate();
-bitfield64_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + BITFIELD64_VALUE_OFFSET])) = value;
-serializer->_tail_offset += BITFIELD64_SIZE;
-return bitfield64_offset;
-}
-
-inline SerializeOffset<enum16> serialize_enum16(Serializer *const serializer,
+SerializeOffset<enum16> serialize_enum16(Serializer *const serializer,
  const uint16_t value){
 SerializeOffset<enum16> enum16_offset;
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM16_ALIGNMENT);
@@ -1506,47 +1575,11 @@ serializer->_tail_offset += ENUM16_SIZE;
 return enum16_offset;
 }
 
-inline SerializeOffset<enum32> serialize_enum32(Serializer *const serializer,
- const uint32_t value){
-SerializeOffset<enum32> enum32_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM32_ALIGNMENT);
-serializer->make_buffer_adequate();
-enum32_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + ENUM32_VALUE_OFFSET])) = value;
-serializer->_tail_offset += ENUM32_SIZE;
-return enum32_offset;
-}
-
-inline SerializeOffset<bitfield16> serialize_bitfield16(Serializer *const serializer,
- const uint16_t value){
-SerializeOffset<bitfield16> bitfield16_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD16_ALIGNMENT);
-serializer->make_buffer_adequate();
-bitfield16_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + BITFIELD16_VALUE_OFFSET])) = value;
-serializer->_tail_offset += BITFIELD16_SIZE;
-return bitfield16_offset;
-}
-
-inline SerializeOffset<bitfield32> serialize_bitfield32(Serializer *const serializer,
- const uint32_t value){
-SerializeOffset<bitfield32> bitfield32_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD32_ALIGNMENT);
-serializer->make_buffer_adequate();
-bitfield32_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + BITFIELD32_VALUE_OFFSET])) = value;
-serializer->_tail_offset += BITFIELD32_SIZE;
-return bitfield32_offset;
-}
-
-inline SerializeOffset<SunspecGroupPointDef> serialize_sunspecgrouppointdef(Serializer *const serializer,
+SerializeOffset<SunspecGroupPointDef> serialize_sunspecgrouppointdef(Serializer *const serializer,
  const SerializeOffset<String> id,
  const SerializeOffset<String> count_point_id,
- const SerializeOffset<Vector<SunspecPointDefStruct>> points,
- const SerializeOffset<Vector<SunspecGroupPointDefStruct>> groups,
+ const SerializeOffset<Vector<SerializeOffset<SunspecPointDef>>> points,
+ const SerializeOffset<Vector<SerializeOffset<SunspecGroupPointDef>>> groups,
  const SerializeOffset<String> label,
  const uint8_t count,
  const SunspecGroupType type){
@@ -1566,55 +1599,31 @@ serializer->_tail_offset += SUNSPECGROUPPOINTDEF_SIZE;
 return sunspecgrouppointdef_offset;
 }
 
-inline SerializeOffset<acc32> serialize_acc32(Serializer *const serializer,
- const uint32_t value){
-SerializeOffset<acc32> acc32_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC32_ALIGNMENT);
+
+
+SerializeOffset<Vector<enum32Struct>> serialize_vector_enum32_struct(Serializer *const serializer, std::vector<enum32Struct> data_array){
+SerializeOffset<Vector<enum32Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
 serializer->make_buffer_adequate();
-acc32_offset.offset = serializer->_tail_offset;
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM32_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ENUM32_SIZE * i) + ENUM32_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (ENUM32_SIZE * len);
+}return data_array_offset;}
 
-*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + ACC32_VALUE_OFFSET])) = value;
-serializer->_tail_offset += ACC32_SIZE;
-return acc32_offset;
-}
-
-inline SerializeOffset<SunspecModelDef> serialize_sunspecmodeldef(Serializer *const serializer,
- const uint16_t id,
- const SunspecGroupPointDefStruct group){
-SerializeOffset<SunspecModelDef> sunspecmodeldef_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECMODELDEF_ALIGNMENT);
+SerializeOffset<Vector<enum64Struct>> serialize_vector_enum64_struct(Serializer *const serializer, std::vector<enum64Struct> data_array){
+SerializeOffset<Vector<enum64Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
 serializer->make_buffer_adequate();
-sunspecmodeldef_offset.offset = serializer->_tail_offset;
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM64_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ENUM64_SIZE * i) + ENUM64_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (ENUM64_SIZE * len);
+}return data_array_offset;}
 
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + SUNSPECMODELDEF_ID_OFFSET])) = id;
-
-
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_ID_OFFSET])) = group.id.offset - (serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_ID_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET])) = group.count_point_id.offset - (serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_POINTS_OFFSET])) = group.points.offset - (serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_POINTS_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_GROUPS_OFFSET])) = group.groups.offset - (serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_GROUPS_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_LABEL_OFFSET])) = group.label.offset - (serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_LABEL_OFFSET);
-*reinterpret_cast<uint8_t *>(&(serializer->_buffer[serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_COUNT_OFFSET])) = group.count;
-*reinterpret_cast<SunspecGroupType *>(&(serializer->_buffer[serializer->_tail_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_TYPE_OFFSET])) = group.type;
-serializer->_tail_offset += SUNSPECMODELDEF_SIZE;
-return sunspecmodeldef_offset;
-}
-
-inline SerializeOffset<acc64> serialize_acc64(Serializer *const serializer,
- const uint64_t value){
-SerializeOffset<acc64> acc64_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC64_ALIGNMENT);
-serializer->make_buffer_adequate();
-acc64_offset.offset = serializer->_tail_offset;
-
-*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + ACC64_VALUE_OFFSET])) = value;
-serializer->_tail_offset += ACC64_SIZE;
-return acc64_offset;
-}
-
-
-
-inline SerializeOffset<Vector<SunspecPointDefStruct>> serialize_vector_sunspecpointdef_struct(Serializer *const serializer, std::vector<SunspecPointDefStruct> data_array){
+SerializeOffset<Vector<SunspecPointDefStruct>> serialize_vector_sunspecpointdef_struct(Serializer *const serializer, std::vector<SunspecPointDefStruct> data_array){
 SerializeOffset<Vector<SunspecPointDefStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -1635,7 +1644,105 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (SUNSPECPOINTDEF_SIZE * len);
 }return data_array_offset;}
 
-inline SerializeOffset<Vector<eui48Struct>> serialize_vector_eui48_struct(Serializer *const serializer, std::vector<eui48Struct> data_array){
+SerializeOffset<Vector<bitfield16Struct>> serialize_vector_bitfield16_struct(Serializer *const serializer, std::vector<bitfield16Struct> data_array){
+SerializeOffset<Vector<bitfield16Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD16_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (BITFIELD16_SIZE * i) + BITFIELD16_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (BITFIELD16_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<bitfield32Struct>> serialize_vector_bitfield32_struct(Serializer *const serializer, std::vector<bitfield32Struct> data_array){
+SerializeOffset<Vector<bitfield32Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD32_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + (BITFIELD32_SIZE * i) + BITFIELD32_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (BITFIELD32_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<bitfield64Struct>> serialize_vector_bitfield64_struct(Serializer *const serializer, std::vector<bitfield64Struct> data_array){
+SerializeOffset<Vector<bitfield64Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD64_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + (BITFIELD64_SIZE * i) + BITFIELD64_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (BITFIELD64_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<sunssfStruct>> serialize_vector_sunssf_struct(Serializer *const serializer, std::vector<sunssfStruct> data_array){
+SerializeOffset<Vector<sunssfStruct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSSF_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSSF_SIZE * i) + SUNSSF_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (SUNSSF_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<acc16Struct>> serialize_vector_acc16_struct(Serializer *const serializer, std::vector<acc16Struct> data_array){
+SerializeOffset<Vector<acc16Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC16_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ACC16_SIZE * i) + ACC16_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (ACC16_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<acc32Struct>> serialize_vector_acc32_struct(Serializer *const serializer, std::vector<acc32Struct> data_array){
+SerializeOffset<Vector<acc32Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC32_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ACC32_SIZE * i) + ACC32_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (ACC32_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<SunspecPointDataStruct>> serialize_vector_sunspecpointdata_struct(Serializer *const serializer, std::vector<SunspecPointDataStruct> data_array){
+SerializeOffset<Vector<SunspecPointDataStruct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECPOINTDATA_ALIGNMENT);for (uint16_t i = 0; i < len; i++){serializer->_tail_offset += (SUNSPECPOINTDATA_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<padStruct>> serialize_vector_pad_struct(Serializer *const serializer, std::vector<padStruct> data_array){
+SerializeOffset<Vector<padStruct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PAD_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (PAD_SIZE * i) + PAD_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (PAD_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<acc64Struct>> serialize_vector_acc64_struct(Serializer *const serializer, std::vector<acc64Struct> data_array){
+SerializeOffset<Vector<acc64Struct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC64_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ACC64_SIZE * i) + ACC64_VALUE_OFFSET])) = data_array[i].value;
+serializer->_tail_offset += (ACC64_SIZE * len);
+}return data_array_offset;}
+
+SerializeOffset<Vector<eui48Struct>> serialize_vector_eui48_struct(Serializer *const serializer, std::vector<eui48Struct> data_array){
 SerializeOffset<Vector<eui48Struct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -1648,7 +1755,7 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (EUI48_SIZE * len);
 }return data_array_offset;}
 
-inline SerializeOffset<Vector<ipaddrStruct>> serialize_vector_ipaddr_struct(Serializer *const serializer, std::vector<ipaddrStruct> data_array){
+SerializeOffset<Vector<ipaddrStruct>> serialize_vector_ipaddr_struct(Serializer *const serializer, std::vector<ipaddrStruct> data_array){
 SerializeOffset<Vector<ipaddrStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -1662,39 +1769,7 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (IPADDR_SIZE * len);
 }return data_array_offset;}
 
-inline SerializeOffset<Vector<SunspecPointDataStruct>> serialize_vector_sunspecpointdata_struct(Serializer *const serializer, std::vector<SunspecPointDataStruct> data_array){
-SerializeOffset<Vector<SunspecPointDataStruct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECPOINTDATA_ALIGNMENT);for (uint16_t i = 0; i < len; i++){serializer->_tail_offset += (SUNSPECPOINTDATA_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<padStruct>> serialize_vector_pad_struct(Serializer *const serializer, std::vector<padStruct> data_array){
-SerializeOffset<Vector<padStruct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PAD_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (PAD_SIZE * i) + PAD_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (PAD_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<acc16Struct>> serialize_vector_acc16_struct(Serializer *const serializer, std::vector<acc16Struct> data_array){
-SerializeOffset<Vector<acc16Struct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC16_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ACC16_SIZE * i) + ACC16_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (ACC16_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<ipv6addrStruct>> serialize_vector_ipv6addr_struct(Serializer *const serializer, std::vector<ipv6addrStruct> data_array){
+SerializeOffset<Vector<ipv6addrStruct>> serialize_vector_ipv6addr_struct(Serializer *const serializer, std::vector<ipv6addrStruct> data_array){
 SerializeOffset<Vector<ipv6addrStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -1710,40 +1785,19 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (IPV6ADDR_SIZE * len);
 }return data_array_offset;}
 
-inline SerializeOffset<Vector<enum64Struct>> serialize_vector_enum64_struct(Serializer *const serializer, std::vector<enum64Struct> data_array){
-SerializeOffset<Vector<enum64Struct>> data_array_offset;
+SerializeOffset<Vector<SunspecModelDefStruct>> serialize_vector_sunspecmodeldef_struct(Serializer *const serializer, std::vector<SunspecModelDefStruct> data_array){
+SerializeOffset<Vector<SunspecModelDefStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
 serializer->make_buffer_adequate();
 data_array_offset.offset = serializer->_tail_offset;
 *reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM64_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ENUM64_SIZE * i) + ENUM64_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (ENUM64_SIZE * len);
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECMODELDEF_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i) + SUNSPECMODELDEF_ID_OFFSET])) = data_array[i].id;
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i) + SUNSPECMODELDEF_GROUP_OFFSET])) = data_array[i].group.offset - (serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i) +SUNSPECMODELDEF_GROUP_OFFSET);
+serializer->_tail_offset += (SUNSPECMODELDEF_SIZE * len);
 }return data_array_offset;}
 
-inline SerializeOffset<Vector<sunssfStruct>> serialize_vector_sunssf_struct(Serializer *const serializer, std::vector<sunssfStruct> data_array){
-SerializeOffset<Vector<sunssfStruct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSSF_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSSF_SIZE * i) + SUNSSF_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (SUNSSF_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<bitfield64Struct>> serialize_vector_bitfield64_struct(Serializer *const serializer, std::vector<bitfield64Struct> data_array){
-SerializeOffset<Vector<bitfield64Struct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD64_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + (BITFIELD64_SIZE * i) + BITFIELD64_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (BITFIELD64_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<enum16Struct>> serialize_vector_enum16_struct(Serializer *const serializer, std::vector<enum16Struct> data_array){
+SerializeOffset<Vector<enum16Struct>> serialize_vector_enum16_struct(Serializer *const serializer, std::vector<enum16Struct> data_array){
 SerializeOffset<Vector<enum16Struct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -1754,40 +1808,7 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (ENUM16_SIZE * len);
 }return data_array_offset;}
 
-inline SerializeOffset<Vector<enum32Struct>> serialize_vector_enum32_struct(Serializer *const serializer, std::vector<enum32Struct> data_array){
-SerializeOffset<Vector<enum32Struct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ENUM32_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ENUM32_SIZE * i) + ENUM32_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (ENUM32_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<bitfield16Struct>> serialize_vector_bitfield16_struct(Serializer *const serializer, std::vector<bitfield16Struct> data_array){
-SerializeOffset<Vector<bitfield16Struct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD16_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (BITFIELD16_SIZE * i) + BITFIELD16_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (BITFIELD16_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<bitfield32Struct>> serialize_vector_bitfield32_struct(Serializer *const serializer, std::vector<bitfield32Struct> data_array){
-SerializeOffset<Vector<bitfield32Struct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, BITFIELD32_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + (BITFIELD32_SIZE * i) + BITFIELD32_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (BITFIELD32_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<SunspecGroupPointDefStruct>> serialize_vector_sunspecgrouppointdef_struct(Serializer *const serializer, std::vector<SunspecGroupPointDefStruct> data_array){
+SerializeOffset<Vector<SunspecGroupPointDefStruct>> serialize_vector_sunspecgrouppointdef_struct(Serializer *const serializer, std::vector<SunspecGroupPointDefStruct> data_array){
 SerializeOffset<Vector<SunspecGroupPointDefStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -1804,66 +1825,16 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (SUNSPECGROUPPOINTDEF_SIZE * len);
 }return data_array_offset;}
 
-inline SerializeOffset<Vector<acc32Struct>> serialize_vector_acc32_struct(Serializer *const serializer, std::vector<acc32Struct> data_array){
-SerializeOffset<Vector<acc32Struct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC32_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ACC32_SIZE * i) + ACC32_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (ACC32_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<SunspecModelDefStruct>> serialize_vector_sunspecmodeldef_struct(Serializer *const serializer, std::vector<SunspecModelDefStruct> data_array){
-SerializeOffset<Vector<SunspecModelDefStruct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, SUNSPECMODELDEF_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i) + SUNSPECMODELDEF_ID_OFFSET])) = data_array[i].id;
 
 
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_ID_OFFSET])) = data_array[i].group.id.offset - (serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_ID_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET])) = data_array[i].group.count_point_id.offset - (serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_POINTS_OFFSET])) = data_array[i].group.points.offset - (serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_POINTS_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_GROUPS_OFFSET])) = data_array[i].group.groups.offset - (serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_GROUPS_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_LABEL_OFFSET])) = data_array[i].group.label.offset - (serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_LABEL_OFFSET);
-*reinterpret_cast<uint8_t *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_COUNT_OFFSET])) = data_array[i].group.count;
-*reinterpret_cast<SunspecGroupType *>(&(serializer->_buffer[serializer->_tail_offset  + (SUNSPECMODELDEF_SIZE * i)  + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_TYPE_OFFSET])) = data_array[i].group.type;
-serializer->_tail_offset += (SUNSPECMODELDEF_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<acc64Struct>> serialize_vector_acc64_struct(Serializer *const serializer, std::vector<acc64Struct> data_array){
-SerializeOffset<Vector<acc64Struct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ACC64_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint64_t *>(&(serializer->_buffer[serializer->_tail_offset  + (ACC64_SIZE * i) + ACC64_VALUE_OFFSET])) = data_array[i].value;
-serializer->_tail_offset += (ACC64_SIZE * len);
-}return data_array_offset;}
-
-
-
-inline unsigned char *serialize_sunspecmodeldef_root(Serializer *const serializer,
+unsigned char *serialize_sunspecmodeldef_root(Serializer *const serializer,
  const uint16_t id,
- const SunspecGroupPointDefStruct group){
+ const SerializeOffset<SunspecGroupPointDef> group){
 uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, SUNSPECMODELDEF_ALIGNMENT);
 
 
 *reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset  + SUNSPECMODELDEF_ID_OFFSET])) = id;
-
-
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_ID_OFFSET])) = group.id.offset - (current_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_ID_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET])) = group.count_point_id.offset - (current_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_COUNT_POINT_ID_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_POINTS_OFFSET])) = group.points.offset - (current_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_POINTS_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_GROUPS_OFFSET])) = group.groups.offset - (current_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_GROUPS_OFFSET);
-*reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_LABEL_OFFSET])) = group.label.offset - (current_offset   + SUNSPECMODELDEF_GROUP_OFFSET +SUNSPECGROUPPOINTDEF_LABEL_OFFSET);
-*reinterpret_cast<uint8_t *>(&(serializer->_buffer[current_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_COUNT_OFFSET])) = group.count;
-*reinterpret_cast<SunspecGroupType *>(&(serializer->_buffer[current_offset   + SUNSPECMODELDEF_GROUP_OFFSET + SUNSPECGROUPPOINTDEF_TYPE_OFFSET])) = group.type;
+*reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset  + SUNSPECMODELDEF_GROUP_OFFSET])) = group.offset - (current_offset  +SUNSPECMODELDEF_GROUP_OFFSET);
 
 return serializer->_buffer;
 }

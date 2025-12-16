@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,10 +12,10 @@
 
 
 
-struct Weapon; 
 struct Monster; 
-struct Packet; 
+struct Weapon; 
 struct AnyPower; 
+struct Packet; 
 
 
 
@@ -46,6 +48,7 @@ struct String
 template<typename T, typename Enable = void>
 struct Offset
 {
+    static constexpr size_t nakedbytes_sizeof = 2;
     unsigned char *data;
     Offset(unsigned char *dataPtr)
     {
@@ -67,6 +70,8 @@ struct Offset
 template<typename T>
 struct Offset<T, typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value)>::type>
 {
+    static constexpr size_t nakedbytes_sizeof = sizeof(T);
+    
     unsigned char *data;
     Offset(unsigned char *dataPtr)
     {
@@ -137,7 +142,7 @@ struct Vector
 
     T get(size_t index) const
     {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
        
 
         return T(&data[offset]);
@@ -181,9 +186,58 @@ struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || st
 
 
 
+enum AnyPower_enum : uint16_t {
+
+AnyPower_enum_Monster,
+AnyPower_enum_Weapon,
+};
+
+inline const char * AnyPower_enum_to_string(AnyPower_enum value){
+switch (value){
+case AnyPower_enum_Monster:
+return "AnyPower_enum_Monster";
+case AnyPower_enum_Weapon:
+return "AnyPower_enum_Weapon";
+default:
+return NULL;
+}
+}
+
+
+
+
+struct Monster {
+
+static constexpr size_t nakedbytes_sizeof = 4;
+
+unsigned char * data_;
+
+Monster(unsigned char * data) : data_(data) {}
+
+#define MONSTER_MEMBER_SIZE_OFFSET 0
+#define MONSTER_NAME_OFFSET 2
+#define MONSTER_ALIGNMENT 2
+#define MONSTER_SIZE 4
+
+
+Offset<String> name() const {
+if(MONSTER_NAME_OFFSET < *reinterpret_cast<uint16_t *>(&data_[MONSTER_MEMBER_SIZE_OFFSET ])){
+const int16_t offset = MONSTER_NAME_OFFSET ;
+return Offset<String>(&data_[offset]);
+}
+}
+
+};
+
+
+
+
+
 
 
 struct Weapon {
+
+static constexpr size_t nakedbytes_sizeof = 8;
 
 unsigned char * data_;
 
@@ -215,49 +269,6 @@ return *reinterpret_cast<uint32_t*>(&data_[WEAPON_DAMAGE_OFFSET ]);
 
 
 
-
-
-struct Monster {
-
-unsigned char * data_;
-
-Monster(unsigned char * data) : data_(data) {}
-
-#define MONSTER_MEMBER_SIZE_OFFSET 0
-#define MONSTER_NAME_OFFSET 2
-#define MONSTER_ALIGNMENT 2
-#define MONSTER_SIZE 4
-
-
-Offset<String> name() const {
-if(MONSTER_NAME_OFFSET < *reinterpret_cast<uint16_t *>(&data_[MONSTER_MEMBER_SIZE_OFFSET ])){
-const int16_t offset = MONSTER_NAME_OFFSET ;
-return Offset<String>(&data_[offset]);
-}
-}
-
-};
-
-
-
-
-
-enum AnyPower_enum : uint16_t {
-
-AnyPower_enum_Monster,
-AnyPower_enum_Weapon,
-};
-
-const char * AnyPower_enum_to_string(AnyPower_enum value){
-switch (value){
-case AnyPower_enum_Monster:
-return "AnyPower_enum_Monster";
-case AnyPower_enum_Weapon:
-return "AnyPower_enum_Weapon";
-default:
-return NULL;
-}
-}
 
 
 struct AnyPower{
@@ -295,7 +306,11 @@ return type() == AnyPower_enum_Weapon ? Offset<Weapon>(&data_[ANYPOWER_DATA_OFFS
 
 
 
+
+
 struct Packet {
+
+static constexpr size_t nakedbytes_sizeof = 24;
 
 unsigned char * data_;
 
@@ -365,10 +380,6 @@ return Vector<Offset<Weapon>>(&data_[offset]);
 }
 
 };
-
-
-
-
 
 
 
@@ -451,7 +462,7 @@ return Vector<Offset<Weapon>>(&data_[offset]);
 
 
 
-size_t get_padding_size(size_t offset, uint16_t alignment)
+inline size_t get_padding_size(size_t offset, uint16_t alignment)
 {
     return (alignment - (offset % alignment)) % alignment;
 }
@@ -461,9 +472,10 @@ struct SerializeOffset
 {
     uint16_t offset = 0;
 
-    operator SerializeOffset<void>() const
+    template<typename U = void>
+    operator SerializeOffset<U>() const
     {
-        SerializeOffset<void> ret;
+        SerializeOffset<U> ret;
         ret.offset = this->offset;
         return ret;
     }
@@ -489,15 +501,16 @@ struct Serializer
     // uint16_t _current_offset = 0;
     uint16_t _tail_offset = 0;
 
-    void init(uint16_t buffer_size)
+    void init(uint16_t buffer_size, const uint16_t root_type_size, uint16_t root_type_alignment)
     {
         _buffer = reinterpret_cast<unsigned char *>(malloc(buffer_size));
         _buffer_size = buffer_size;
         *reinterpret_cast<uint16_t *>(&_buffer[OFFSET_SIZE]) = VERSION;
 
-        _tail_offset = get_padding_size(OFFSET_SIZE * 2, PACKET_ALIGNMENT) + OFFSET_SIZE * 2 + PACKET_SIZE;
+        _tail_offset = get_padding_size(OFFSET_SIZE * 2, root_type_alignment) + OFFSET_SIZE * 2 + root_type_size;
         make_buffer_adequate();
     }
+
 
     inline void make_buffer_adequate()
     {
@@ -603,16 +616,16 @@ struct Serializer
 
 
 
-struct WeaponStruct {
+struct MonsterStruct {
 SerializeOffset<String> name;
-uint32_t damage;
 };
 
 
 
 
-struct MonsterStruct {
+struct WeaponStruct {
 SerializeOffset<String> name;
+uint32_t damage;
 };
 
 
@@ -640,7 +653,19 @@ SerializeOffset<Vector<Weapon>> arsenal;
 
 
 
-SerializeOffset<Weapon> serialize_weapon(Serializer *const serializer,
+inline SerializeOffset<Monster> serialize_monster(Serializer *const serializer,
+ const SerializeOffset<String> name){
+SerializeOffset<Monster> monster_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, MONSTER_ALIGNMENT);
+serializer->make_buffer_adequate();
+monster_offset.offset = serializer->_tail_offset;
+
+*reinterpret_cast<int16_t *>(&(serializer->_buffer[serializer->_tail_offset + MONSTER_MEMBER_SIZE_OFFSET])) = MONSTER_SIZE;*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + MONSTER_NAME_OFFSET])) = name.offset - (serializer->_tail_offset  +MONSTER_NAME_OFFSET);
+serializer->_tail_offset += MONSTER_SIZE;
+return monster_offset;
+}
+
+inline SerializeOffset<Weapon> serialize_weapon(Serializer *const serializer,
  const SerializeOffset<String> name,
  const uint32_t damage){
 SerializeOffset<Weapon> weapon_offset;
@@ -654,19 +679,17 @@ serializer->_tail_offset += WEAPON_SIZE;
 return weapon_offset;
 }
 
-SerializeOffset<Monster> serialize_monster(Serializer *const serializer,
- const SerializeOffset<String> name){
-SerializeOffset<Monster> monster_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, MONSTER_ALIGNMENT);
+inline SerializeOffset<AnyPower> serialize_anypower(Serializer *const serializer){
+SerializeOffset<AnyPower> anypower_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);
 serializer->make_buffer_adequate();
-monster_offset.offset = serializer->_tail_offset;
+anypower_offset.offset = serializer->_tail_offset;
 
-*reinterpret_cast<int16_t *>(&(serializer->_buffer[serializer->_tail_offset + MONSTER_MEMBER_SIZE_OFFSET])) = MONSTER_SIZE;*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + MONSTER_NAME_OFFSET])) = name.offset - (serializer->_tail_offset  +MONSTER_NAME_OFFSET);
-serializer->_tail_offset += MONSTER_SIZE;
-return monster_offset;
+serializer->_tail_offset += ANYPOWER_SIZE;
+return anypower_offset;
 }
 
-SerializeOffset<Packet> serialize_packet(Serializer *const serializer,
+inline SerializeOffset<Packet> serialize_packet(Serializer *const serializer,
  const int16_t id,
  const AnyPower_enum power_type,
  const SerializeOffset<void> power,
@@ -692,19 +715,20 @@ serializer->_tail_offset += PACKET_SIZE;
 return packet_offset;
 }
 
-SerializeOffset<AnyPower> serialize_anypower(Serializer *const serializer){
-SerializeOffset<AnyPower> anypower_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);
+
+
+inline SerializeOffset<Vector<MonsterStruct>> serialize_vector_monster_struct(Serializer *const serializer, std::vector<MonsterStruct> data_array){
+SerializeOffset<Vector<MonsterStruct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
 serializer->make_buffer_adequate();
-anypower_offset.offset = serializer->_tail_offset;
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, MONSTER_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (MONSTER_SIZE * i) + MONSTER_NAME_OFFSET])) = data_array[i].name.offset - (serializer->_tail_offset  + (MONSTER_SIZE * i) +MONSTER_NAME_OFFSET);
+serializer->_tail_offset += (MONSTER_SIZE * len);
+}return data_array_offset;}
 
-serializer->_tail_offset += ANYPOWER_SIZE;
-return anypower_offset;
-}
-
-
-
-SerializeOffset<Vector<WeaponStruct>> serialize_vector_weapon_struct(Serializer *const serializer, std::vector<WeaponStruct> data_array){
+inline SerializeOffset<Vector<WeaponStruct>> serialize_vector_weapon_struct(Serializer *const serializer, std::vector<WeaponStruct> data_array){
 SerializeOffset<Vector<WeaponStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -716,18 +740,17 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (WEAPON_SIZE * len);
 }return data_array_offset;}
 
-SerializeOffset<Vector<MonsterStruct>> serialize_vector_monster_struct(Serializer *const serializer, std::vector<MonsterStruct> data_array){
-SerializeOffset<Vector<MonsterStruct>> data_array_offset;
+inline SerializeOffset<Vector<AnyPowerStruct>> serialize_vector_anypower_struct(Serializer *const serializer, std::vector<AnyPowerStruct> data_array){
+SerializeOffset<Vector<AnyPowerStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
 serializer->make_buffer_adequate();
 data_array_offset.offset = serializer->_tail_offset;
 *reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, MONSTER_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (MONSTER_SIZE * i) + MONSTER_NAME_OFFSET])) = data_array[i].name.offset - (serializer->_tail_offset  + (MONSTER_SIZE * i) +MONSTER_NAME_OFFSET);
-serializer->_tail_offset += (MONSTER_SIZE * len);
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);for (uint16_t i = 0; i < len; i++){serializer->_tail_offset += (ANYPOWER_SIZE * len);
 }return data_array_offset;}
 
-SerializeOffset<Vector<PacketStruct>> serialize_vector_packet_struct(Serializer *const serializer, std::vector<PacketStruct> data_array){
+inline SerializeOffset<Vector<PacketStruct>> serialize_vector_packet_struct(Serializer *const serializer, std::vector<PacketStruct> data_array){
 SerializeOffset<Vector<PacketStruct>> data_array_offset;
 uint16_t len = data_array.size();
 serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
@@ -745,19 +768,9 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 serializer->_tail_offset += (PACKET_SIZE * len);
 }return data_array_offset;}
 
-SerializeOffset<Vector<AnyPowerStruct>> serialize_vector_anypower_struct(Serializer *const serializer, std::vector<AnyPowerStruct> data_array){
-SerializeOffset<Vector<AnyPowerStruct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);for (uint16_t i = 0; i < len; i++){serializer->_tail_offset += (ANYPOWER_SIZE * len);
-}return data_array_offset;}
 
 
-
-unsigned char *serialize_packet_root(Serializer *const serializer,
+inline unsigned char *serialize_packet_root(Serializer *const serializer,
  const int16_t id,
  const AnyPower_enum power_type,
  const SerializeOffset<void> power,
@@ -777,6 +790,8 @@ uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, PA
 *reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset  + PACKET_POS_OFFSET])) = pos.offset - (current_offset  +PACKET_POS_OFFSET);
 *reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset  + PACKET_YOU_OFFSET])) = you.offset - (current_offset  +PACKET_YOU_OFFSET);
 *reinterpret_cast<uint16_t *>(&(serializer->_buffer[current_offset  + PACKET_ARSENAL_OFFSET])) = arsenal.offset - (current_offset  +PACKET_ARSENAL_OFFSET);
+
+*reinterpret_cast<uint16_t*>(&(serializer->_buffer[0])) = serializer->_tail_offset;
 
 return serializer->_buffer;
 }
