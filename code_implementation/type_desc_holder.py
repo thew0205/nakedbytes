@@ -5,7 +5,7 @@ import struct
 from typing import List, Dict, cast
 
 
-from .type_utils import get_padding_size
+from .type_utils import get_offset_type_int, get_padding_size, get_real_type_name, get_type_from_json
 
 
 
@@ -16,24 +16,6 @@ primitive_types = {'bool', 'char', 'int8', 'uint8', 'int16', 'uint16', 'int32', 
 def is_primitive_type(type_name):
     return type_name in primitive_types
 
-def get_type_from_json(type_name, model_def: Dict) -> Dict:
-    
-    for model_type in model_def['types']:
-        if model_type['name'] == type_name:
-            return model_type
-    raise ValueError(f"Type name given {type_name} but type definition json not found. Error in model definition.")
-
-def get_offset_type_int(offset_size: int) -> str:
-    if offset_size == 1:
-        return ('uint8')
-    elif offset_size == 2:
-        return ('uint16')
-    elif offset_size == 4:
-        return ('uint32')
-    elif offset_size == 8:
-        return ('uint64')
-    else: 
-        return 'uint16'
     
     
 def get_offset_type_desc_int(offset_size:int, types_desc: set['TypeDesc']) -> 'TypeDesc':
@@ -262,16 +244,9 @@ class MemberDesc:
         
 
 
-def set_all_types(model_def: Dict, all_types: set[str]):
-    for ty in model_def.get('types', []):
-        all_types.add(ty['name'])
+
         
-def get_real_type_name(type_name: str) -> str:
-    first_bracket_index = type_name.find('[')
-    last_bracket_index = type_name.find(']')
-    if  first_bracket_index != -1 and last_bracket_index != -1:
-        type_name = type_name[first_bracket_index+1: last_bracket_index] 
-    return type_name
+
 
 def get_type_is_vector(type_name: str) -> bool:
     first_bracket_index = type_name.find('[')
@@ -280,25 +255,6 @@ def get_type_is_vector(type_name: str) -> bool:
         return type_name[0: first_bracket_index] == 'vector'
     return False
 
-def set_needed_types(root_type: Dict, needed_types: set[str], model_def:Dict ):    
-    if root_type['name'] in needed_types:
-        return needed_types
-    needed_types.add(root_type['name'])
-    members = root_type.get('members', [])
-    for member in members:
-        member_type_name: str = get_real_type_name(member['type'])
-        if not member_type_name  in needed_types:
-            member_type = get_type_from_json(member_type_name, model_def)
-            #? Not needed?
-            set_needed_types(member_type, needed_types, model_def)
-    members = root_type.get('unions', [])
-    for member in members:
-        if not member['name']  in needed_types:
-            member_type = get_type_from_json(member['name'],model_def)
-            #? Not needed?
-            set_needed_types(member_type, needed_types, model_def)
-            # needed_types.update(set_needed_types(member_type))   
-    return needed_types
 
 def members_contain_union_recursively(type_json: Dict, model_def: Dict, offset_size: int) -> bool:
     for mem in type_json["members"]:

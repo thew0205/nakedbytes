@@ -10,7 +10,7 @@ from typing import cast
 from code_implementation.byte_generator import generate_byte
 from code_implementation.cpp_code_generator_deserializer import generate_cpp_code
 from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_types_desc
-from code_implementation.type_parsing import parsing
+from code_implementation.type_parsing import parsing_schema_to_type_desc
 
 parser = argparse.ArgumentParser(prog='nakedbytes')
 
@@ -34,7 +34,7 @@ version = model_def['version']
 offset_size = model_def['offset_size']
 
     
-types_desc = parsing(schema_def_file)
+types_desc = parsing_schema_to_type_desc(schema_def_file)
 
 
 

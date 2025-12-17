@@ -1,6 +1,6 @@
 {
     "offset_size": 2,
-    "version": 0,
+    "version": 5,
     "root_type": "Packet",
     "types": [
         {
@@ -48,24 +48,8 @@
                     "type": "int16"
                 },
                 {
-                    "name": "power",
-                    "type": "AnyPower"
-                },
-                {
-                    "name": "description",
-                    "type": "string"
-                },
-                {
                     "name": "length",
                     "type": "uint32"
-                },
-                {
-                    "name": "pos",
-                    "type": "vector[uint16]"
-                },
-                {
-                    "name": "you",
-                    "type": "Monster"
                 }
             ]
         }

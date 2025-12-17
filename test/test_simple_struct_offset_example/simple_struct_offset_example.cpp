@@ -4,7 +4,7 @@
 int main()
 {
     Serializer serializer;
-    serializer.init(1024);
+    serializer.init(1024,PACKET_SIZE, PACKET_ALIGNMENT);
 
     auto name = serializer.serialize_string("Matthew :()");
     auto wep = serialize_weapon(&serializer, name, 0xdeadadde);

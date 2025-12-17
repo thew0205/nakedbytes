@@ -2,11 +2,13 @@ import json
 import struct
 from typing import List, Dict, cast
 
+from code_implementation.type_utils import set_all_types, set_needed_types
+
 from .type_desc_holder import *
 
 
 
-def parsing(model_def_file: str):
+def parsing_schema_to_type_desc(model_def_file: str):
     model_def = {}
     with open(model_def_file, 'r') as f:
         model_def = json.load(f)
@@ -25,9 +27,11 @@ def parsing(model_def_file: str):
 
     set_all_types(model_def, all_types)
     set_needed_types(root_type, needed_types, model_def)
+    
     if not needed_types.issubset(all_types):
         raise ValueError("All the needed type must be a subset of all type known.")
     print(needed_types)
+    
     types_desc = TypeDesc.get_primitive_types_desc(offset_size=offset_size).copy()
     for i in range(1, 8):
         types_desc.add(TypeDesc.generate_pad(i) )  
