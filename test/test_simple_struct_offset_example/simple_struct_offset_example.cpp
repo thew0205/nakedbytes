@@ -17,7 +17,7 @@ int main()
     auto wepField = WeaponStruct{.name = desc, .damage = 2345};
 
     auto arr_wep = serializer.serialize_vector(std::vector<SerializeOffset<Weapon>>{wep});
-    auto buf = serialize_packet_root(&serializer, 5, AnyPower_enum_Weapon, wep, desc, 0x55aa, pos, you, arr_wep);
+    auto buf = serialize_packet_root(&serializer, 5, AnyPower_enum_Weapon, wep, desc, 5599, pos, you, arr_wep);
 
     const char *file_name = "simple_struct_offset_example.bin";
     FILE *file = fopen(file_name, "rb");
@@ -35,7 +35,7 @@ int main()
         return -1;
     }
 
-    PacketRoot packet{buf};
+    PacketRoot& packet = *reinterpret_cast<PacketRoot*>(&buf[0]);
     printf("Packet\n");
     printf("id: %d\n", packet.id());
     printf("length: %d\n", packet.length());
@@ -48,8 +48,8 @@ int main()
     else if (packet.power_type() == AnyPower_enum_Weapon)
     {
         printf("Packet power is weapon\n");
-        auto weapon = packet.power().data_as_Weapon();
-        printf("name %s\n", weapon.value().name().value().c_str());
+        auto weapon = packet.power().data_as_Weapon()->value_ptr();
+        printf("%x name %s\n",weapon->damage(), weapon->name().value().c_str());
     }
 
     for (int i = 0; i < packet.pos().size(); i++)

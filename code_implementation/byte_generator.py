@@ -74,7 +74,7 @@ def generate_vector_type(model: List, root_array: bytearray,  current_type_desc:
           
     return temp_current_offset, tail_offset
 
-def generate_union_type(model, root_array: bytearray, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int, true_union_type: TypeDesc) ->Tuple[int, int]:
+def generate_union_type(model, root_array: bytearray, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int, true_union_type: TypeDesc) ->Tuple[int|None, int]:
     """
     Generate the byte representation for a union type by checking the true union type and generating the byte representation for that type.
     """
@@ -83,20 +83,34 @@ def generate_union_type(model, root_array: bytearray, current_type_desc: TypeDes
     true_union_type_desc = cast(TypeDesc, get_type_desc_from_types_desc(true_union_type.name, types_desc))
     current_offset += get_padding_size(current_offset, alignment= true_union_type_desc.alignment)
     
-    tail_offset = current_offset + true_union_type_desc.size 
-    check_and_increment_bytearray(root_array, tail_offset)
+    
 
+    # if true_union_type_desc.is_offset_type:
+    #     tail_offset = current_offset + offset_size 
+    #     check_and_increment_bytearray(root_array, tail_offset)
+        
+    #     real_item_offset, tail_offset = generate_offset_type(model=model, root_array=root_array, current_type_desc=true_union_type_desc, types_desc= types_desc, current_offset= tail_offset, offset_size=offset_size, is_array= False, true_union_type= None)
+    #     value = 0
+    #     if real_item_offset != None:
+    #         value = real_item_offset - current_offset
+    #     root_array[current_offset: current_offset + offset_size] = generate_primitive_number_byte(value, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  )
     if true_union_type_desc.is_offset_type:
-        real_item_offset, tail_offset = generate_offset_type(model=model, root_array=root_array, current_type_desc=true_union_type_desc, types_desc= types_desc, current_offset= tail_offset, offset_size=offset_size, is_array= False, true_union_type= None)
-        value = 0
-        if real_item_offset != None:
-            value = real_item_offset - current_offset
-        root_array[current_offset: current_offset + offset_size] = generate_primitive_number_byte(value, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  )
+        return generate_offset_type(model=model, root_array=root_array, current_type_desc=true_union_type_desc, types_desc= types_desc, current_offset= current_offset, offset_size=offset_size, is_array= False, true_union_type= None)
+        
     elif true_union_type_desc.is_primitive:
+        tail_offset = current_offset + true_union_type_desc.size 
+        check_and_increment_bytearray(root_array, tail_offset)
+        
         root_array[current_offset: current_offset + true_union_type_desc.size] = generate_primitive_number_byte(value= model, type_desc= true_union_type_desc, )   
     elif true_union_type_desc.type_type == 'enum':
+        tail_offset = current_offset + true_union_type_desc.size 
+        check_and_increment_bytearray(root_array, tail_offset)
+        
         root_array[current_offset : current_offset+ true_union_type_desc.size] = generate_enum_byte(model= model, types_desc= types_desc, offset_size=true_union_type_desc.size, current_type_desc=true_union_type_desc)  
     elif true_union_type_desc.type_type == 'struct':
+        tail_offset = current_offset + true_union_type_desc.size 
+        check_and_increment_bytearray(root_array, tail_offset)
+        
         tail_offset = generate_struct_type(model=model, root_array= root_array, current_offset= current_offset, offset_size= offset_size,  current_type_desc= true_union_type_desc,tail_offset= tail_offset, types_desc= types_desc)
     return current_offset, tail_offset
         
@@ -109,8 +123,6 @@ def generate_class_type(model: Dict, root_array: bytearray,  current_type_desc: 
     Generate the byte representation for a class type. It first store the size of the class and then generate the byte representation of the class struct type. The alignment for the class must be enforced before calling this function.
     Returns the new tail offset after generating the class type.
     """
-    
-    
     
     root_array[current_offset: current_offset + offset_size] = generate_primitive_number_byte(value = current_type_desc.size , type_desc= get_offset_type_desc_int(offset_size=offset_size, types_desc= types_desc))
     return generate_struct_type(model=model, root_array=root_array, current_type_desc= current_type_desc,current_offset=current_offset,  tail_offset= tail_offset, offset_size= offset_size, types_desc= types_desc)
@@ -158,7 +170,6 @@ def generate_struct_type(model: Dict, root_array: bytearray,  current_type_desc:
     It returns the new tail offset after generating the struct type. Alignment for the struct must be enforced before calling this function.
     """
     #Not really needed
-    # current_offset += get_padding_size(current_offset, alignment= current_type_desc.alignment)
     offset_member_map:Dict[str, int|None] = {}
     for member in current_type_desc.members:
         if member.is_offset_type:

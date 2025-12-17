@@ -10,204 +10,213 @@
 
 #define OFFSET_SIZE 2
 
-struct Packet;
+
+
+struct Packet; 
+
+
 
 struct String
 {
-    unsigned char *data;
-
-    String(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
 #define STRING_LENGTH_OFFSET 0
-    uint16_t length() const
+    const uint16_t length() const
     {
-        int16_t offset = STRING_LENGTH_OFFSET;
-        return *reinterpret_cast<uint16_t *>(&data[offset]);
+        const int16_t offset = STRING_LENGTH_OFFSET;
+        return *reinterpret_cast<const uint16_t *>(&data_[offset]);
     }
 
 #define STRING_VALUE_OFFSET 2
     const char *c_str() const
     {
-        uint16_t offset = STRING_VALUE_OFFSET;
-        return reinterpret_cast<const char *>(&data[offset]);
+        const int16_t offset = STRING_VALUE_OFFSET;
+        return reinterpret_cast<const char *>(&data_[offset]);
     }
+    
+private:
+    
+    unsigned char data_[1];
+
+    String() = delete;
+    String (const String &other) = delete;
+    String &operator=(const String &other) = delete;
+    
 };
 
-template <typename T, typename Enable = void>
+template<typename T, typename Enable = void>
 struct Offset
 {
     static constexpr size_t nakedbytes_sizeof = 2;
-    unsigned char *data;
-    Offset(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
 
     bool is_null() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
     }
 
-    T value() const
+    const T* value_ptr() const
     {
-        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
-        return T(&data[offset]);
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return reinterpret_cast<const T*>(&data_[offset]);
     }
+    
+    const T& value() const
+    {
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+private:
+
+    unsigned char data_[1];
+
+    Offset() = delete;
+    Offset (const Offset &other) = delete;
+    Offset &operator=(const Offset &other) = delete;
 };
 
-template <typename T>
+template<typename T>
 struct Offset<T, typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value)>::type>
 {
     static constexpr size_t nakedbytes_sizeof = sizeof(T);
-
-    unsigned char *data;
-    Offset(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-
+    
     bool is_null() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
     }
 
-    T value() const
+    const T* value_ptr() const
     {
-        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
-        return static_cast<T>(data[offset]);
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return reinterpret_cast<const T*>(&data_[offset]);
     }
+    
+    const T& value() const
+    {
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+private:
+
+    unsigned char data_[1];
+
+    Offset() = delete;
+    Offset (const Offset &other) = delete;
+    Offset &operator=(const Offset &other) = delete;
 };
 
-template <typename T>
-struct is_Offset_Type : std::false_type
-{
-};
-template <typename T>
-struct is_Offset_Type<Offset<T>> : std::true_type
-{
-};
+template<typename T> struct is_Offset_Type : std::false_type {};
+template<typename T>
+struct is_Offset_Type<Offset<T>> : std::true_type {};
+
 
 template <typename T>
 struct Union
 {
-    unsigned char *data;
-    Union(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-
 #define UNION_TYPE_OFFSET 0
     uint16_t type() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[UNION_TYPE_OFFSET]);
+        return *reinterpret_cast<uint16_t *>(&data_[UNION_TYPE_OFFSET]);
     }
 
 #define DATA_OFFSET 2
-    const unsigned char *raw_data() const
+    const Offset<T>* value_ptr() const
     {
-        int16_t offset = *reinterpret_cast<uint16_t *>(&data[DATA_OFFSET]) + DATA_OFFSET;
-
-        return (&data[offset]);
+        const int16_t offset = *reinterpret_cast<uint16_t *>(&data_[DATA_OFFSET]) + DATA_OFFSET;
+        return reinterpret_cast<const Offset<T>*>(&data_[offset]);
     }
-
-    bool is_null() const
+    
+    const Offset<T>& value() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[DATA_OFFSET]) == 0;
+        const int16_t offset = *reinterpret_cast<uint16_t *>(&data_[DATA_OFFSET]) + DATA_OFFSET;
+        return *reinterpret_cast<const Offset<T>*>(&data_[offset]);
     }
-};
-
-template <typename T, typename Enable = void>
-struct Vector
-{
-    unsigned char *data;
-
-    bool is_null() const
-    {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
-    }
-
-    uint16_t size() const
-    {
-        int16_t offset = *reinterpret_cast<uint16_t *>(&data[0]);
-        return *reinterpret_cast<uint16_t *>(&data[offset]);
-    }
-
-    T get(size_t index) const
-    {
-        int16_t offset = *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
-
-        return T(&data[offset]);
-    }
-
-    Vector(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-};
-
-template <typename T>
-struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || std::is_integral<T>::value)>::type>
-{
-    unsigned char *data;
-
-    bool is_null() const
-    {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
-    }
-
-    uint16_t size() const
-    {
-        int16_t offset = *reinterpret_cast<uint16_t *>(&data[0]);
-        return *reinterpret_cast<uint16_t *>(&data[offset]);
-    }
-
-    T get(size_t index) const
-    {
-        int16_t offset = *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
-
-        return static_cast<T>(data[offset]);
-    }
-
-    Vector(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-};
-
-struct Packet
-{
-
-    static constexpr size_t nakedbytes_sizeof = 8;
-
-    unsigned char *data_;
-
-    Packet(unsigned char *data) : data_(data) {}
-
-#define PACKET_ID_OFFSET 0
-#define PACKET_PAD2_OFFSET 2
-#define PACKET_LENGTH_OFFSET 4
-#define PACKET_ALIGNMENT 4
-#define PACKET_SIZE 8
-
-    int16_t id() const
-    {
-        return *reinterpret_cast<int16_t *>(&data_[PACKET_ID_OFFSET]);
-    }
-
-    uint32_t length() const
-    {
-        return *reinterpret_cast<uint32_t *>(&data_[PACKET_LENGTH_OFFSET]);
-    }
-};
-
-struct PacketRoot
-{
+    
+private:
 
     unsigned char data_[1];
 
-    PacketRoot()  {}
+    Union() = delete;
+    Union (const Union &other) = delete;
+    Union &operator=(const Union &other) = delete;
+};
+
+template<typename T, typename Enable = void>
+struct Vector
+{
+
+    bool is_null() const
+    {
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
+    }
+    
+    uint16_t size() const
+    {
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]);
+        return *reinterpret_cast<const uint16_t *>(&data_[offset]);
+    }
+
+    const T& get(size_t index) const
+    {
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+    const T& operator[](size_t index) const {
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+
+    
+private:
+
+    unsigned char data_[1];
+
+    Vector() = delete;
+    Vector (const Vector &other) = delete;
+    Vector &operator=(const Vector &other) = delete;
+};
+
+template<typename T>
+struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || std::is_integral<T>::value)>::type>
+{
+
+    bool is_null() const
+    {
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
+    }
+    
+    uint16_t size() const
+    {
+        int16_t offset =  *reinterpret_cast<uint16_t *>(&data_[0]);
+        return *reinterpret_cast<const uint16_t *>(&data_[offset]);
+    }
+
+    const T& get(size_t index) const
+    {
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+    const T& operator[](size_t index) const {
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+
+
+private:
+
+    unsigned char data_[1];
+
+    Vector() = delete;
+    Vector (const Vector &other) = delete;
+    Vector &operator=(const Vector &other) = delete;
+};
+
+
+
+
+
+struct Packet  {
 
 #define PACKET_ID_OFFSET 0
 #define PACKET_PAD2_OFFSET 2
@@ -215,17 +224,61 @@ struct PacketRoot
 #define PACKET_ALIGNMENT 4
 #define PACKET_SIZE 8
 
-    int16_t id() const
-    {
-        auto a = &data_[PACKET_ID_OFFSET + 2 * OFFSET_SIZE];
-        return *reinterpret_cast<const int16_t *>(a);
-    }
 
-    uint32_t length() const
-    {
-        return *reinterpret_cast<const uint32_t *>(&data_[PACKET_LENGTH_OFFSET + 2 * OFFSET_SIZE]);
-    }
+const int16_t id() const {
+return *reinterpret_cast<const int16_t*>(&data_[PACKET_ID_OFFSET ]);
+}
+
+const uint32_t length() const {
+return *reinterpret_cast<const uint32_t*>(&data_[PACKET_LENGTH_OFFSET ]);
+}
+
+static constexpr size_t nakedbytes_sizeof = 8;
+
+private:
+Packet() =delete;
+Packet(const Packet &) =delete;
+Packet& operator=(const Packet &) =delete;
+unsigned char data_[1];
+
 };
+
+
+
+
+
+
+
+struct PacketRoot  {
+
+#define PACKET_ID_OFFSET 0
+#define PACKET_PAD2_OFFSET 2
+#define PACKET_LENGTH_OFFSET 4
+#define PACKET_ALIGNMENT 4
+#define PACKET_SIZE 8
+
+
+const int16_t id() const {
+return *reinterpret_cast<const int16_t*>(&data_[PACKET_ID_OFFSET + 2* OFFSET_SIZE]);
+}
+
+const uint32_t length() const {
+return *reinterpret_cast<const uint32_t*>(&data_[PACKET_LENGTH_OFFSET + 2* OFFSET_SIZE]);
+}
+
+static constexpr size_t nakedbytes_sizeof = 8;
+
+private:
+PacketRoot() =delete;
+PacketRoot(const PacketRoot &) =delete;
+PacketRoot& operator=(const PacketRoot &) =delete;
+unsigned char data_[1];
+
+};
+
+
+
+
 
 inline size_t get_padding_size(size_t offset, uint16_t alignment)
 {
@@ -237,7 +290,7 @@ struct SerializeOffset
 {
     uint16_t offset = 0;
 
-    template <typename U = void>
+    template<typename U = void>
     operator SerializeOffset<U>() const
     {
         SerializeOffset<U> ret;
@@ -276,6 +329,7 @@ struct Serializer
         make_buffer_adequate();
     }
 
+
     inline void make_buffer_adequate()
     {
         while (_buffer_size < _tail_offset)
@@ -288,7 +342,7 @@ struct Serializer
     SerializeOffset<String> serialize_string(const char *str)
     {
         SerializeOffset<String> str_offset;
-
+        
         if (str == nullptr)
         {
             str_offset.offset = 0;
@@ -309,7 +363,7 @@ struct Serializer
         }
         return str_offset;
     }
-
+    
     template <typename T>
     typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_enum<T>::value), SerializeOffset<T>>::type serialize_primitive(T data)
     {
@@ -323,7 +377,7 @@ struct Serializer
 
         return data_offset;
     }
-
+    
     template <typename>
     struct extract_vector_type
     {
@@ -370,63 +424,64 @@ struct Serializer
 
         for (uint16_t i = 0; i < len; i++)
         {
-            *reinterpret_cast<uint16_t *>(&_buffer[_tail_offset]) = data_array[i].offset - _tail_offset;
+            *reinterpret_cast<uint16_t*>(&_buffer[_tail_offset]) = data_array[i].offset - _tail_offset;
             _tail_offset += OFFSET_SIZE;
         }
         return data_array_offset;
     }
 };
 
-struct PacketStruct
-{
-    int16_t id;
-    uint32_t length;
+
+
+
+struct PacketStruct {
+int16_t id;
+uint32_t length;
 };
 
+
+
+
 inline SerializeOffset<Packet> serialize_packet(Serializer *const serializer,
-                                                const int16_t id,
-                                                const uint32_t length)
-{
-    SerializeOffset<Packet> packet_offset;
-    serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PACKET_ALIGNMENT);
-    serializer->make_buffer_adequate();
-    packet_offset.offset = serializer->_tail_offset;
+ const int16_t id,
+ const uint32_t length){
+SerializeOffset<Packet> packet_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PACKET_ALIGNMENT);
+serializer->make_buffer_adequate();
+packet_offset.offset = serializer->_tail_offset;
 
-    *reinterpret_cast<int16_t *>(&(serializer->_buffer[serializer->_tail_offset + PACKET_ID_OFFSET])) = id;
-    *reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset + PACKET_LENGTH_OFFSET])) = length;
-    serializer->_tail_offset += PACKET_SIZE;
-    return packet_offset;
+*reinterpret_cast<int16_t *>(&(serializer->_buffer[serializer->_tail_offset  + PACKET_ID_OFFSET])) = id;
+*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + PACKET_LENGTH_OFFSET])) = length;
+serializer->_tail_offset += PACKET_SIZE;
+return packet_offset;
 }
 
-inline SerializeOffset<Vector<PacketStruct>> serialize_vector_packet_struct(Serializer *const serializer, std::vector<PacketStruct> data_array)
-{
-    SerializeOffset<Vector<PacketStruct>> data_array_offset;
-    uint16_t len = data_array.size();
-    serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-    serializer->make_buffer_adequate();
-    data_array_offset.offset = serializer->_tail_offset;
-    *reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-    serializer->_tail_offset += OFFSET_SIZE;
-    serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PACKET_ALIGNMENT);
-    for (uint16_t i = 0; i < len; i++)
-    {
-        *reinterpret_cast<int16_t *>(&(serializer->_buffer[serializer->_tail_offset + (PACKET_SIZE * i) + PACKET_ID_OFFSET])) = data_array[i].id;
-        *reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset + (PACKET_SIZE * i) + PACKET_LENGTH_OFFSET])) = data_array[i].length;
-        serializer->_tail_offset += (PACKET_SIZE * len);
-    }
-    return data_array_offset;
-}
+
+
+inline SerializeOffset<Vector<PacketStruct>> serialize_vector_packet_struct(Serializer *const serializer, std::vector<PacketStruct> data_array){
+SerializeOffset<Vector<PacketStruct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+serializer->make_buffer_adequate();
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PACKET_ALIGNMENT);for (uint16_t i = 0; i < len; i++){*reinterpret_cast<int16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (PACKET_SIZE * i) + PACKET_ID_OFFSET])) = data_array[i].id;
+*reinterpret_cast<uint32_t *>(&(serializer->_buffer[serializer->_tail_offset  + (PACKET_SIZE * i) + PACKET_LENGTH_OFFSET])) = data_array[i].length;
+serializer->_tail_offset += (PACKET_SIZE * len);
+}return data_array_offset;}
+
+
 
 inline unsigned char *serialize_packet_root(Serializer *const serializer,
-                                            const int16_t id,
-                                            const uint32_t length)
-{
-    uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, PACKET_ALIGNMENT);
+ const int16_t id,
+ const uint32_t length){
+uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, PACKET_ALIGNMENT);
 
-    *reinterpret_cast<int16_t *>(&(serializer->_buffer[current_offset + PACKET_ID_OFFSET])) = id;
-    *reinterpret_cast<uint32_t *>(&(serializer->_buffer[current_offset + PACKET_LENGTH_OFFSET])) = length;
 
-    *reinterpret_cast<uint16_t *>(&(serializer->_buffer[0])) = serializer->_tail_offset;
+*reinterpret_cast<int16_t *>(&(serializer->_buffer[current_offset  + PACKET_ID_OFFSET])) = id;
+*reinterpret_cast<uint32_t *>(&(serializer->_buffer[current_offset  + PACKET_LENGTH_OFFSET])) = length;
 
-    return serializer->_buffer;
+*reinterpret_cast<uint16_t*>(&(serializer->_buffer[0])) = serializer->_tail_offset;
+
+return serializer->_buffer;
 }

@@ -12,59 +12,68 @@
 
 
 
+struct AnyPower; 
 struct Monster; 
 struct Weapon; 
 struct Packet; 
-struct AnyPower; 
-
-
-
 
 
 
 struct String
 {
-    unsigned char *data;
-
-    String(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
 #define STRING_LENGTH_OFFSET 0
-    uint16_t length() const
+    const uint16_t length() const
     {
-        int16_t offset = STRING_LENGTH_OFFSET;
-        return *reinterpret_cast<uint16_t *>(&data[offset]);
+        const int16_t offset = STRING_LENGTH_OFFSET;
+        return *reinterpret_cast<const uint16_t *>(&data_[offset]);
     }
 
 #define STRING_VALUE_OFFSET 2
     const char *c_str() const
     {
-        uint16_t offset = STRING_VALUE_OFFSET;
-        return reinterpret_cast<const char *>(&data[offset]);
+        const int16_t offset = STRING_VALUE_OFFSET;
+        return reinterpret_cast<const char *>(&data_[offset]);
     }
+    
+private:
+    
+    unsigned char data_[1];
+
+    String() = delete;
+    String (const String &other) = delete;
+    String &operator=(const String &other) = delete;
+    
 };
 
 template<typename T, typename Enable = void>
 struct Offset
 {
     static constexpr size_t nakedbytes_sizeof = 2;
-    unsigned char *data;
-    Offset(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
 
     bool is_null() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
     }
 
-    T value() const
+    const T* value_ptr() const
     {
-        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
-        return T(&data[offset]);
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return reinterpret_cast<const T*>(&data_[offset]);
     }
+    
+    const T& value() const
+    {
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+private:
+
+    unsigned char data_[1];
+
+    Offset() = delete;
+    Offset (const Offset &other) = delete;
+    Offset &operator=(const Offset &other) = delete;
 };
 
 template<typename T>
@@ -72,22 +81,30 @@ struct Offset<T, typename std::enable_if<(std::is_integral<T>::value || std::is_
 {
     static constexpr size_t nakedbytes_sizeof = sizeof(T);
     
-    unsigned char *data;
-    Offset(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-
     bool is_null() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
     }
 
-    T value() const
+    const T* value_ptr() const
     {
-        int16_t offset = *reinterpret_cast<int16_t *>(&data[0]);
-        return static_cast<T>(data[offset]);
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return reinterpret_cast<const T*>(&data_[offset]);
     }
+    
+    const T& value() const
+    {
+        const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[0]);
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+private:
+
+    unsigned char data_[1];
+
+    Offset() = delete;
+    Offset (const Offset &other) = delete;
+    Offset &operator=(const Offset &other) = delete;
 };
 
 template<typename T> struct is_Offset_Type : std::false_type {};
@@ -95,152 +112,77 @@ template<typename T>
 struct is_Offset_Type<Offset<T>> : std::true_type {};
 
 
-template <typename T>
-struct Union
-{
-    unsigned char *data;
-    Union(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
-
-#define UNION_TYPE_OFFSET 0
-    uint16_t type() const
-    {
-        return *reinterpret_cast<uint16_t *>(&data[UNION_TYPE_OFFSET]);
-    }
-
-#define DATA_OFFSET 2
-    const unsigned char *raw_data() const
-    {
-        int16_t offset = *reinterpret_cast<uint16_t *>(&data[DATA_OFFSET]) + DATA_OFFSET;
-
-        return (&data[offset]);
-    }
-    
-    bool is_null() const
-    {
-        return *reinterpret_cast<uint16_t *>(&data[DATA_OFFSET]) == 0;
-    }
-};
-
 template<typename T, typename Enable = void>
 struct Vector
 {
-    unsigned char *data;
 
     bool is_null() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
     }
     
     uint16_t size() const
     {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]);
-        return *reinterpret_cast<uint16_t *>(&data[offset]);
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]);
+        return *reinterpret_cast<const uint16_t *>(&data_[offset]);
     }
 
-    T get(size_t index) const
+    const T& get(size_t index) const
     {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
-       
-
-        return T(&data[offset]);
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+    const T& operator[](size_t index) const {
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
     }
 
-    Vector(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
+    
+private:
+
+    unsigned char data_[1];
+
+    Vector() = delete;
+    Vector (const Vector &other) = delete;
+    Vector &operator=(const Vector &other) = delete;
 };
 
 template<typename T>
 struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || std::is_integral<T>::value)>::type>
 {
-    unsigned char *data;
 
     bool is_null() const
     {
-        return *reinterpret_cast<uint16_t *>(&data[0]) == 0;
+        return *reinterpret_cast<const uint16_t *>(&data_[0]) == 0;
     }
     
     uint16_t size() const
     {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]);
-        return *reinterpret_cast<uint16_t *>(&data[offset]);
+        int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]);
+        return *reinterpret_cast<const uint16_t *>(&data_[offset]);
     }
 
-    T get(size_t index) const
+    const T& get(size_t index) const
     {
-        int16_t offset =  *reinterpret_cast<uint16_t *>(&data[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
-       
-
-        return static_cast<T>(data[offset]);
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
+    }
+    
+    const T& operator[](size_t index) const {
+        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+        return *reinterpret_cast<const T*>(&data_[offset]);
     }
 
-    Vector(unsigned char *dataPtr)
-    {
-        data = dataPtr;
-    }
+
+private:
+
+    unsigned char data_[1];
+
+    Vector() = delete;
+    Vector (const Vector &other) = delete;
+    Vector &operator=(const Vector &other) = delete;
 };
-
-
-
-
-
-struct Monster {
-
-static constexpr size_t nakedbytes_sizeof = 2;
-
-unsigned char * data_;
-
-Monster(unsigned char * data) : data_(data) {}
-
-#define MONSTER_NAME_OFFSET 0
-#define MONSTER_ALIGNMENT 2
-#define MONSTER_SIZE 2
-
-
-Offset<String> name() const {
-const int16_t offset = MONSTER_NAME_OFFSET ;
-return Offset<String>(&data_[offset]);
-}
-
-};
-
-
-
-
-
-
-
-struct Weapon {
-
-static constexpr size_t nakedbytes_sizeof = 8;
-
-unsigned char * data_;
-
-Weapon(unsigned char * data) : data_(data) {}
-
-#define WEAPON_NAME_OFFSET 0
-#define WEAPON_PAD2_OFFSET 2
-#define WEAPON_DAMAGE_OFFSET 4
-#define WEAPON_ALIGNMENT 4
-#define WEAPON_SIZE 8
-
-
-Offset<String> name() const {
-const int16_t offset = WEAPON_NAME_OFFSET ;
-return Offset<String>(&data_[offset]);
-}
-
-uint32_t damage() const {
-return *reinterpret_cast<uint32_t*>(&data_[WEAPON_DAMAGE_OFFSET ]);
-}
-
-};
-
-
 
 
 
@@ -248,6 +190,7 @@ enum AnyPower_enum : uint16_t {
 
 AnyPower_enum_Monster,
 AnyPower_enum_Weapon,
+AnyPower_enum_int8,
 };
 
 inline const char * AnyPower_enum_to_string(AnyPower_enum value){
@@ -256,17 +199,75 @@ case AnyPower_enum_Monster:
 return "AnyPower_enum_Monster";
 case AnyPower_enum_Weapon:
 return "AnyPower_enum_Weapon";
+case AnyPower_enum_int8:
+return "AnyPower_enum_int8";
 default:
 return NULL;
 }
 }
 
 
+
+
+struct Monster  {
+
+#define MONSTER_NAME_OFFSET 0
+#define MONSTER_ALIGNMENT 2
+#define MONSTER_SIZE 2
+
+
+const Offset<String>& name() const {
+const int16_t offset = MONSTER_NAME_OFFSET ;
+return *reinterpret_cast<const Offset<String>*>(&data_[offset]);
+}
+
+static constexpr size_t nakedbytes_sizeof = 2;
+
+private:
+Monster() =delete;
+Monster(const Monster &) =delete;
+Monster& operator=(const Monster &) =delete;
+unsigned char data_[1];
+
+};
+
+
+
+
+
+struct Weapon  {
+
+#define WEAPON_NAME_OFFSET 0
+#define WEAPON_PAD2_OFFSET 2
+#define WEAPON_DAMAGE_OFFSET 4
+#define WEAPON_ALIGNMENT 4
+#define WEAPON_SIZE 8
+
+
+const Offset<String>& name() const {
+const int16_t offset = WEAPON_NAME_OFFSET ;
+return *reinterpret_cast<const Offset<String>*>(&data_[offset]);
+}
+
+const uint32_t damage() const {
+return *reinterpret_cast<const uint32_t*>(&data_[WEAPON_DAMAGE_OFFSET ]);
+}
+
+static constexpr size_t nakedbytes_sizeof = 8;
+
+private:
+Weapon() =delete;
+Weapon(const Weapon &) =delete;
+Weapon& operator=(const Weapon &) =delete;
+unsigned char data_[1];
+
+};
+
+
+
+
+
 struct AnyPower{
-
-unsigned char * data_;
-
-AnyPower(unsigned char * data) : data_(data) {}
 
 #define ANYPOWER_TYPE_OFFSET 0
 #define ANYPOWER_DATA_OFFSET 2
@@ -275,82 +276,102 @@ AnyPower(unsigned char * data) : data_(data) {}
 
 
 bool is_null() const {
-return (type() == 0) or (*reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) == 0);
+return (type() == 0) or (*reinterpret_cast<const uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) == 0);
 }
 
-unsigned char *raw_data() const {const int16_t offset = *reinterpret_cast<uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) + ANYPOWER_DATA_OFFSET;
-return (&data_[offset]);
+const unsigned char *raw_data() const {const int16_t offset = *reinterpret_cast<const uint16_t *>(&data_[ANYPOWER_DATA_OFFSET]) + ANYPOWER_DATA_OFFSET;
+return reinterpret_cast<const unsigned char *>(&data_[offset]);
 }
 AnyPower_enum type() const {
-return *reinterpret_cast<AnyPower_enum *>(&data_[ANYPOWER_TYPE_OFFSET]);
+return *reinterpret_cast<const AnyPower_enum *>(&data_[ANYPOWER_TYPE_OFFSET]);
 }
 
-Offset<Monster> data_as_Monster() const {
-return type() == AnyPower_enum_Monster ? Offset<Monster>(&data_[ANYPOWER_DATA_OFFSET]) : 0;
+const Offset<Monster>* data_as_Monster() const {
+return type() == AnyPower_enum_Monster ? reinterpret_cast<const Offset<Monster>*>(&data_[ANYPOWER_DATA_OFFSET]) : nullptr;
 }
 
-Offset<Weapon> data_as_Weapon() const {
-return type() == AnyPower_enum_Weapon ? Offset<Weapon>(&data_[ANYPOWER_DATA_OFFSET]) : 0;
+const Offset<Weapon>* data_as_Weapon() const {
+return type() == AnyPower_enum_Weapon ? reinterpret_cast<const Offset<Weapon>*>(&data_[ANYPOWER_DATA_OFFSET]) : nullptr;
 }
+
+const Offset<int8_t>* data_as_int8() const {
+return type() == AnyPower_enum_int8 ? reinterpret_cast<const Offset<int8_t>*>(&data_[ANYPOWER_DATA_OFFSET]) : nullptr;
+}
+
+private:
+AnyPower() =delete;
+AnyPower(const AnyPower &) =delete;
+AnyPower& operator=(const AnyPower &) =delete;
+unsigned char data_[1];
+
+
 
 };
 
 
 
-struct Packet {
+
+
+
+
+
+
+struct Packet  {
+
+#define PACKET_ID_OFFSET 0
+#define PACKET_POWER_TYPE_OFFSET 2
+#define PACKET_POWER_OFFSET 4
+#define PACKET_DESCRIPTION_OFFSET 6
+#define PACKET_LENGTH_OFFSET 8
+#define PACKET_POS_OFFSET 12
+#define PACKET_YOU_OFFSET 14
+#define PACKET_ARSENAL_OFFSET 16
+#define PACKET_PAD18_OFFSET 18
+#define PACKET_ALIGNMENT 4
+#define PACKET_SIZE 20
+
+
+const int16_t id() const {
+return *reinterpret_cast<const int16_t*>(&data_[PACKET_ID_OFFSET ]);
+}
+
+const AnyPower_enum power_type() const {
+return *reinterpret_cast<const AnyPower_enum*>(&data_[PACKET_POWER_TYPE_OFFSET ]);
+}
+
+const AnyPower& power() const {
+const int16_t offset = PACKET_POWER_OFFSET - 2 ;
+return *reinterpret_cast<const AnyPower*>(&data_[offset]);
+}
+
+const Offset<String>& description() const {
+const int16_t offset = PACKET_DESCRIPTION_OFFSET ;
+return *reinterpret_cast<const Offset<String>*>(&data_[offset]);
+}
+
+const uint32_t length() const {
+return *reinterpret_cast<const uint32_t*>(&data_[PACKET_LENGTH_OFFSET ]);
+}
+
+const Vector<uint16_t>& pos() const {
+const int16_t offset = PACKET_POS_OFFSET ;
+return *reinterpret_cast<const Vector<uint16_t>*>(&data_[offset]);
+}
+
+const Offset<Monster>& you() const {const int16_t offset =PACKET_YOU_OFFSET ;return *reinterpret_cast<const Offset<Monster>*>(&data_[offset]);}
+
+const Vector<Offset<Weapon>>& arsenal() const {
+const int16_t offset = PACKET_ARSENAL_OFFSET ;
+return *reinterpret_cast<const Vector<Offset<Weapon>>*>(&data_[offset]);
+}
 
 static constexpr size_t nakedbytes_sizeof = 20;
 
-unsigned char * data_;
-
-Packet(unsigned char * data) : data_(data) {}
-
-#define PACKET_ID_OFFSET 0
-#define PACKET_POWER_TYPE_OFFSET 2
-#define PACKET_POWER_OFFSET 4
-#define PACKET_DESCRIPTION_OFFSET 6
-#define PACKET_LENGTH_OFFSET 8
-#define PACKET_POS_OFFSET 12
-#define PACKET_YOU_OFFSET 14
-#define PACKET_ARSENAL_OFFSET 16
-#define PACKET_PAD18_OFFSET 18
-#define PACKET_ALIGNMENT 4
-#define PACKET_SIZE 20
-
-
-int16_t id() const {
-return *reinterpret_cast<int16_t*>(&data_[PACKET_ID_OFFSET ]);
-}
-
-AnyPower_enum power_type() const {
-return *reinterpret_cast<AnyPower_enum*>(&data_[PACKET_POWER_TYPE_OFFSET ]);
-}
-
-AnyPower power() const {
-const int16_t offset = PACKET_POWER_OFFSET - 2 ;
-return AnyPower(&data_[offset]);
-}
-
-Offset<String> description() const {
-const int16_t offset = PACKET_DESCRIPTION_OFFSET ;
-return Offset<String>(&data_[offset]);
-}
-
-uint32_t length() const {
-return *reinterpret_cast<uint32_t*>(&data_[PACKET_LENGTH_OFFSET ]);
-}
-
-Vector<uint16_t> pos() const {
-const int16_t offset = PACKET_POS_OFFSET ;
-return Vector<uint16_t>(&data_[offset]);
-}
-
-Offset<Monster> you() const {const int16_t offset =PACKET_YOU_OFFSET ;return Offset<Monster>(&data_[offset]);}
-
-Vector<Offset<Weapon>> arsenal() const {
-const int16_t offset = PACKET_ARSENAL_OFFSET ;
-return Vector<Offset<Weapon>>(&data_[offset]);
-}
+private:
+Packet() =delete;
+Packet(const Packet &) =delete;
+Packet& operator=(const Packet &) =delete;
+unsigned char data_[1];
 
 };
 
@@ -360,15 +381,7 @@ return Vector<Offset<Weapon>>(&data_[offset]);
 
 
 
-
-
-
-
-struct PacketRoot {
-
-unsigned char * data_;
-
-PacketRoot(unsigned char * data) : data_(data) {}
+struct PacketRoot  {
 
 #define PACKET_ID_OFFSET 0
 #define PACKET_POWER_TYPE_OFFSET 2
@@ -383,39 +396,47 @@ PacketRoot(unsigned char * data) : data_(data) {}
 #define PACKET_SIZE 20
 
 
-int16_t id() const {
-return *reinterpret_cast<int16_t*>(&data_[PACKET_ID_OFFSET + 2* OFFSET_SIZE]);
+const int16_t id() const {
+return *reinterpret_cast<const int16_t*>(&data_[PACKET_ID_OFFSET + 2* OFFSET_SIZE]);
 }
 
-AnyPower_enum power_type() const {
-return *reinterpret_cast<AnyPower_enum*>(&data_[PACKET_POWER_TYPE_OFFSET + 2 * OFFSET_SIZE]);
+const AnyPower_enum power_type() const {
+return *reinterpret_cast<const AnyPower_enum*>(&data_[PACKET_POWER_TYPE_OFFSET + 2 * OFFSET_SIZE]);
 }
 
-AnyPower power() const {
+const AnyPower& power() const {
 const int16_t offset = PACKET_POWER_OFFSET - 2 + 2* OFFSET_SIZE;
-return AnyPower(&data_[offset]);
+return *reinterpret_cast<const AnyPower*>(&data_[offset]);
 }
 
-Offset<String> description() const {
+const Offset<String>& description() const {
 const int16_t offset = PACKET_DESCRIPTION_OFFSET + 2* OFFSET_SIZE;
-return Offset<String>(&data_[offset]);
+return *reinterpret_cast<const Offset<String>*>(&data_[offset]);
 }
 
-uint32_t length() const {
-return *reinterpret_cast<uint32_t*>(&data_[PACKET_LENGTH_OFFSET + 2* OFFSET_SIZE]);
+const uint32_t length() const {
+return *reinterpret_cast<const uint32_t*>(&data_[PACKET_LENGTH_OFFSET + 2* OFFSET_SIZE]);
 }
 
-Vector<uint16_t> pos() const {
+const Vector<uint16_t>& pos() const {
 const int16_t offset = PACKET_POS_OFFSET + 2* OFFSET_SIZE;
-return Vector<uint16_t>(&data_[offset]);
+return *reinterpret_cast<const Vector<uint16_t>*>(&data_[offset]);
 }
 
-Offset<Monster> you() const {const int16_t offset =PACKET_YOU_OFFSET + 2* OFFSET_SIZE;return Offset<Monster>(&data_[offset]);}
+const Offset<Monster>& you() const {const int16_t offset =PACKET_YOU_OFFSET + 2* OFFSET_SIZE;return *reinterpret_cast<const Offset<Monster>*>(&data_[offset]);}
 
-Vector<Offset<Weapon>> arsenal() const {
+const Vector<Offset<Weapon>>& arsenal() const {
 const int16_t offset = PACKET_ARSENAL_OFFSET + 2* OFFSET_SIZE;
-return Vector<Offset<Weapon>>(&data_[offset]);
+return *reinterpret_cast<const Vector<Offset<Weapon>>*>(&data_[offset]);
 }
+
+static constexpr size_t nakedbytes_sizeof = 20;
+
+private:
+PacketRoot() =delete;
+PacketRoot(const PacketRoot &) =delete;
+PacketRoot& operator=(const PacketRoot &) =delete;
+unsigned char data_[1];
 
 };
 
@@ -521,7 +542,7 @@ struct Serializer
         return data_offset;
     }
     
-     template <typename>
+    template <typename>
     struct extract_vector_type
     {
     };
@@ -614,6 +635,16 @@ SerializeOffset<Vector<Weapon>> arsenal;
 
 
 
+inline SerializeOffset<AnyPower> serialize_anypower(Serializer *const serializer){
+SerializeOffset<AnyPower> anypower_offset;
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);
+serializer->make_buffer_adequate();
+anypower_offset.offset = serializer->_tail_offset;
+
+serializer->_tail_offset += ANYPOWER_SIZE;
+return anypower_offset;
+}
+
 inline SerializeOffset<Monster> serialize_monster(Serializer *const serializer,
  const SerializeOffset<String> name){
 SerializeOffset<Monster> monster_offset;
@@ -666,17 +697,17 @@ serializer->_tail_offset += PACKET_SIZE;
 return packet_offset;
 }
 
-inline SerializeOffset<AnyPower> serialize_anypower(Serializer *const serializer){
-SerializeOffset<AnyPower> anypower_offset;
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);
+
+
+inline SerializeOffset<Vector<AnyPowerStruct>> serialize_vector_anypower_struct(Serializer *const serializer, std::vector<AnyPowerStruct> data_array){
+SerializeOffset<Vector<AnyPowerStruct>> data_array_offset;
+uint16_t len = data_array.size();
+serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
 serializer->make_buffer_adequate();
-anypower_offset.offset = serializer->_tail_offset;
-
-serializer->_tail_offset += ANYPOWER_SIZE;
-return anypower_offset;
-}
-
-
+data_array_offset.offset = serializer->_tail_offset;
+*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
+serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);for (uint16_t i = 0; i < len; i++){serializer->_tail_offset += (ANYPOWER_SIZE * len);
+}return data_array_offset;}
 
 inline SerializeOffset<Vector<MonsterStruct>> serialize_vector_monster_struct(Serializer *const serializer, std::vector<MonsterStruct> data_array){
 SerializeOffset<Vector<MonsterStruct>> data_array_offset;
@@ -717,16 +748,6 @@ serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_
 *reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (PACKET_SIZE * i) + PACKET_YOU_OFFSET])) = data_array[i].you.offset - (serializer->_tail_offset  + (PACKET_SIZE * i) +PACKET_YOU_OFFSET);
 *reinterpret_cast<uint16_t *>(&(serializer->_buffer[serializer->_tail_offset  + (PACKET_SIZE * i) + PACKET_ARSENAL_OFFSET])) = data_array[i].arsenal.offset - (serializer->_tail_offset  + (PACKET_SIZE * i) +PACKET_ARSENAL_OFFSET);
 serializer->_tail_offset += (PACKET_SIZE * len);
-}return data_array_offset;}
-
-inline SerializeOffset<Vector<AnyPowerStruct>> serialize_vector_anypower_struct(Serializer *const serializer, std::vector<AnyPowerStruct> data_array){
-SerializeOffset<Vector<AnyPowerStruct>> data_array_offset;
-uint16_t len = data_array.size();
-serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
-serializer->make_buffer_adequate();
-data_array_offset.offset = serializer->_tail_offset;
-*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
-serializer->_tail_offset += OFFSET_SIZE;serializer->_tail_offset += get_padding_size(serializer->_tail_offset, ANYPOWER_ALIGNMENT);for (uint16_t i = 0; i < len; i++){serializer->_tail_offset += (ANYPOWER_SIZE * len);
 }return data_array_offset;}
 
 
