@@ -40,6 +40,17 @@ def is_structable_type(type_desc: TypeDesc) -> bool:
     Check if the type description represents a struct, struct_offset, or class type."""
     return type_desc.type_type in ['struct', 'struct_offset', 'class']
 
+def get_cpp_type_name(type_desc: TypeDesc)-> str:
+    if type_desc.name == 'string':
+        type_name = 'String'
+    elif type_desc.is_primitive:
+        type_name = convert_to_cpp_primitive_type(type_desc.name)
+    # elif type_desc.type_type in  ['struct_offset', 'class']:
+        # type_name = type_desc.name
+    
+    else:
+        type_name = type_desc.name
+    return type_name
 
 def generate_define_offset_macro(type_desc: TypeDesc) -> str:
     """

@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+
 script_dir = Path(__file__).parent
 test_dir = script_dir.parent
 sys.path.append(f"{test_dir.parent}")
@@ -7,9 +8,10 @@ sys.path.append(f"{test_dir.parent}")
 import json
 from typing import cast
 from code_implementation.byte_generator import generate_byte
-from code_implementation.cpp_code_generator_deserializer import generate_cpp_code
 from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_types_desc
 from code_implementation.type_parsing import parsing_schema_to_type_desc
+from code_implementation.cpp_code_generator import generate_cpp_code
+
 
 
 model_def_file = f"{script_dir}/simple_struct_offset_example.json"
