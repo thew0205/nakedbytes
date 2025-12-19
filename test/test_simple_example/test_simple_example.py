@@ -25,7 +25,7 @@ offset_size = model_def['offset_size']
 types_desc = parsing_schema_to_type_desc(model_def_file)
 
 with open(f"{script_dir}/simple_example_generated_class.h", 'wt') as f:
-    f.write(generate_cpp_code(types_desc,root_type_name))
+    f.write(generate_cpp_code(types_desc,root_type_name, namespace= None))
       
 with open(f"{script_dir}/simple_example_data.json", 'r') as f:
     model_data = json.load(f)

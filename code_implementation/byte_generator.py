@@ -84,16 +84,6 @@ def generate_union_type(model, root_array: bytearray, current_type_desc: TypeDes
     current_offset += get_padding_size(current_offset, alignment= true_union_type_desc.alignment)
     
     
-
-    # if true_union_type_desc.is_offset_type:
-    #     tail_offset = current_offset + offset_size 
-    #     check_and_increment_bytearray(root_array, tail_offset)
-        
-    #     real_item_offset, tail_offset = generate_offset_type(model=model, root_array=root_array, current_type_desc=true_union_type_desc, types_desc= types_desc, current_offset= tail_offset, offset_size=offset_size, is_array= False, true_union_type= None)
-    #     value = 0
-    #     if real_item_offset != None:
-    #         value = real_item_offset - current_offset
-    #     root_array[current_offset: current_offset + offset_size] = generate_primitive_number_byte(value, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc),  )
     if true_union_type_desc.is_offset_type:
         return generate_offset_type(model=model, root_array=root_array, current_type_desc=true_union_type_desc, types_desc= types_desc, current_offset= current_offset, offset_size=offset_size, is_array= False, true_union_type= None)
         
@@ -173,7 +163,7 @@ def generate_struct_type(model: Dict, root_array: bytearray,  current_type_desc:
     offset_member_map:Dict[str, int|None] = {}
     for member in current_type_desc.members:
         if member.is_offset_type:
-            offset_member_map[member.name], tail_offset = generate_offset_type(model[member.name], root_array= root_array,  current_type_desc= member.type_desc, types_desc=types_desc, current_offset= tail_offset, offset_size= offset_size, is_array= member.is_array,true_union_type= model.get(f'{member.name}_type', None))
+            offset_member_map[member.name], tail_offset = generate_offset_type(model.get(member.name, member.default_value), root_array= root_array,  current_type_desc= member.type_desc, types_desc=types_desc, current_offset= tail_offset, offset_size= offset_size, is_array= member.is_array,true_union_type= model.get(f'{member.name}_type', None))
     
     for member in current_type_desc.members:
         member_offset = current_offset + member.offset
@@ -185,9 +175,9 @@ def generate_struct_type(model: Dict, root_array: bytearray,  current_type_desc:
                 value = cast(int, offset_member_map[member.name])- member_offset
             root_array[member_offset : member_offset + member.size] = generate_primitive_number_byte(value = value, type_desc= get_offset_type_desc_int(offset_size=offset_size, types_desc= types_desc))
         elif member.type_desc.is_primitive:
-            root_array[member_offset : member_offset + member.size] = generate_primitive_number_byte(value = model[member.name], type_desc= member.type_desc)
+            root_array[member_offset : member_offset + member.size] = generate_primitive_number_byte(value = model.get(member.name, member.default_value), type_desc= member.type_desc)
         elif member.type_desc.type_type == 'enum':
-            root_array[member_offset : member_offset + member.size] = generate_enum_byte(model= model[member.name],offset_size= member.type_desc.size, current_type_desc= member.type_desc, types_desc= types_desc)
+            root_array[member_offset : member_offset + member.size] = generate_enum_byte(model= model.get(member.name, member.default_value),offset_size= member.type_desc.size, current_type_desc= member.type_desc, types_desc= types_desc)
         elif member.type_desc.type_type == 'struct':
             tail_offset = generate_struct_type(model = model[member.name], offset_size= offset_size,  tail_offset=tail_offset, root_array=root_array,  current_type_desc= member.type_desc, types_desc = types_desc, current_offset = member_offset)
         else:

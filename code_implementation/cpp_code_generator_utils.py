@@ -61,3 +61,20 @@ def generate_define_offset_macro(type_desc: TypeDesc) -> str:
     ret_str += f"#define {type_desc.name.upper()}_ALIGNMENT {type_desc.alignment}\n"
     ret_str += f"#define {type_desc.name.upper()}_SIZE {type_desc.size}\n"
     return ret_str
+
+def get_cpp_default_value(type_desc: TypeDesc, default_value) -> str:
+    if type_desc.name == 'bool':
+        if default_value is True:
+            return 'true'
+        else:
+            return 'false'
+    elif type_desc.name == 'char':
+        return f"'{default_value}'"
+    elif type_desc.name in ['int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64']:
+        return str(default_value)
+    elif type_desc.name in ['float32', 'float64']:
+        return str(default_value) + ('.f' if default_value == 0 else 'f')
+    elif type_desc.type_type == 'enum':
+        return f"{type_desc.name}::{default_value}"
+    else:
+        raise ValueError(f"Unsupported primitive type for default value: {type_desc.name}")

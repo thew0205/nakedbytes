@@ -1,5 +1,5 @@
 from typing import List, cast
-from code_implementation.cpp_code_generator_utils import convert_to_cpp_primitive_type, generate_define_offset_macro, get_cpp_type_name
+from code_implementation.cpp_code_generator_utils import convert_to_cpp_primitive_type, generate_define_offset_macro, get_cpp_default_value, get_cpp_type_name
 from code_implementation.cpp_code_serializer import generate_all_types_serialize_vector_struct, generate_root_type_serialization_function, get_all_type_struct_offset_struct_field_struct, get_all_types_offset_serialization_function, get_base_serializer_class_function
 from code_implementation.type_desc_holder import MemberDesc, TypeDesc, get_type_desc_from_types_desc
 
@@ -225,6 +225,8 @@ def generate_struct_enum_number_member_get_function(mem: MemberDesc, parent_type
     ret_str += f"}}"
     return ret_str
 
+
+    
 def generate_struct_primitive_number_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ""
@@ -242,6 +244,7 @@ def generate_struct_primitive_number_member_get_function(mem: MemberDesc, parent
     if is_class_type:
         ret_str += f'}}'
         ret_str += '\n'
+        ret_str += f'return {get_cpp_default_value(mem.type_desc, mem.default_value)};\n'
         
     ret_str += f"}}"
     return ret_str
@@ -249,7 +252,7 @@ def generate_struct_primitive_number_member_get_function(mem: MemberDesc, parent
 def generate_struct_string_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ''
-    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Offset<String>& {mem.name}() const {{'
+    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Offset<String>* {mem.name}() const {{'
     ret_str += '\n'
     
     if is_class_type:
@@ -260,12 +263,13 @@ def generate_struct_string_member_get_function(mem: MemberDesc, parent_type_desc
     ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
     ret_str += '\n'
     
-    ret_str += 'return *reinterpret_cast<const Offset<String>*>(&data_[offset]);'
+    ret_str += 'return reinterpret_cast<const Offset<String>*>(&data_[offset]);'
     ret_str += '\n'
     
     if is_class_type:
         ret_str += f'}}'
         ret_str += '\n'
+        ret_str += 'return nullptr;\n'
     ret_str += f"}}"
     return ret_str
     
@@ -293,7 +297,7 @@ def generate_struct_vector_member_get_function(mem: MemberDesc, parent_type_desc
         
             
         
-    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Vector<{type_name}>& {mem.name}() const {{'
+    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Vector<{type_name}>* {mem.name}() const {{'
     ret_str += '\n'
     
     if is_class_type:
@@ -303,20 +307,21 @@ def generate_struct_vector_member_get_function(mem: MemberDesc, parent_type_desc
     ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
     ret_str += '\n'
     
-    ret_str += f'return *reinterpret_cast<const Vector<{type_name}>*>(&data_[offset]);'
+    ret_str += f'return reinterpret_cast<const Vector<{type_name}>*>(&data_[offset]);'
     ret_str += '\n'
     
     if is_class_type:
         ret_str += f'}}'
         ret_str += '\n'
-        
+        ret_str += 'return nullptr;\n'
+                
     ret_str += f"}}"
     return ret_str
 
 def generate_struct_union_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ''
-    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const {mem.type_desc.name}& {mem.name}() const {{'
+    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const {mem.type_desc.name}* {mem.name}() const {{'
     ret_str += '\n'
     
     if is_class_type:
@@ -326,26 +331,29 @@ def generate_struct_union_member_get_function(mem: MemberDesc, parent_type_desc:
     ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET - 2 {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
     ret_str += '\n'
     
-    ret_str += f'return *reinterpret_cast<const {mem.type_desc.name}*>(&data_[offset]);'
+    ret_str += f'return reinterpret_cast<const {mem.type_desc.name}*>(&data_[offset]);'
     ret_str += '\n'
     
     if is_class_type:
         ret_str += f'}}'
         ret_str += '\n'
-        
+        ret_str += 'return nullptr;\n'
+                
     ret_str += f"}}"
     return ret_str
 
 def generate_struct_class_struct_offset_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ''
-    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Offset<{mem.type_desc.name}>& {mem.name}() const {{'
+    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Offset<{mem.type_desc.name}>* {mem.name}() const {{'
     if is_class_type:
         ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<const uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
     ret_str += f'const int16_t offset ={parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
-    ret_str += f'return *reinterpret_cast<const Offset<{mem.type_desc.name}>*>(&data_[offset]);'
+    ret_str += f'return reinterpret_cast<const Offset<{mem.type_desc.name}>*>(&data_[offset]);'
     if is_class_type:
-        ret_str += f'}}'
+        ret_str += f'}}\n'
+        ret_str += 'return nullptr;\n'
+        
     ret_str += f"}}"
     return ret_str
 

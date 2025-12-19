@@ -86,13 +86,16 @@ Generate the byte representation for an enum by check for the enum value in the 
     if current_type_desc.type_type != 'enum':
         raise ValueError(f"The type must be of type union instead of {current_type_desc.type_type}")
     model = f"{current_type_desc.name}_{model}" 
-    for i, item in enumerate(current_type_desc.e_members):
-        if item.name == model:
-            val = item.value
-
-            return generate_primitive_number_byte(value= val, type_desc= current_type_desc.basetype, )
+    
+    if isinstance(model, int) or isinstance(model, str):
+        for enu in current_type_desc.e_members:
+            if (isinstance(model, int) and enu.value == model) or (isinstance(model, str) and enu.name == model):
+                return generate_primitive_number_byte(value= enu.value , type_desc= current_type_desc.basetype, )
+        else:
+            raise ValueError(f"Default value for enum type must be of int or str type but got {type(model)}")
     else:
-        raise ValueError(f"Enum value {model}'] not found in enum {current_type_desc.e_members}.")
+        raise ValueError(f"Default value for enum type must be of int type but got {type(model)}")
+
     
 
 def generate_string_byte(model: str, root_array: bytearray,  current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int) ->Tuple[int, int]:

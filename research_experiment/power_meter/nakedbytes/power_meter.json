@@ -6,11 +6,12 @@
     "types": [
         {
             "name": "PZEM004Tv30Data",
-            "type": "struct",
+            "type": "class",
             "members": [
                 {
                     "name": "voltage",
-                    "type": "float32"
+                    "type": "float32",
+                    "default_value": 230
                 },
                 {
                     "name": "current",
@@ -34,7 +35,12 @@
                 },
                 {
                     "name": "alarms",
-                    "type": "uint16"
+                    "type": "uint16",
+                    "default_value": 255
+                },
+                {
+                    "name": "id",
+                    "type": "string"
                 }
             ]
         }

@@ -5,20 +5,21 @@
 
 void print_power_meter_data(const MyGame::PZEM004Tv30Data *data)
 {
-    // if (data == nullptr)
-    // {
-    //     printf("No data available.\n");
-    //     return;
-    // }
+    if (data == nullptr)
+    {
+        printf("No data available.\n");
+        return;
+    }
 
-    //     printf("PZEM004Tv30 Data:\n");
-    //     printf("Voltage: %.2f V\n", data->voltage());
-    //     printf("Current: %.2f A\n", data->current());
-    //     printf("Power: %.2f W\n", data->power());
-    //     printf("Energy: %.2f Wh\n", data->energy());
-    //     printf("Frequency: %.2f Hz\n", data->freq());
-    //     printf("Power Factor: %.2f\n", data->pf());
-    //     printf("Alarms: 0x%04X\n", data->alarms());
+    printf("PZEM004Tv30 Data:\n");
+    printf("Voltage: %.2f V\n", data->voltage());
+    printf("Current: %.2f A\n", data->current());
+    printf("Power: %.2f W\n", data->power());
+    printf("Energy: %.2f Wh\n", data->energy());
+    printf("Frequency: %.2f Hz\n", data->freq());
+    printf("Power Factor: %.2f\n", data->pf());
+    printf("Alarms: 0x%04X\n", data->alarms());
+    printf("%s\n", data->id()->value().c_str());
 }
 
 int main()
@@ -72,6 +73,8 @@ int main()
         data->pf();
         data->alarms();
     }
+    const MyGame::PZEM004Tv30Data *data = (MyGame::PZEM004Tv30Data *)(buffer + 4);
+    print_power_meter_data(data);
 
     auto t2 = high_resolution_clock::now();
 
@@ -83,9 +86,7 @@ int main()
 
     printf("Time taken to deserialize: %ldms %f\n", ms_int.count(), ms_double.count());
 
-
-
-     t1 = high_resolution_clock::now();
+    t1 = high_resolution_clock::now();
     // Get the root object from the buffer
     for (int i = 0; i < 10000000; i++)
     {
@@ -102,13 +103,13 @@ int main()
         data->alarms();
     }
 
-     t2 = high_resolution_clock::now();
+    t2 = high_resolution_clock::now();
 
     /* Getting number of milliseconds as an integer. */
-     ms_int = duration_cast<milliseconds>(t2 - t1);
+    ms_int = duration_cast<milliseconds>(t2 - t1);
 
     /* Getting number of milliseconds as a double. */
-   ms_double = t2 - t1;
+    ms_double = t2 - t1;
 
     printf("Time taken to deserialize: %ldms %f\n", ms_int.count(), ms_double.count());
     // std::cout << ms_int.count() << "ms\n";

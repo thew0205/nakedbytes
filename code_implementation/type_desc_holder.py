@@ -2,7 +2,7 @@
 
 import json
 import struct
-from typing import List, Dict, cast
+from typing import Any, List, Dict, cast
 
 
 from .type_utils import get_offset_type_int, get_padding_size, get_real_type_name, get_type_from_json
@@ -69,7 +69,7 @@ class TypeDesc:
     def can_contain_member(self) -> bool:
         return self.type_type in ['struct', 'struct_offset', 'class']
      
-    def add_member(self,name: str, type_type: str, is_array: bool,parent_types: List[str], offset_size: int, types_desc: set['TypeDesc'], model_def: Dict)-> None:
+    def add_member(self,name: str, type_type: str, is_array: bool, default_value,parent_types: List[str], offset_size: int, types_desc: set['TypeDesc'], model_def: Dict)-> None:
         if not self.can_contain_member():
             raise ValueError(f"This type must of either struct, struct_offset or class to be able to add a member but type is of {self.type_type}")
         else:
@@ -99,24 +99,24 @@ class TypeDesc:
                         mem_alignment = real_type.alignment
                     
             if real_type.type_type == 'union' and (not is_array):
-                self.add_member(name= f"{name}_type", type_type=f"{type_type}_enum", is_array=False, parent_types=parent_types, offset_size=offset_size, types_desc=types_desc,model_def= model_def)
+                self.add_member(name= f"{name}_type", type_type=f"{type_type}_enum", is_array=False, default_value=None, parent_types=parent_types, offset_size=offset_size, types_desc=types_desc,model_def= model_def)
             self.alignment = max(mem_alignment, self.alignment)
             
             
             padding = get_padding_size(self.size, mem_alignment)
             if padding > 0:
-                mem_pad = MemberDesc(f'pad{self.size}', cast(TypeDesc,get_type_desc_from_types_desc(f'pad{padding}', types_desc)), False, offset=self.size, size=padding, alignment=1)
+                mem_pad = MemberDesc(f'pad{self.size}', cast(TypeDesc,get_type_desc_from_types_desc(f'pad{padding}', types_desc)), False, default_value=None,offset=self.size, size=padding, alignment=1)
                 self.members.append(mem_pad)
                 self.set_size(self.size + padding)
                 
-            member = MemberDesc(name=name,type_type=real_type, is_array=is_array, offset=self.size,size=mem_size, alignment=mem_alignment)
+            member = MemberDesc(name=name,type_type=real_type, is_array=is_array, default_value=default_value, offset=self.size,size=mem_size, alignment=mem_alignment)
                 
             self.members.append(member)
             self.set_size(self.size + member.size)
             
             padding = get_padding_size(self.size, self.alignment)
             if padding > 0:
-                mem_pad = MemberDesc(f'pad{self.size}', cast(TypeDesc,get_type_desc_from_types_desc(f'pad{padding}', types_desc)), False, offset=self.size, size=padding, alignment=1)
+                mem_pad = MemberDesc(f'pad{self.size}', cast(TypeDesc,get_type_desc_from_types_desc(f'pad{padding}', types_desc)), False,default_value=None, offset=self.size, size=padding, alignment=1)
                 self.members.append(mem_pad)
                 self.set_size(self.size + padding)
                 
@@ -191,7 +191,7 @@ class TypeDesc:
     def gen_struct_type(name: str, type_type: str, members: List, offset_size: int, types_desc: set['TypeDesc'], model_def: dict, parent_types: list[str])-> 'TypeDesc':
         type_desc = TypeDesc(name=name, type_type=type_type, is_primitive=False)
         for member in members:
-            type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
+            type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']),default_value=member.get('default_value', None),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
         return type_desc
     
     @staticmethod
@@ -199,7 +199,7 @@ class TypeDesc:
         type_desc = TypeDesc(name=name, type_type=type_type, is_primitive=False)
         type_desc.set_size(type_desc.size + offset_size)
         for member in members:
-            type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
+            type_desc.add_member(name=member['name'],type_type=get_real_type_name( member['type']), is_array=get_type_is_vector(member['type']), default_value= member.get('default_value', None),parent_types=parent_types, offset_size=offset_size, model_def=model_def, types_desc=types_desc)
         return type_desc
     
     @staticmethod
@@ -228,7 +228,7 @@ class TypeDesc:
         }  
     
 class MemberDesc:
-    def __init__(self, name: str, type_type: TypeDesc, is_array: bool, offset: int, size: int, alignment: int) -> None:
+    def __init__(self, name: str, type_type: TypeDesc, is_array: bool, offset: int, size: int, alignment: int, default_value) -> None:
         
         
         self.name: str = name
@@ -238,9 +238,64 @@ class MemberDesc:
         self.is_offset_type: bool = is_array or type_type.is_offset_type or type_type.name in ['string', 'blob']
         self.size: int = size
         self.alignment: int = alignment
-    
+        self.default_value = self.set_default_value(default_value)
+        
+        
+    def set_default_value(self, default_value) -> Any:
+        if (self.type_desc.is_primitive or self.type_desc.type_type == 'enum') and (not self.is_array):
+            if default_value == None:
+                if self.type_desc.type_type == 'enum':
+                    return 0
+                
+                elif self.type_desc.name in ['bool', 'char', 'int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64', 'float32', 'float64']:
+                    return 0
+                elif self.type_desc.name in ['string', 'blob']:
+                    return None
+                else:
+                    return None
+            else:
+                if self.type_desc.type_type == 'enum':
+                    if isinstance(default_value, int) or isinstance(default_value, str):
+                        for enu in self.type_desc.e_members:
+                            if (isinstance(default_value, int) and enu.value == default_value) or (isinstance(default_value, str) and enu.name == default_value):
+                                return default_value
+                        else:
+                            raise ValueError(f"Default value for enum type must be of int or str type but got {type(default_value)}")
+                    else:
+                        raise ValueError(f"Default value for enum type must be of int type but got {type(default_value)}")
+                if self.type_desc.name == 'bool':
+                    if isinstance(default_value, bool):
+                        return default_value
+                    else:
+                        raise ValueError(f"Default value for bool type must be of bool type but got {type(default_value)}")
+                elif self.type_desc.name == 'char':
+                    if isinstance(default_value, str) and len(default_value) == 1:
+                        return default_value
+                    else:
+                        raise ValueError(f"Default value for char type must be of str type with length 1 but got {default_value}")
+                elif self.type_desc.name in ['int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64']:
+                    if isinstance(default_value, int):
+                        return default_value
+                    else:
+                        raise ValueError(f"Default value for {self.type_desc.name} type must be of int type but got {type(default_value)}")
+                elif self.type_desc.name in ['float32', 'float64']:
+                    if isinstance(default_value, float) or isinstance(default_value, int):
+                        return float(default_value)
+                    else:
+                        raise ValueError(f"Default value for {self.type_desc.name} type must be of float type but got {type(default_value)}")
+                elif self.type_desc.name in ['string', 'blob']:
+                    if isinstance(default_value, str):
+                        return default_value
+                    else:
+                        raise ValueError(f"Default value for {self.type_desc.name} type must be of str type but got {type(default_value)}")
+                else:    
+                    return None
+            
+        else:
+            return None
+
     def __str__(self) -> str:
-        return f'MemberDesc(name={self.name}, type={'List[' if self.is_array  else ''}{self.type_desc.name}{']' if self.is_array else ''}, size={self.size}, offset={self.offset}, alignment={self.alignment})'
+        return f'MemberDesc(name={self.name}, type={'List[' if self.is_array  else ''}{self.type_desc.name}{']' if self.is_array else ''}, size={self.size}, offset={self.offset}, alignment={self.alignment}, is_array={self.is_array}, default_value={self.default_value})'
         
 
 

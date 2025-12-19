@@ -4,7 +4,7 @@ from code_implementation.cpp_code_serializer import generate_all_types_serialize
 from code_implementation.type_desc_holder import TypeDesc
 
 
-def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace: str) -> str:
+def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace: str|None) -> str:
     str_file:str = ""
     
     str_file += get_header_files()
