@@ -6,8 +6,6 @@ from code_implementation.type_desc_holder import MemberDesc, TypeDesc, get_type_
 
 def get_header_files() -> str:
     return '''
-#pragma once
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +30,7 @@ def get_header_files() -> str:
 
 def get_base_offset_types() -> str:
     return '''
+namespace nakedbytes{
 struct String
 {
 #define STRING_LENGTH_OFFSET 0
@@ -196,7 +195,7 @@ private:
     Vector (const Vector &other) = delete;
     Vector &operator=(const Vector &other) = delete;
 };
-
+}; //namespace nakedbytes
 '''
 
 
@@ -252,7 +251,7 @@ def generate_struct_primitive_number_member_get_function(mem: MemberDesc, parent
 def generate_struct_string_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ''
-    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Offset<String>* {mem.name}() const {{'
+    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const ::nakedbytes::Offset<::nakedbytes::String>* {mem.name}() const {{'
     ret_str += '\n'
     
     if is_class_type:
@@ -263,7 +262,7 @@ def generate_struct_string_member_get_function(mem: MemberDesc, parent_type_desc
     ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
     ret_str += '\n'
     
-    ret_str += 'return reinterpret_cast<const Offset<String>*>(&data_[offset]);'
+    ret_str += 'return reinterpret_cast<const ::nakedbytes::Offset<::nakedbytes::String>*>(&data_[offset]);'
     ret_str += '\n'
     
     if is_class_type:
@@ -281,9 +280,9 @@ def generate_struct_vector_member_get_function(mem: MemberDesc, parent_type_desc
         if mem.type_desc.type_type == 'union':
             type_name = f'{mem.type_desc.name}'
         elif mem.type_desc.name == 'string':
-            type_name = f'Offset<String>'
+            type_name = f'::nakedbytes::Offset<nakedbytes::String>'
         elif mem.type_desc.type_type in ['struct_offset', 'class']:
-            type_name = f'Offset<{mem.type_desc.name}>'
+            type_name = f'::nakedbytes::Offset<{mem.type_desc.name}>'
         else:
             raise ValueError('')
     elif mem.type_desc.is_primitive:
@@ -297,7 +296,7 @@ def generate_struct_vector_member_get_function(mem: MemberDesc, parent_type_desc
         
             
         
-    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Vector<{type_name}>* {mem.name}() const {{'
+    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const ::nakedbytes::Vector<{type_name}>* {mem.name}() const {{'
     ret_str += '\n'
     
     if is_class_type:
@@ -307,7 +306,7 @@ def generate_struct_vector_member_get_function(mem: MemberDesc, parent_type_desc
     ret_str += f'const int16_t offset = {parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
     ret_str += '\n'
     
-    ret_str += f'return reinterpret_cast<const Vector<{type_name}>*>(&data_[offset]);'
+    ret_str += f'return reinterpret_cast<const ::nakedbytes::Vector<{type_name}>*>(&data_[offset]);'
     ret_str += '\n'
     
     if is_class_type:

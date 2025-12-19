@@ -5,8 +5,8 @@ from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_ty
 
 def get_base_serializer_class_function() -> str:
     return """
-
-inline size_t get_padding_size(size_t offset, uint16_t alignment)
+namespace nakedbytes{
+NAKEDBYTES_FORCE_INLINE size_t get_padding_size(size_t offset, uint16_t alignment)
 {
     return (alignment - (offset % alignment)) % alignment;
 }
@@ -156,6 +156,7 @@ struct Serializer
         return data_array_offset;
     }
 };
+}; //namespace nakedbytes
 """
 
 def generate_struct_offset_struct_field_struct(type_desc: TypeDesc, type_def_generated: set[str]) -> str:
@@ -182,10 +183,10 @@ def generate_struct_offset_struct_field_struct(type_desc: TypeDesc, type_def_gen
             type_name = f"{type_name}Struct"
             
         if mem.is_array:
-            type_name = f"Vector<{type_name}>"
+            type_name = f"::nakedbytes::Vector<{type_name}>"
             
         if mem.is_offset_type:
-            ret_str += f"SerializeOffset<{type_name}> {mem.name};\n"
+            ret_str += f"::nakedbytes::SerializeOffset<{type_name}> {mem.name};\n"
         else:
             ret_str += f"{type_name} {mem.name};\n"
     ret_str += f"}};\n"
@@ -238,11 +239,11 @@ def generate_serialization_function_parameters(type_desc: TypeDesc) -> str:
             
         if mem.is_array:
             if mem.type_desc.is_offset_type:
-                type_name = f"SerializeOffset<{type_name}>"
-            type_name = f"Vector<{type_name}>"
+                type_name = f"::nakedbytes::SerializeOffset<{type_name}>"
+            type_name = f"::nakedbytes::Vector<{type_name}>"
             
         if mem.is_offset_type:
-            ret_str += f",\n const SerializeOffset<{type_name}> {mem.name}"
+            ret_str += f",\n const ::nakedbytes::SerializeOffset<{type_name}> {mem.name}"
         else:
             ret_str += f",\n const {type_name} {mem.name}"
     return ret_str 
@@ -250,14 +251,14 @@ def generate_serialization_function_parameters(type_desc: TypeDesc) -> str:
 def generate_offset_serialization_function(type_desc: TypeDesc) -> str:
 
     ret_str = ""
-    ret_str += f"inline SerializeOffset<{type_desc.name}> serialize_{type_desc.name.lower()}"
-    ret_str += "(Serializer *const serializer"
+    ret_str += f"inline ::nakedbytes::SerializeOffset<{type_desc.name}> serialize_{type_desc.name.lower()}"
+    ret_str += "(::nakedbytes::Serializer *const serializer"
     
     ret_str += generate_serialization_function_parameters(type_desc= type_desc)
     ret_str += "){\n"
     
-    ret_str += f"SerializeOffset<{type_desc.name}> {type_desc.name.lower()}_offset;\n"
-    ret_str += f"serializer->_tail_offset += get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);\n"
+    ret_str += f"::nakedbytes::SerializeOffset<{type_desc.name}> {type_desc.name.lower()}_offset;\n"
+    ret_str += f"serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);\n"
     ret_str += "serializer->make_buffer_adequate();\n"
     ret_str += f"{type_desc.name.lower()}_offset.offset = serializer->_tail_offset;\n\n"
     
@@ -291,13 +292,13 @@ def generate_root_type_serialization_function(types_desc:
     root_type_desc =cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc))
     ret_str += "inline unsigned char *"
     ret_str += f"serialize_{root_type_desc.name.lower()}_root"
-    ret_str += "(Serializer *const serializer"
+    ret_str += "(::nakedbytes::Serializer *const serializer"
     
     ret_str += generate_serialization_function_parameters(type_desc=root_type_desc)
    
     ret_str += "){\n"
     
-    ret_str += f"uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);\n"
+    ret_str += f"uint16_t current_offset = OFFSET_SIZE * 2 + ::nakedbytes::get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);\n"
     if root_type_desc.type_type == 'class':
         ret_str += f"*reinterpret_cast<int16_t *>(&(serializer->_buffer[current_offset + {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = {root_type_desc.name.upper()}_SIZE;"
     
@@ -315,17 +316,17 @@ def generate_root_type_serialization_function(types_desc:
 
 def generate_serialize_vector_struct(type_desc: TypeDesc) -> str:
     ret_str = ""
-    ret_str += f"inline SerializeOffset<Vector<{type_desc.name}Struct>> "
+    ret_str += f"inline ::nakedbytes::SerializeOffset<::nakedbytes::Vector<{type_desc.name}Struct>> "
     ret_str += f"serialize_vector_{type_desc.name.lower()}_struct("
-    ret_str += f"Serializer *const serializer, std::vector<{type_desc.name}Struct> data_array){{\n"
-    ret_str += f"SerializeOffset<Vector<{type_desc.name}Struct>> data_array_offset;\n"
+    ret_str += f"::nakedbytes::Serializer *const serializer, std::vector<{type_desc.name}Struct> data_array){{\n"
+    ret_str += f"::nakedbytes::SerializeOffset<::nakedbytes::Vector<{type_desc.name}Struct>> data_array_offset;\n"
     ret_str += "uint16_t len = data_array.size();\n"
-    ret_str += "serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);\n"
+    ret_str += "serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, OFFSET_SIZE);\n"
     ret_str += "serializer->make_buffer_adequate();\n"
     ret_str += "data_array_offset.offset = serializer->_tail_offset;\n"
     ret_str += "*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;\n"
     ret_str += "serializer->_tail_offset += OFFSET_SIZE;"
-    ret_str += f"serializer->_tail_offset += get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);"
+    ret_str += f"serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);"
     ret_str += "for (uint16_t i = 0; i < len; i++){"
     ret_str += generate_struct_serializer_fields(type_desc=type_desc, is_root_type= False, additional_prefix= f" + ({type_desc.name.upper()}_SIZE * i)", access_prefix = "data_array[i].")
     ret_str += f"serializer->_tail_offset += ({type_desc.name.upper()}_SIZE * len);\n"

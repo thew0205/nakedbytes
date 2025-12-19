@@ -5,5 +5,6 @@
     "energy": 12345.6,
     "freq": 50.0,
     "pf": 0.98,
-    "alarms": 255
+    "alarms": 255,
+    "id": "matthew777"
 }

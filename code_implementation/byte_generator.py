@@ -114,7 +114,7 @@ def generate_class_type(model: Dict, root_array: bytearray,  current_type_desc: 
     Returns the new tail offset after generating the class type.
     """
     
-    root_array[current_offset: current_offset + offset_size] = generate_primitive_number_byte(value = current_type_desc.size , type_desc= get_offset_type_desc_int(offset_size=offset_size, types_desc= types_desc))
+    root_array[current_offset: current_offset + offset_size] = generate_primitive_number_byte(value = current_type_desc.unpadded_size, type_desc= get_offset_type_desc_int(offset_size=offset_size, types_desc= types_desc))
     return generate_struct_type(model=model, root_array=root_array, current_type_desc= current_type_desc,current_offset=current_offset,  tail_offset= tail_offset, offset_size= offset_size, types_desc= types_desc)
 
 

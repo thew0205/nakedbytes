@@ -47,6 +47,7 @@ class TypeDesc:
         self.is_offset_type: bool = type_type in ['struct_offset', 'class', 'union'] or name in ['string', 'blob']
         
         self.size: int = 0
+        self.unpadded_size = 0
         self.alignment: int = 0
         self.members: List['MemberDesc']= []
         self.u_members: List['TypeDesc'] = []
@@ -113,6 +114,7 @@ class TypeDesc:
                 
             self.members.append(member)
             self.set_size(self.size + member.size)
+            self.unpadded_size = self.size
             
             padding = get_padding_size(self.size, self.alignment)
             if padding > 0:

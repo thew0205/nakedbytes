@@ -42,7 +42,7 @@ namespace = model_def.get('namespace', None)
 
 if args.cpp:
     with open(Path(f"{args.cpp}").joinpath(f"{schema_def_file_without_ext}.nbs.h"), 'wt') as f:
-        f.write(generate_cpp_code(types_desc,root_type_name, namespace= namespace))
+        f.write(generate_cpp_code(types_desc,root_type_name, namespace= namespace, file_name=schema_def_file_without_ext))
         
 
 if args.binary:

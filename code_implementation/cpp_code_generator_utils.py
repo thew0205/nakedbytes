@@ -42,7 +42,7 @@ def is_structable_type(type_desc: TypeDesc) -> bool:
 
 def get_cpp_type_name(type_desc: TypeDesc)-> str:
     if type_desc.name == 'string':
-        type_name = 'String'
+        type_name = '::nakedbytes::String'
     elif type_desc.is_primitive:
         type_name = convert_to_cpp_primitive_type(type_desc.name)
     # elif type_desc.type_type in  ['struct_offset', 'class']:
@@ -60,6 +60,7 @@ def generate_define_offset_macro(type_desc: TypeDesc) -> str:
         ret_str += f"#define {type_desc.name.upper()}_{mem.name.upper()}_OFFSET {mem.offset}\n"
     ret_str += f"#define {type_desc.name.upper()}_ALIGNMENT {type_desc.alignment}\n"
     ret_str += f"#define {type_desc.name.upper()}_SIZE {type_desc.size}\n"
+    ret_str += f"#define {type_desc.name.upper()}_UNPADDED_SIZE {type_desc.unpadded_size}\n"
     return ret_str
 
 def get_cpp_default_value(type_desc: TypeDesc, default_value) -> str:

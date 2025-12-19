@@ -1,5 +1,5 @@
-#ifndef __POWER_METER_NAKEDBYTES_GENERATED_H
-#define __POWER_METER_NAKEDBYTES_GENERATED_H
+
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,8 +21,10 @@
 #define NAKEDBYTES_FORCE_INLINE inline
 #endif
 
-namespace nakedbytes
+namespace MyGame
 {
+    struct PZEM004Tv30Data;
+
     struct String
     {
 #define STRING_LENGTH_OFFSET 0
@@ -185,11 +187,6 @@ namespace nakedbytes
         Vector(const Vector &other) = delete;
         Vector &operator=(const Vector &other) = delete;
     };
-}; // namespace nakedbytes
-
-namespace MyGame
-{
-    struct PZEM004Tv30Data;
 
     struct PZEM004Tv30Data
     {
@@ -206,7 +203,6 @@ namespace MyGame
 #define PZEM004TV30DATA_ID_OFFSET 30
 #define PZEM004TV30DATA_ALIGNMENT 4
 #define PZEM004TV30DATA_SIZE 32
-#define PZEM004TV30DATA_UNPADDED_SIZE 32
 
         NAKEDBYTES_INLINE const float voltage() const
         {
@@ -271,12 +267,12 @@ namespace MyGame
             return 255;
         }
 
-        NAKEDBYTES_INLINE const ::nakedbytes::Offset<::nakedbytes::String> *id() const
+        NAKEDBYTES_INLINE const Offset<String> *id() const
         {
             if (PZEM004TV30DATA_ID_OFFSET < *reinterpret_cast<const uint16_t *>(&data_[PZEM004TV30DATA_MEMBER_SIZE_OFFSET]))
             {
                 const int16_t offset = PZEM004TV30DATA_ID_OFFSET;
-                return reinterpret_cast<const ::nakedbytes::Offset<::nakedbytes::String> *>(&data_[offset]);
+                return reinterpret_cast<const Offset<String> *>(&data_[offset]);
             }
             return nullptr;
         }
@@ -305,7 +301,6 @@ namespace MyGame
 #define PZEM004TV30DATA_ID_OFFSET 30
 #define PZEM004TV30DATA_ALIGNMENT 4
 #define PZEM004TV30DATA_SIZE 32
-#define PZEM004TV30DATA_UNPADDED_SIZE 32
 
         NAKEDBYTES_INLINE const float voltage() const
         {
@@ -370,12 +365,12 @@ namespace MyGame
             return 255;
         }
 
-        NAKEDBYTES_INLINE const ::nakedbytes::Offset<::nakedbytes::String> *id() const
+        NAKEDBYTES_INLINE const Offset<String> *id() const
         {
             if (PZEM004TV30DATA_ID_OFFSET < *reinterpret_cast<const uint16_t *>(&data_[PZEM004TV30DATA_MEMBER_SIZE_OFFSET + 2 * OFFSET_SIZE]))
             {
                 const int16_t offset = PZEM004TV30DATA_ID_OFFSET + 2 * OFFSET_SIZE;
-                return reinterpret_cast<const ::nakedbytes::Offset<::nakedbytes::String> *>(&data_[offset]);
+                return reinterpret_cast<const Offset<String> *>(&data_[offset]);
             }
             return nullptr;
         }
@@ -389,11 +384,7 @@ namespace MyGame
         unsigned char data_[1];
     };
 
-} // namespace MyGame
-
-namespace nakedbytes
-{
-    NAKEDBYTES_FORCE_INLINE size_t get_padding_size(size_t offset, uint16_t alignment)
+    inline size_t get_padding_size(size_t offset, uint16_t alignment)
     {
         return (alignment - (offset % alignment)) % alignment;
     }
@@ -542,10 +533,6 @@ namespace nakedbytes
             return data_array_offset;
         }
     };
-}; // namespace nakedbytes
-
-namespace MyGame
-{
 
     struct PZEM004Tv30DataStruct
     {
@@ -556,21 +543,21 @@ namespace MyGame
         float freq;
         float pf;
         uint16_t alarms;
-        ::nakedbytes::SerializeOffset<::nakedbytes::String> id;
+        SerializeOffset<String> id;
     };
 
-    inline ::nakedbytes::SerializeOffset<PZEM004Tv30Data> serialize_pzem004tv30data(::nakedbytes::Serializer *const serializer,
-                                                                                    const float voltage,
-                                                                                    const float current,
-                                                                                    const float power,
-                                                                                    const float energy,
-                                                                                    const float freq,
-                                                                                    const float pf,
-                                                                                    const uint16_t alarms,
-                                                                                    const ::nakedbytes::SerializeOffset<::nakedbytes::String> id)
+    inline SerializeOffset<PZEM004Tv30Data> serialize_pzem004tv30data(Serializer *const serializer,
+                                                                      const float voltage,
+                                                                      const float current,
+                                                                      const float power,
+                                                                      const float energy,
+                                                                      const float freq,
+                                                                      const float pf,
+                                                                      const uint16_t alarms,
+                                                                      const SerializeOffset<String> id)
     {
-        ::nakedbytes::SerializeOffset<PZEM004Tv30Data> pzem004tv30data_offset;
-        serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, PZEM004TV30DATA_ALIGNMENT);
+        SerializeOffset<PZEM004Tv30Data> pzem004tv30data_offset;
+        serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PZEM004TV30DATA_ALIGNMENT);
         serializer->make_buffer_adequate();
         pzem004tv30data_offset.offset = serializer->_tail_offset;
 
@@ -587,16 +574,16 @@ namespace MyGame
         return pzem004tv30data_offset;
     }
 
-    inline ::nakedbytes::SerializeOffset<::nakedbytes::Vector<PZEM004Tv30DataStruct>> serialize_vector_pzem004tv30data_struct(::nakedbytes::Serializer *const serializer, std::vector<PZEM004Tv30DataStruct> data_array)
+    inline SerializeOffset<Vector<PZEM004Tv30DataStruct>> serialize_vector_pzem004tv30data_struct(Serializer *const serializer, std::vector<PZEM004Tv30DataStruct> data_array)
     {
-        ::nakedbytes::SerializeOffset<::nakedbytes::Vector<PZEM004Tv30DataStruct>> data_array_offset;
+        SerializeOffset<Vector<PZEM004Tv30DataStruct>> data_array_offset;
         uint16_t len = data_array.size();
-        serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
+        serializer->_tail_offset += get_padding_size(serializer->_tail_offset, OFFSET_SIZE);
         serializer->make_buffer_adequate();
         data_array_offset.offset = serializer->_tail_offset;
         *reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;
         serializer->_tail_offset += OFFSET_SIZE;
-        serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, PZEM004TV30DATA_ALIGNMENT);
+        serializer->_tail_offset += get_padding_size(serializer->_tail_offset, PZEM004TV30DATA_ALIGNMENT);
         for (uint16_t i = 0; i < len; i++)
         {
             *reinterpret_cast<float *>(&(serializer->_buffer[serializer->_tail_offset + (PZEM004TV30DATA_SIZE * i) + PZEM004TV30DATA_VOLTAGE_OFFSET])) = data_array[i].voltage;
@@ -612,7 +599,7 @@ namespace MyGame
         return data_array_offset;
     }
 
-    inline unsigned char *serialize_pzem004tv30data_root(::nakedbytes::Serializer *const serializer,
+    inline unsigned char *serialize_pzem004tv30data_root(Serializer *const serializer,
                                                          const float voltage,
                                                          const float current,
                                                          const float power,
@@ -620,9 +607,9 @@ namespace MyGame
                                                          const float freq,
                                                          const float pf,
                                                          const uint16_t alarms,
-                                                         const ::nakedbytes::SerializeOffset<::nakedbytes::String> id)
+                                                         const SerializeOffset<String> id)
     {
-        uint16_t current_offset = OFFSET_SIZE * 2 + ::nakedbytes::get_padding_size(OFFSET_SIZE * 2, PZEM004TV30DATA_ALIGNMENT);
+        uint16_t current_offset = OFFSET_SIZE * 2 + get_padding_size(OFFSET_SIZE * 2, PZEM004TV30DATA_ALIGNMENT);
         *reinterpret_cast<int16_t *>(&(serializer->_buffer[current_offset + PZEM004TV30DATA_MEMBER_SIZE_OFFSET])) = PZEM004TV30DATA_SIZE;
 
         *reinterpret_cast<float *>(&(serializer->_buffer[current_offset + PZEM004TV30DATA_VOLTAGE_OFFSET])) = voltage;
@@ -639,4 +626,3 @@ namespace MyGame
         return serializer->_buffer;
     }
 } // namespace MyGame
-#endif //__POWER_METER_NAKEDBYTES_GENERATED_H

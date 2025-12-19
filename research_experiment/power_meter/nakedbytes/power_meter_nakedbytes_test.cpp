@@ -19,7 +19,7 @@ void print_power_meter_data(const MyGame::PZEM004Tv30Data *data)
     printf("Frequency: %.2f Hz\n", data->freq());
     printf("Power Factor: %.2f\n", data->pf());
     printf("Alarms: 0x%04X\n", data->alarms());
-    printf("%s\n", data->id()->value().c_str());
+    printf("%d\n",(data->id() ==nullptr || data->id()->is_null()));
 }
 
 int main()
