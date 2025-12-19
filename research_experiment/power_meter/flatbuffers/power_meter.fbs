@@ -1,0 +1,14 @@
+namespace MyGame;
+
+table PZEM004Tv30Data
+{
+     voltage: float;
+     current: float;
+     power: float;
+     energy: float;
+     freq: float;
+     pf: float;
+     alarms: uint16;
+}
+
+root_type PZEM004Tv30Data;

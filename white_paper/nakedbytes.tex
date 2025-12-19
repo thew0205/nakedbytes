@@ -1,4 +1,5 @@
 \documentclass[11pt, a4paper]{article}
+\usepackage{lmodern}
 \usepackage{geometry}
 \usepackage{graphicx}
 \usepackage{amsmath}
@@ -10,6 +11,15 @@
 \usepackage{url}
 \usepackage{setspace}
 
+\lstdefinelanguage{hex}{
+  basicstyle=\ttfamily\small,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  breaklines=true,
+  comment=[l]{:},
+}
+
 \lstdefinelanguage{json}{
   basicstyle=\ttfamily\small,
   numbers=left,
@@ -19,6 +29,7 @@
   showstringspaces=false,
   breaklines=true,
   frame=single,
+  columns=fullflexible
   morestring=[b]",
   stringstyle=\color{black},
   identifierstyle=\color{black},
@@ -346,7 +357,210 @@ Generated accessors include basic safety checks to avoid out-of-bounds reads. Fo
 subsection{Random Access Characteristics}
 Because data is located via offsets, any field or element can be accessed in O(1) time given its offset in the schema. There is no need to scan or parse previous fields. This enables true random access. For example, you can jump to the N-th element of a vector without iterating from the start, because the vector has a count and fixed stride (for fixed-size elements) or stored offsets (for variable elements). Even nested fields require only a fixed sequence of pointer dereferences. This is in contrast to parsed formats (e.g. JSON) where accessing a deep field may require scanning the entire prefix. The zero-copy nature allows extremely fast point queries in the buffer, which is ideal for high-performance use cases. In short, NakedBytes delivers the same kind of “immediate structured access” that has made FlatBuffers popular in real-time systems[1][3].
 \section{Example}
+This section provides a concrete example of serializing and deserializing a simple object using NakedBytes.
+\subsection{Schema Definition}
+Below is a sample NakedBytes schema in JSON format that defines a Packet structure containing various fields, including a union type, string, and nested structs.:
+\begin{lstlisting}[language=json, caption={A simple NakedBytes Schema for defining a Packet.}]
+{
+    "offset_size": 2,
+    "version": 5,
+    "root_type": "Packet",
+    "types": [
+        {
+            "name": "Monster",
+            "type": "struct_offset",
+            "members": [
+                {
+                    "name": "name",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "Weapon",
+            "type": "struct",
+            "members": [
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "damage",
+                    "type": "uint32"
+                }
+            ]
+        },
+        {
+            "name": "AnyPower",
+            "type": "union",
+            "unions": [
+                {
+                    "name": "Monster"
+                },
+                {
+                    "name": "Weapon"
+                }
+            ]
+        },
+        {
+            "name": "Packet",
+            "type": "struct",
+            "members": [
+                {
+                    "name": "id",
+                    "type": "int16"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                },
+                {
+                    "name": "power",
+                    "type": "AnyPower"
+                },
+                {
+                    "name": "length",
+                    "type": "uint32"
+                },
+                {
+                    "name": "you",
+                    "type": "Monster"
+                }
+            ]
+        }
+    ]
+}
 
+\end{lstlisting}
+
+
+\subsection{Serialization Example}
+To show a serailized example, consider the following Packet object:
+Using the above schema, we can serialize a Packet object as follows:
+\begin{lstlisting}[language=json, caption={A simple NakedBytes Schema for defining a Packet.}]
+{
+    "id": 1,
+    "description": "A sample packet!",
+    "length": 10,
+    "power_type": "Weapon",
+    "power": {
+        "name": "Most dangerous weapon!!!",
+        "damage": "0xdeadadde"
+    },
+    "you": {
+        "name": "Humans!!!"
+    }
+}
+\end{lstlisting}
+
+After serialization, the resulting binary buffer (in hexadecimal) dump by the xxd program:
+\begin{lstlisting}[language=hex, caption={Serialized NakedBytes Buffer for the Packet object.}]
+00000000: 5a00 0500 0100 0e00 0100 1e00 0a00 0000  Z...............
+00000010: 3c00 a5a5 1000 4120 7361 6d70 6c65 2070  <.....A sample p
+00000020: 6163 6b65 7421 0000 0800 a5a5 dead adde  acket!..........
+00000030: 1800 4d6f 7374 2064 616e 6765 726f 7573  ..Most dangerous
+00000040: 2077 6561 706f 6e21 2121 0000 0200 0900   weapon!!!......
+00000050: 4875 6d61 6e73 2121 2100                 Humans!!!.
+\end{lstlisting}
+
+Breaking down the buffer:
+Since the offset size specified in the schema is 2 bytes, the maximum is 32767 since offset can be in both directions and all offsets, union type enums, length and version are 2-byte integers and the value is in little-endian format.
+\begin{itemize}
+    \item The first 2 bytes (5a00) represent the total buffer length (90 bytes).
+    \item The next 2 bytes (0500) represent the schema version (5).
+    \item The next 2 bytes (0100) represent the Packet.id field (1).
+    \item The next 2 bytes (0e00) represent the offset to the description string (14 bytes ahead).
+    \item The next 2 bytes (0100) represent the union type to the power which is 1 which represents the weapon type.
+    \item The next 2 bytes (1e00) represent the offset to the power object (30 bytes ahead).
+    \item The next 2 bytes (0a00 0000) represent the Packet.length field (10).
+    \item The next 2 bytes (3c00) represent the offset to the Packet.you which is of Monster object  which is a struct\_offst type(60 bytes ahead).
+    \item The next 2 bytes(a5a5) represent the padding added to meet the alignment requirements for the Packet object.
+    \item The next bytes represents the description string starting with its two bytes length prefix (0a00) followed by the UTF-8 bytes for "A sample packet!" and a null terminator (00).
+    \item  The next 2 bytes (0800) represent the offset of the weapon.name string (8 bytes ahead).
+    \item The next 2 bytes (a5a5) represent the padding added to meet the internal alignment requirements for the uint32 damage field in Weapon object.
+    \item The next 4 bytes (deadadde) represent the Weapon.damage field (0xdeadadde).
+    \item The next bytes represent the weapon.name string starting with its two bytes length prefix (1800) followed by the UTF-8 bytes for "Most dangerous weapon!!!" and a null terminator (00).
+    \item The next 1 byte (00) represent the padding added to meet the alignment requirements for the Monster object.
+    \item The monster object you offset ahead start here with the next 2 bytes (0200) represent the offset of the Monster.name string (2 bytes ahead).
+    \item The next bytes represent the Monster.name string starting with its two bytes length prefix (0900) followed by the UTF-8 bytes for "Humans!!!" and a null terminator (00).
+\end{itemize}
+
+\subsection{Deserialization Example}
+The deserialization process is actually a misnomer, since there is no deserialization being done but rather just accessing the data in-place via pointers dereferencing and offset calculations. Below is an pseudo code example of how one would access the fields of the Packet object from the serialized NakedBytes buffer.
+To access the id field:
+\begin{lstlisting}[language=c, caption={Accessing the Packet.id field from the NakedBytes buffer.}, breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible]
+int16_t packet_id = *(int16_t *)(buffer + 4); // offset 4 bytes from start of buffer to skip the header
+\end{lstlisting}
+To access the description string:
+\begin{lstlisting}[language=c, caption={Accessing the Packet.description string from the NakedBytes buffer.}, breaklines=true,breakatwhitespace=false,columns=fullflexible]
+int16_t desc_offset = *(int16_t *)(buffer + 6); // offset to description field
+char *description = (char *)(buffer + 6 + desc_offset); // compute absolute address
+uint16_t desc_length = *(uint16_t *)description;
+char *desc_str = description + 2; // skip length prefix
+\end{lstlisting}
+
+\subsection{c++ Code Generation}
+Below is an example of the C++ struct that would be generated by a NakedBytes code generator for the Packet object defined in the schema. This struct includes methods to access each field in the buffer using pointer arithmetic and offset calculations.
+\begin{lstlisting}[language=c++, caption={Deserializing a NakedBytes Buffer into a Packet object.},  breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible]
+struct PacketRoot
+{
+
+#define PACKET_ID_OFFSET 0
+#define PACKET_DESCRIPTION_OFFSET 2
+#define PACKET_POWER_TYPE_OFFSET 4
+#define PACKET_POWER_OFFSET 6
+#define PACKET_LENGTH_OFFSET 8
+#define PACKET_YOU_OFFSET 12
+#define PACKET_PAD14_OFFSET 14
+#define PACKET_ALIGNMENT 4
+#define PACKET_SIZE 16
+
+    const int16_t id() const
+    {
+        return *reinterpret_cast<const int16_t *>(&data_[PACKET_ID_OFFSET + 2 * OFFSET_SIZE]);
+    }
+
+    const Offset<String> &description() const
+    {
+        const int16_t offset = PACKET_DESCRIPTION_OFFSET + 2 * OFFSET_SIZE;
+        return *reinterpret_cast<const Offset<String> *>(&data_[offset]);
+    }
+
+    const AnyPower_enum power_type() const
+    {
+        return *reinterpret_cast<const AnyPower_enum *>(&data_[PACKET_POWER_TYPE_OFFSET + 2 * OFFSET_SIZE]);
+    }
+
+    const AnyPower &power() const
+    {
+        const int16_t offset = PACKET_POWER_OFFSET - 2 + 2 * OFFSET_SIZE;
+        return *reinterpret_cast<const AnyPower *>(&data_[offset]);
+    }
+
+    const uint32_t length() const
+    {
+        return *reinterpret_cast<const uint32_t *>(&data_[PACKET_LENGTH_OFFSET + 2 * OFFSET_SIZE]);
+    }
+
+    const Offset<Monster> &you() const
+    {
+        const int16_t offset = PACKET_YOU_OFFSET + 2 * OFFSET_SIZE;
+        return *reinterpret_cast<const Offset<Monster> *>(&data_[offset]);
+    }
+
+    static constexpr size_t nakedbytes_sizeof = 16;
+
+private:
+    PacketRoot() = delete;
+    PacketRoot(const PacketRoot &) = delete;
+    PacketRoot &operator=(const PacketRoot &) = delete;
+    unsigned char data_[1];
+};
+\end{lstlisting}
 \section{Technical Specification Summary}
 \begin{itemize}
     \item Primitive types supported: uint8, uint16, uint32, uint64, int8, int16, int32, int64, float32 (float), float64 (double), bool, Enums (user-defined int types). All are stored in little-endian as raw bytes (fixed size).
@@ -361,7 +575,7 @@ Because data is located via offsets, any field or element can be accessed in O(1
     \item Forward/Backward compatibility: Classes include a “root size” to check if a requested field exists. If field\_offset > root\_size, the field is considered absent (backward compatibility). New fields should only be appended (forward compatibility)[10].
     \item Implicit Invariants: The schema must not contain contradictory definitions. For example, an array field must have a fixed count, a vector must specify element type, and cycles must be via indirection. The serializer assumes the schema is correct.
 \end{itemize}
-   
+
 \section{Conclusion and Future Work}
 NakedBytes provides a unified, offset-based serialization framework optimized for speed and compactness. By storing data in a canonical in-memory format with only relative offsets for variable parts, it achieves near-zero-copy access[1] and minimal overhead[3]. The design draws on lessons from FlatBuffers and Cap’n Proto but streamlines them: it drops vtables to save space, supports schema evolution, and enforces alignment for reliability. The JSON schema and code generation make it adaptable to many languages, and the arena model means it works in the tightest embedded environments. Potential future enhancements include: bit-packing of small fields, optional compression of large blobs, richer default-value support, and tools for schema migration. We also plan to expand the language bindings (e.g. Python, Java) and investigate formal verification of backward compatibility rules. Ultimately, NakedBytes aims to serve as a drop-in replacement for less efficient serializers in domains from IoT to real-time analytics, giving developers both the familiarity of C-like types and the performance of direct memory access.
 \end{document}

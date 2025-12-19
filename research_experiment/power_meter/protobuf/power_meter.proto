@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message PZEM004Tv30Data {
+  float voltage = 1;
+  float current = 2;
+  float power = 3;
+  float energy = 4;
+  float freq = 5;
+  float pf = 6;
+  uint32 alarms = 7;
+}

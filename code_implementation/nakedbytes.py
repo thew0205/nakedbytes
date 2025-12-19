@@ -1,6 +1,7 @@
 import sys
 import argparse
 from pathlib import Path
+
 script_dir = Path(__file__).parent
 sys.path.append(f"{script_dir.parent}")
 
@@ -8,9 +9,9 @@ import os
 import json
 from typing import cast
 from code_implementation.byte_generator import generate_byte
-from code_implementation.cpp_code_generator_deserializer import generate_cpp_code
 from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_types_desc
 from code_implementation.type_parsing import parsing_schema_to_type_desc
+from code_implementation.cpp_code_generator import generate_cpp_code
 
 parser = argparse.ArgumentParser(prog='nakedbytes')
 
@@ -36,12 +37,12 @@ offset_size = model_def['offset_size']
     
 types_desc = parsing_schema_to_type_desc(schema_def_file)
 
-
+namespace = model_def.get('namespace', None)
 
 
 if args.cpp:
     with open(Path(f"{args.cpp}").joinpath(f"{schema_def_file_without_ext}.nbs.h"), 'wt') as f:
-        f.write(generate_cpp_code(types_desc,root_type_name))
+        f.write(generate_cpp_code(types_desc,root_type_name, namespace= namespace))
         
 
 if args.binary:

@@ -1,0 +1,148 @@
+desc: (none)
+cmd: ./power_meter_nakedbytes_test
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1968648
+mem_heap_B=73728
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=1970221
+mem_heap_B=74200
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=1970843
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=1971456
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n1: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7C47B: _IO_file_seekoff@@GLIBC_2.2.5 (fileops.c:938)
+    n1: 4096 0x4B77EAD: fseek (fseek.c:36)
+     n0: 4096 0x109296: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=5
+#-----------
+time=1971456
+mem_heap_B=74200
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=1971594
+mem_heap_B=73728
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=1971648
+mem_heap_B=74200
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=1972277
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=1311976997
+mem_heap_B=79320
+mem_heap_extra_B=40
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=1311993049
+mem_heap_B=79320
+mem_heap_extra_B=40
+mem_stacks_B=0
+heap_tree=peak
+n3: 79320 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 5120 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n3: 5120 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n1: 1024 0x4B7BF8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
+    n1: 1024 0x4B7CAAE: _IO_new_file_xsputn (fileops.c:1244)
+     n1: 1024 0x4B7CAAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
+      n1: 1024 0x4B49CC8: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+       n1: 1024 0x4B49CC8: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
+        n1: 1024 0x4B54742: __vfprintf_internal (vfprintf-internal.c:1545)
+         n1: 1024 0x4B491B2: printf (printf.c:33)
+          n0: 1024 0x10949F: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=11
+#-----------
+time=1311993049
+mem_heap_B=5592
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=1311994294
+mem_heap_B=4568
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=1311994328
+mem_heap_B=472
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty

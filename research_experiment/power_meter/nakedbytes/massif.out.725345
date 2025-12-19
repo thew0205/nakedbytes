@@ -1,0 +1,910 @@
+desc: --stacks=yes
+cmd: ./power_meter_nakedbytes_test
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1973162
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=2136
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=2
+#-----------
+time=22663317
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=38870113
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=53135174
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=5
+#-----------
+time=65240300
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=89450148
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=111498478
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=137438050
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=163377622
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=182832147
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=11
+#-----------
+time=203583464
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=224334781
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=245086098
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=265837415
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=286588732
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=16
+#-----------
+time=310798734
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=328091782
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=345384830
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=362677878
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=20
+#-----------
+time=379970926
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=397263974
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=414557022
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=431850070
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=449143118
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=25
+#-----------
+time=466436166
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=483729214
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=501022262
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=518315310
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=544254882
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=30
+#-----------
+time=570194454
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=596134026
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=622073598
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=635043384
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=648013170
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=660982956
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=673952742
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=37
+#-----------
+time=686922528
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=699892314
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=712862100
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=725831886
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=738801672
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=42
+#-----------
+time=751771458
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=764741244
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=777711030
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=790680816
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=803650602
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=47
+#-----------
+time=816620388
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=829590174
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=842559960
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=854665087
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=866770219
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=878875346
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=890980478
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=54
+#-----------
+time=903085605
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=915190737
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=927295869
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=939400996
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=951506128
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=963611255
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=975716387
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=987821514
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=999926646
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=1012031778
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=64
+#-----------
+time=1024136905
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=1036242037
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=1048347164
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=1060452296
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=1072557423
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=1084662555
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=1096767687
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=1108872814
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=1120977946
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=1133083073
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=74
+#-----------
+time=1145188205
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=1157293332
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=1169398464
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=77
+#-----------
+time=1181503596
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=1193608723
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=1205713855
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=80
+#-----------
+time=1217818982
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=81
+#-----------
+time=1229924114
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=82
+#-----------
+time=1242029241
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=83
+#-----------
+time=1254134373
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=detailed
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=84
+#-----------
+time=1266239505
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=85
+#-----------
+time=1278344632
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=86
+#-----------
+time=1290449764
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=87
+#-----------
+time=1302554891
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=472
+heap_tree=empty
+#-----------
+snapshot=88
+#-----------
+time=1311974688
+mem_heap_B=78296
+mem_heap_extra_B=32
+mem_stacks_B=2952
+heap_tree=peak
+n3: 78296 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73728 0x492238E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  n1: 73728 0x400571E: call_init.part.0 (dl-init.c:74)
+   n1: 73728 0x4005823: call_init (dl-init.c:120)
+    n1: 73728 0x4005823: _dl_init (dl-init.c:121)
+     n0: 73728 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+ n1: 4096 0x4B6E1B4: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 4096 0x4B7E523: _IO_doallocbuf (genops.c:347)
+   n1: 4096 0x4B7CF4B: _IO_file_xsgetn (fileops.c:1288)
+    n1: 4096 0x4B6F49A: fread (iofread.c:38)
+     n0: 4096 0x10936D: main (in /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/nakedbytes/power_meter_nakedbytes_test)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 472 in 1 place, below massif's threshold (1.00%)

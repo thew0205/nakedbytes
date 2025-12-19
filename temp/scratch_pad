@@ -1,0 +1,29 @@
+g++ -g ./power_meter_protobuf_test.cpp  power_meter.pb.cc -lprotobuf -o ./power_meter_protobuf_test  $(pkg-config --cflags protobuf) $(pkg-config --libs protobuf) && ./power_meter_protobuf_te
+st
+
+
+protoc --encode PZEM004Tv30Data ./power_meter.proto < ./power_meter_data_protobuf.txt > ./power_meter_data_protobuf.bin
+
+
+nm --size-sort -r --print-size ./power_meter_nakedbytes_test | c++filt > temp
+
+/usr/bin/time -v ./power_meter_nakedbytes_test
+
+
+objdump  ./power_meter_nakedbytes_test > temp
+
+size ./power_meter_nakedbytes_test
+
+python3 /home/busoye_tm/Documents/matthew/projects/nakedbytes/code_implementation/nakedbytes.py --cpp . -b ./power_meter_data_nakedbytes.json power_meter.json 
+
+
+
+valgrind --tool=massif ./power_meter_nakedbytes_test
+valgrind --tool=massif --stacks=yes ./power_meter_nakedbytes_test
+ms_print massif.out.*
+
+
+top
+htop
+pmap <pid>
+

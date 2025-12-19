@@ -16,7 +16,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/test/test_simple_struct_offset_example/simple_struct_offset_example",
+            "program": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/protobuf/power_meter_protobuf_test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
