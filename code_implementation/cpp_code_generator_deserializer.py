@@ -26,6 +26,8 @@ def get_header_files() -> str:
 #define NAKEDBYTES_FORCE_INLINE inline
 #endif
 
+#define REMOVE_ROOT(buffer) (&buffer[2 * OFFSET_SIZE])
+
 '''
 
 def get_base_offset_types() -> str:

@@ -1,0 +1,177 @@
+/usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:540:3:constexpr bool std::__is_constant_evaluated()	16	static
+/usr/include/c++/13/bits/char_traits.h:393:7:static constexpr std::size_t std::char_traits<char>::length(const char_type*)	32	static
+/usr/include/c++/13/new:174:33:void* operator new(std::size_t, void*)	16	static
+/usr/include/c++/13/new:180:13:void operator delete(void*, void*)	16	static
+/usr/local/include/absl/log/internal/log_message.h:117:15:absl::log_internal::LogMessage& absl::log_internal::LogMessage::InternalStream()	16	static
+/usr/local/include/absl/log/internal/check_op.h:550:32:constexpr long unsigned int absl::log_internal::GetReferenceableValue(long unsigned int)	16	static
+/usr/include/c++/13/string_view:229:7:constexpr std::basic_string_view<_CharT, _Traits>::size_type std::basic_string_view<_CharT, _Traits>::size() const [with _CharT = char; _Traits = std::char_traits<char>]	16	static
+/usr/include/c++/13/string_view:289:7:constexpr const std::basic_string_view<_CharT, _Traits>::value_type* std::basic_string_view<_CharT, _Traits>::data() const [with _CharT = char; _Traits = std::char_traits<char>]	16	static
+/usr/local/include/google/protobuf/io/coded_stream.h:664:26:uint8_t* google::protobuf::io::EpsCopyOutputStream::EnsureSpace(uint8_t*)	32	static
+/usr/local/include/google/protobuf/io/coded_stream.h:698:12:uint8_t* google::protobuf::io::EpsCopyOutputStream::WriteStringMaybeAliased(uint32_t, absl::string_view, uint8_t*)	112	static
+/usr/local/include/google/protobuf/io/coded_stream.h:874:24:static constexpr int google::protobuf::io::EpsCopyOutputStream::TagSize(uint32_t)	16	static
+/usr/local/include/google/protobuf/io/coded_stream.h:1669:17:static uint8_t* google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(uint32_t, uint8_t*)	16	static
+/usr/local/include/google/protobuf/io/coded_stream.h:1695:17:static uint8_t* google::protobuf::io::CodedOutputStream::WriteLittleEndian32ToArray(uint32_t, uint8_t*)	16	static
+/usr/local/include/google/protobuf/io/coded_stream.h:1759:15:static size_t google::protobuf::io::CodedOutputStream::VarintSize32(uint32_t)	48	static
+/usr/local/include/google/protobuf/io/coded_stream.h:1773:15:static size_t google::protobuf::io::CodedOutputStream::VarintSize32PlusOne(uint32_t)	48	static
+/usr/local/include/google/protobuf/internal_visibility.h:38:18:constexpr google::protobuf::internal::InternalVisibility::InternalVisibility()	16	static
+/usr/local/include/google/protobuf/port.h:151:13:void google::protobuf::internal::SizedDelete(void*, size_t)	32	static
+/usr/local/include/google/protobuf/port.h:327:16:constexpr bool google::protobuf::internal::DebugHardenForceCopyDefaultString()	16	static
+/usr/local/include/google/protobuf/port.h:335:16:constexpr bool google::protobuf::internal::DebugHardenForceCopyInSwap()	16	static
+/usr/local/include/google/protobuf/port.h:601:13:void google::protobuf::internal::PrefetchToLocalCache(const void*)	16	static
+/usr/local/include/google/protobuf/port.h:638:13:void google::protobuf::internal::UnpoisonMemoryRegion(const void*, size_t)	16	static
+/usr/local/include/google/protobuf/arena.h:347:12:uint64_t google::protobuf::Arena::SpaceAllocated() const	32	static
+/usr/local/include/google/protobuf/arena.h:788:31:void* google::protobuf::Arena::AllocateInternal() [with T = std::__cxx11::basic_string<char>; bool trivial = false]	32	static
+/usr/local/include/google/protobuf/arenastring.h:106:22:constexpr google::protobuf::internal::TaggedStringPtr::TaggedStringPtr(const google::protobuf::internal::GlobalEmptyString*)	16	static
+/usr/local/include/google/protobuf/arenastring.h:118:23:std::string* google::protobuf::internal::TaggedStringPtr::SetAllocated(std::string*)	32	static
+/usr/local/include/google/protobuf/arenastring.h:132:23:std::string* google::protobuf::internal::TaggedStringPtr::SetMutableArena(std::string*)	32	static
+/usr/local/include/google/protobuf/arenastring.h:140:15:bool google::protobuf::internal::TaggedStringPtr::IsDefault() const	32	static
+/usr/local/include/google/protobuf/arenastring.h:163:23:std::string* google::protobuf::internal::TaggedStringPtr::Get() const	32	static
+/usr/local/include/google/protobuf/arenastring.h:170:15:bool google::protobuf::internal::TaggedStringPtr::IsNull() const	16	static
+/usr/local/include/google/protobuf/arenastring.h:182:22:static void google::protobuf::internal::TaggedStringPtr::assert_aligned(const void*)	80	static
+/usr/local/include/google/protobuf/arenastring.h:192:23:std::string* google::protobuf::internal::TaggedStringPtr::TagAs(Type, std::string*)	112	static
+/usr/local/include/google/protobuf/arenastring.h:199:13:uintptr_t google::protobuf::internal::TaggedStringPtr::as_int() const	16	static
+/usr/local/include/google/protobuf/arenastring.h:241:12:google::protobuf::internal::ArenaStringPtr::ArenaStringPtr(google::protobuf::Arena*)	64	static
+/usr/local/include/google/protobuf/arenastring.h:265:3:google::protobuf::internal::ArenaStringPtr::ArenaStringPtr(google::protobuf::Arena*, const google::protobuf::internal::ArenaStringPtr&)	64	static
+/usr/local/include/google/protobuf/arenastring.h:335:45:const std::string& google::protobuf::internal::ArenaStringPtr::Get() const	32	static
+/usr/local/include/google/protobuf/arenastring.h:392:15:bool google::protobuf::internal::ArenaStringPtr::IsDefault() const	32	static
+/usr/local/include/google/protobuf/arenastring.h:408:8:bool google::protobuf::internal::ArenaStringPtr::IsFixedSizeArena() const	16	static
+/usr/local/include/google/protobuf/arenastring.h:430:24:google::protobuf::internal::TaggedStringPtr google::protobuf::internal::TaggedStringPtr::Copy(google::protobuf::Arena*) const	32	static
+/usr/local/include/google/protobuf/arenastring.h:502:29:static void google::protobuf::internal::ArenaStringPtr::InternalSwap(google::protobuf::internal::ArenaStringPtr*, google::protobuf::internal::ArenaStringPtr*, google::protobuf::Arena*)	160	static
+/usr/local/include/google/protobuf/arenastring.h:526:13:void google::protobuf::internal::ArenaStringPtr::ClearNonDefaultToEmpty()	96	static
+/usr/local/include/google/protobuf/metadata_lite.h:47:12:google::protobuf::internal::InternalMetadata::InternalMetadata(google::protobuf::Arena*)	16	static
+/usr/local/include/google/protobuf/metadata_lite.h:66:33:google::protobuf::Arena* google::protobuf::internal::InternalMetadata::arena() const	32	static
+/usr/local/include/google/protobuf/metadata_lite.h:74:31:bool google::protobuf::internal::InternalMetadata::have_unknown_fields() const	16	static
+/usr/local/include/google/protobuf/metadata_lite.h:114:31:void google::protobuf::internal::InternalMetadata::InternalSwap(google::protobuf::internal::InternalMetadata*)	32	static
+/usr/local/include/google/protobuf/message_lite.h:184:13:constexpr google::protobuf::internal::CachedSize::CachedSize(Scalar)	16	static
+/usr/local/include/google/protobuf/message_lite.h:488:30:constexpr const google::protobuf::internal::ClassData* google::protobuf::internal::ClassDataFull::base() const	16	static
+/usr/local/include/google/protobuf/message_lite.h:507:29:const google::protobuf::internal::ClassDataFull& google::protobuf::internal::ClassData::full() const	96	static
+/usr/local/include/google/protobuf/message_lite.h:564:10:google::protobuf::Arena* google::protobuf::MessageLite::GetArena() const	32	static
+/usr/local/include/google/protobuf/message_lite.h:887:49:static constexpr google::protobuf::internal::InternalVisibility google::protobuf::MessageLite::internal_visibility()	32	static
+/usr/local/include/google/protobuf/message_lite.h:970:12:google::protobuf::MessageLite::MessageLite(google::protobuf::Arena*)	32	static
+/usr/local/include/absl/log/internal/check_op.h:533:27:constexpr const T& absl::log_internal::GetReferenceableValue(const T&) [with T = char*]	16	static
+/usr/local/include/absl/log/internal/check_op.h:533:27:constexpr const T& absl::log_internal::GetReferenceableValue(const T&) [with T = std::nullptr_t]	16	static
+/usr/local/include/absl/log/internal/check_op.h:503:1:constexpr const char* absl::log_internal::Check_NEImpl(const T1&, const T2&, const char*) [with T1 = char*; T2 = std::nullptr_t]	48	static
+/usr/local/include/google/protobuf/repeated_field.h:160:9:char* google::protobuf::internal::LongSooRep::elements() const	112	static
+/usr/local/include/google/protobuf/repeated_field.h:177:7:int google::protobuf::internal::ShortSooRep::size() const	16	static
+/usr/local/include/google/protobuf/repeated_field.h:178:8:bool google::protobuf::internal::ShortSooRep::is_soo() const	16	static
+/usr/local/include/google/protobuf/repeated_field.h:193:8:bool google::protobuf::internal::SooRep::is_soo() const	32	static
+/usr/local/include/google/protobuf/repeated_field.h:202:10:google::protobuf::Arena* google::protobuf::internal::SooRep::soo_arena() const	96	static
+/usr/local/include/google/protobuf/repeated_field.h:206:7:int google::protobuf::internal::SooRep::size(bool) const	96	static
+/usr/local/include/google/protobuf/wire_format_lite.h:719:27:static constexpr uint32_t google::protobuf::internal::WireFormatLite::MakeTag(int, WireType)	16	static
+/usr/local/include/google/protobuf/wire_format_lite.h:744:17:static uint32_t google::protobuf::internal::WireFormatLite::EncodeFloat(float)	32	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1262:17:static uint8_t* google::protobuf::internal::WireFormatLite::WriteTagToArray(int, WireType, uint8_t*)	48	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1277:17:static uint8_t* google::protobuf::internal::WireFormatLite::WriteUInt32NoTagToArray(uint32_t, uint8_t*)	32	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1313:17:static uint8_t* google::protobuf::internal::WireFormatLite::WriteFloatNoTagToArray(float, uint8_t*)	32	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1379:17:static uint8_t* google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(int, uint32_t, uint8_t*)	32	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1427:17:static uint8_t* google::protobuf::internal::WireFormatLite::WriteFloatToArray(int, float, uint8_t*)	32	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1540:15:static size_t google::protobuf::internal::WireFormatLite::UInt32SizePlusOne(uint32_t)	32	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1556:15:static size_t google::protobuf::internal::WireFormatLite::StringSize(const std::string&)	32	static
+/usr/local/include/google/protobuf/wire_format_lite.h:1590:15:static size_t google::protobuf::internal::WireFormatLite::LengthDelimitedSize(size_t)	32	static
+/usr/local/include/google/protobuf/message_lite.h:544:20:google::protobuf::MessageLite::~MessageLite()	16	static
+/usr/local/include/google/protobuf/message_lite.h:544:20:virtual google::protobuf::MessageLite::~MessageLite()	32	static
+/usr/local/include/google/protobuf/unknown_field_set.h:255:10:google::protobuf::Arena* google::protobuf::UnknownFieldSet::arena()	32	static
+/usr/local/include/google/protobuf/unknown_field_set.h:320:8:google::protobuf::UnknownFieldSet::~UnknownFieldSet()	48	static
+/usr/local/include/google/protobuf/unknown_field_set.h:325:31:static const google::protobuf::UnknownFieldSet& google::protobuf::UnknownFieldSet::default_instance()	16	static
+/usr/local/include/google/protobuf/unknown_field_set.h:333:13:void google::protobuf::UnknownFieldSet::Clear()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:152:8:void PowerMeter::MeterData::MergeFrom(const PowerMeter::MeterData&)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:410:29:const std::string& PowerMeter::MeterData::_internal_id() const	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:465:14:float PowerMeter::MeterData::_internal_voltage() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:490:14:float PowerMeter::MeterData::_internal_current() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:515:14:float PowerMeter::MeterData::_internal_power() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:540:14:float PowerMeter::MeterData::_internal_energy() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:565:14:float PowerMeter::MeterData::_internal_freq() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:590:14:float PowerMeter::MeterData::_internal_pf() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:615:19:uint32_t PowerMeter::MeterData::_internal_alarms() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.h:650:29:const std::string& PowerMeter::MeterData::_internal_timestamp() const	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:57:3:PowerMeter::MeterDataDefaultTypeInternal::~MeterDataDefaultTypeInternal()	16	static
+/usr/local/include/google/protobuf/message.h:264:23:google::protobuf::Message::~Message()	32	static
+/usr/local/include/google/protobuf/message.h:264:23:virtual google::protobuf::Message::~Message()	32	static
+/usr/local/include/google/protobuf/has_bits.h:35:36:constexpr google::protobuf::internal::HasBits<doublewords>::HasBits() [with int doublewords = 1]	16	static
+/usr/local/include/google/protobuf/message.h:389:22:google::protobuf::Message::Message(google::protobuf::Arena*) [inherited from google::protobuf::MessageLite]	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:139:1:PowerMeter::MeterData::MeterData(google::protobuf::Arena*)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:148:24:PowerMeter::MeterData::Impl_::Impl_(google::protobuf::internal::InternalVisibility, google::protobuf::Arena*, const PowerMeter::MeterData::Impl_&, const PowerMeter::MeterData&)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:157:1:PowerMeter::MeterData::MeterData(google::protobuf::Arena*, const PowerMeter::MeterData&)	96	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:180:24:PowerMeter::MeterData::Impl_::Impl_(google::protobuf::internal::InternalVisibility, google::protobuf::Arena*)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:187:13:void PowerMeter::MeterData::SharedCtor(google::protobuf::Arena*)	64	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:196:1:PowerMeter::MeterData::~MeterData()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:196:1:virtual PowerMeter::MeterData::~MeterData()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:200:13:static void PowerMeter::MeterData::SharedDtor(google::protobuf::MessageLite&)	96	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:212:31:static void* PowerMeter::MeterData::PlacementNew_(const void*, void*, google::protobuf::Arena*)	80	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:249:1:virtual const google::protobuf::internal::ClassData* PowerMeter::MeterData::GetClassData() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:347:24:virtual void PowerMeter::MeterData::Clear()	80	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:379:29:virtual uint8_t* PowerMeter::MeterData::_InternalSerialize(uint8_t*, google::protobuf::io::EpsCopyOutputStream*) const	208	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:488:10:virtual size_t PowerMeter::MeterData::ByteSizeLong() const	160	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:565:6:static void PowerMeter::MeterData::MergeImpl(google::protobuf::MessageLite&, const google::protobuf::MessageLite&)	320	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:639:6:void PowerMeter::MeterData::CopyFrom(const PowerMeter::MeterData&)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:647:6:void PowerMeter::MeterData::InternalSwap(PowerMeter::MeterData*)	112	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter.pb.cc:663:30:google::protobuf::Metadata PowerMeter::MeterData::GetMetadata() const	32	static
+/usr/include/c++/13/bits/char_traits.h:199:5:static constexpr std::size_t __gnu_cxx::char_traits<_CharT>::length(const char_type*) [with _CharT = char]	64	static
+/usr/include/c++/13/bits/basic_string.h:181:14:std::__cxx11::basic_string<char>::_Alloc_hider::~_Alloc_hider()	48	static
+/usr/include/c++/13/string_view:140:7:constexpr std::basic_string_view<_CharT, _Traits>::basic_string_view(const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>]	32	static
+/usr/local/include/absl/base/casts.h:180:23:constexpr Dest absl::bit_cast(const Source&) [with Dest = unsigned int; Source = float; typename std::enable_if<(((sizeof (Dest) == sizeof (Source)) && std::is_trivially_copyable<Source>::value) && std::is_trivially_copyable<_Tp>::value), int>::type <anonymous> = 0]	16	static
+/usr/include/c++/13/bits/move.h:97:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = __cxx11::basic_string<char>&]	16	static
+/usr/include/c++/13/bits/basic_string.h:641:7:std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _CharT*, const _Alloc&) [with <template-parameter-2-1> = std::allocator<char>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]	80	static
+/usr/local/include/absl/log/internal/voidify.h:39:28:void absl::log_internal::Voidify::operator&&(T&&) const && [with T = absl::log_internal::LogMessage&]	32	static
+/usr/local/include/absl/numeric/bits.h:108:5:constexpr typename std::enable_if<std::is_unsigned<_Tp>::value, int>::type absl::countl_zero(T) [with T = unsigned int]	16	static
+/usr/local/include/absl/base/casts.h:105:1:constexpr std::enable_if_t<absl::type_traits_internal::IsView<typename std::enable_if<(! is_reference_v<To>), typename std::remove_cv< <template-parameter-1-1> >::type>::type>::value, To> absl::implicit_cast(type_identity_t<To>) [with To = const char*]	16	static
+/usr/local/include/absl/log/internal/check_op.h:502:1:constexpr const char* absl::log_internal::Check_EQImpl(const T1&, const T2&, const char*) [with T1 = long unsigned int; T2 = long unsigned int]	48	static
+/usr/include/c++/13/bits/move.h:189:5:std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = google::protobuf::internal::TaggedStringPtr]	48	static
+/usr/include/c++/13/initializer_list:73:7:constexpr const _E* std::initializer_list<_E>::begin() const [with _E = google::protobuf::internal::ArenaStringPtr*]	16	static
+/usr/include/c++/13/initializer_list:77:7:constexpr const _E* std::initializer_list<_E>::end() const [with _E = google::protobuf::internal::ArenaStringPtr*]	48	static
+/usr/local/include/google/protobuf/arena.h:263:3:) [with T = std::__cxx11::basic_string<char>; Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}]	64	static
+/usr/local/include/google/protobuf/arena.h:263:3:) [with T = std::__cxx11::basic_string<char>; Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]	48	static
+/usr/local/include/google/protobuf/metadata_lite.h:147:6:U* google::protobuf::internal::InternalMetadata::PtrValue() const [with U = ContainerBase]	16	static
+/usr/local/include/google/protobuf/metadata_lite.h:147:6:U* google::protobuf::internal::InternalMetadata::PtrValue() const [with U = google::protobuf::Arena]	16	static
+/usr/include/c++/13/bits/move.h:189:5:std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = long int]	48	static
+/usr/include/c++/13/bits/stl_algobase.h:204:5:_ForwardIterator2 std::swap_ranges(_ForwardIterator1, _ForwardIterator1, _ForwardIterator2) [with _ForwardIterator1 = char*; _ForwardIterator2 = char*]	48	static
+/usr/local/include/absl/log/internal/check_op.h:533:27:constexpr const T& absl::log_internal::GetReferenceableValue(const T&) [with T = google::protobuf::Arena*]	16	static
+/usr/local/include/absl/log/internal/check_op.h:502:1:constexpr const char* absl::log_internal::Check_EQImpl(const T1&, const T2&, const char*) [with T1 = google::protobuf::Arena*; T2 = google::protobuf::Arena*]	48	static
+/usr/local/include/absl/log/internal/check_op.h:533:27:constexpr const T& absl::log_internal::GetReferenceableValue(const T&) [with T = bool]	16	static
+/usr/local/include/absl/log/internal/check_op.h:502:1:constexpr const char* absl::log_internal::Check_EQImpl(const T1&, const T2&, const char*) [with T1 = bool; T2 = bool]	48	static
+/usr/local/include/google/protobuf/repeated_field.h:721:1:google::protobuf::RepeatedField< <template-parameter-1-1> >::~RepeatedField() [with Element = google::protobuf::UnknownField]	64	static
+/usr/local/include/google/protobuf/repeated_field.h:468:47:google::protobuf::Arena* google::protobuf::RepeatedField< <template-parameter-1-1> >::GetArena() [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:774:13:bool google::protobuf::RepeatedField< <template-parameter-1-1> >::empty() const [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:779:12:int google::protobuf::RepeatedField< <template-parameter-1-1> >::size() const [with Element = google::protobuf::UnknownField]	32	static
+/usr/include/c++/13/bits/move.h:189:5:std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = unsigned int]	48	static
+/usr/local/include/google/protobuf/metadata_lite.h:83:35:const T& google::protobuf::internal::InternalMetadata::unknown_fields(const T& (*)()) const [with T = google::protobuf::UnknownFieldSet]	32	static
+/usr/local/include/google/protobuf/has_bits.h:45:36:uint32_t& google::protobuf::internal::HasBits<doublewords>::operator[](int) [with int doublewords = 1]	16	static
+/usr/local/include/google/protobuf/metadata_lite.h:120:31:void google::protobuf::internal::InternalMetadata::MergeFrom(const google::protobuf::internal::InternalMetadata&) [with T = google::protobuf::UnknownFieldSet]	32	static
+/usr/local/include/google/protobuf/metadata_lite.h:59:8:void google::protobuf::internal::InternalMetadata::Delete() [with T = google::protobuf::UnknownFieldSet]	32	static
+/usr/local/include/google/protobuf/has_bits.h:41:31:void google::protobuf::internal::HasBits<doublewords>::Clear() [with int doublewords = 1]	32	static
+/usr/local/include/google/protobuf/metadata_lite.h:127:31:void google::protobuf::internal::InternalMetadata::Clear() [with T = google::protobuf::UnknownFieldSet]	32	static
+/usr/local/include/google/protobuf/has_bits.h:49:42:const uint32_t& google::protobuf::internal::HasBits<doublewords>::operator[](int) const [with int doublewords = 1]	16	static
+/usr/local/include/absl/log/internal/check_op.h:533:27:constexpr const T& absl::log_internal::GetReferenceableValue(const T&) [with T = const PowerMeter::MeterData*]	16	static
+/usr/local/include/absl/log/internal/check_op.h:533:27:constexpr const T& absl::log_internal::GetReferenceableValue(const T&) [with T = PowerMeter::MeterData*]	16	static
+/usr/local/include/absl/log/internal/check_op.h:503:1:constexpr const char* absl::log_internal::Check_NEImpl(const T1&, const T2&, const char*) [with T1 = const PowerMeter::MeterData*; T2 = PowerMeter::MeterData*]	48	static
+/usr/local/include/google/protobuf/repeated_ptr_field.h:79:13:void google::protobuf::internal::memswap(char*, char*) [with long unsigned int N = 28]	32	static
+/usr/include/c++/13/bits/char_traits.h:136:7:static constexpr bool __gnu_cxx::char_traits<_CharT>::eq(const char_type&, const char_type&) [with _CharT = char]	16	static
+/usr/include/c++/13/bits/new_allocator.h:104:7:std::__new_allocator<_Tp>::~__new_allocator() [with _Tp = char]	16	static
+/usr/include/c++/13/bits/basic_string.tcc:239:13:std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_construct(_InIterator, _InIterator, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>*) [with _InIterator = const char*; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]	16	static
+/usr/include/c++/13/bits/basic_string.tcc:242:4:std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_construct(_InIterator, _InIterator, std::forward_iterator_tag)::_Guard::~_Guard() [with _InIterator = const char*; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]	32	static
+/usr/include/c++/13/bits/basic_string.tcc:221:7:void std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_construct(_InIterator, _InIterator, std::forward_iterator_tag) [with _FwdIterator = const char*; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]	112	static
+/usr/include/c++/13/bits/move.h:97:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = google::protobuf::internal::TaggedStringPtr&]	16	static
+/usr/include/c++/13/initializer_list:69:7:constexpr std::initializer_list<_E>::size_type std::initializer_list<_E>::size() const [with _E = google::protobuf::internal::ArenaStringPtr*]	16	static
+/usr/include/c++/13/bits/move.h:70:5:constexpr _Tp&& std::forward(typename remove_reference<_Functor>::type&) [with _Tp = __cxx11::basic_string<char>&]	16	static
+/usr/include/c++/13/bits/move.h:70:5:constexpr _Tp&& std::forward(typename remove_reference<_Functor>::type&) [with _Tp = __cxx11::basic_string<char>]	16	static
+/usr/include/c++/13/bits/move.h:97:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = long int&]	16	static
+/usr/include/c++/13/bits/stl_algobase.h:155:5:void std::iter_swap(_ForwardIterator1, _ForwardIterator2) [with _ForwardIterator1 = char*; _ForwardIterator2 = char*]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:584:8:void google::protobuf::RepeatedField< <template-parameter-1-1> >::AnnotateSize(int, int) const [with Element = google::protobuf::UnknownField]	48	static
+/usr/local/include/google/protobuf/repeated_field.h:516:8:bool google::protobuf::RepeatedField< <template-parameter-1-1> >::is_soo() const [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:512:17:google::protobuf::Arena* google::protobuf::RepeatedField< <template-parameter-1-1> >::GetArena(bool) const [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:517:7:int google::protobuf::RepeatedField< <template-parameter-1-1> >::size(bool) const [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:633:12:Element* google::protobuf::RepeatedField< <template-parameter-1-1> >::unsafe_elements(bool) [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:558:15:static void google::protobuf::RepeatedField< <template-parameter-1-1> >::Destroy(const Element*, const Element*) [with Element = google::protobuf::UnknownField]	16	static
+/usr/local/include/google/protobuf/repeated_field.h:598:8:void google::protobuf::RepeatedField< <template-parameter-1-1> >::UnpoisonBuffer() const [with Element = google::protobuf::UnknownField]	48	static
+/usr/local/include/google/protobuf/repeated_field.h:651:8:void google::protobuf::RepeatedField< <template-parameter-1-1> >::InternalDeallocate() [with bool in_destructor = true; Element = google::protobuf::UnknownField]	96	static
+/usr/include/c++/13/bits/move.h:97:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = unsigned int&]	16	static
+/usr/local/include/google/protobuf/metadata_lite.h:147:6:U* google::protobuf::internal::InternalMetadata::PtrValue() const [with U = Container<google::protobuf::UnknownFieldSet>]	16	static
+/usr/include/c++/13/bits/move.h:189:5:std::_Require<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> > std::swap(_Tp&, _Tp&) [with _Tp = char]	48	static
+/usr/local/include/google/protobuf/repeated_field.h:637:18:const Element* google::protobuf::RepeatedField< <template-parameter-1-1> >::unsafe_elements(bool) const [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:643:12:google::protobuf::RepeatedField< <template-parameter-1-1> >::HeapRep* google::protobuf::RepeatedField< <template-parameter-1-1> >::heap_rep() const [with Element = google::protobuf::UnknownField]	96	static
+/usr/local/include/google/protobuf/repeated_field.h:784:12:int google::protobuf::RepeatedField< <template-parameter-1-1> >::Capacity() const [with Element = google::protobuf::UnknownField]	32	static
+/usr/local/include/google/protobuf/repeated_field.h:518:7:int google::protobuf::RepeatedField< <template-parameter-1-1> >::Capacity(bool) const [with Element = google::protobuf::UnknownField]	16	static
+/usr/include/c++/13/bits/move.h:97:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = char&]	16	static
+/usr/local/include/google/protobuf/port_undef.inc:85:27:void __static_initialization_and_destruction_0()	16	static
+/usr/local/include/google/protobuf/port_undef.inc:85:27:void __static_initialization_and_destruction_1()	16	static
+/usr/local/include/google/protobuf/port_undef.inc:85:27:inc)	16	static
+/usr/local/include/google/protobuf/port_undef.inc:85:27:inc)	16	static

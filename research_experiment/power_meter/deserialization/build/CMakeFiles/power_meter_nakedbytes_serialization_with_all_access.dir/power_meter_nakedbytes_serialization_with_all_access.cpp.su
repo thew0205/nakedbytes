@@ -1,0 +1,12 @@
+/usr/include/c++/13/bits/std_abs.h:71:3:constexpr double std::abs(double)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:220:69:const nakedbytes::Offset<nakedbytes::String>* PowerMeter::MeterData::id() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:228:31:const float PowerMeter::MeterData::voltage() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:235:31:const float PowerMeter::MeterData::current() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:242:31:const float PowerMeter::MeterData::power() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:249:31:const float PowerMeter::MeterData::energy() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:256:31:const float PowerMeter::MeterData::freq() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:263:31:const float PowerMeter::MeterData::pf() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:270:34:const uint16_t PowerMeter::MeterData::alarms() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:277:69:const nakedbytes::Offset<nakedbytes::String>* PowerMeter::MeterData::timestamp() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes_serialization_with_all_access.cpp:4:6:void test_function(const uint8_t*, size_t)	128	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes_serialization_with_all_access.cpp:19:6:void test_assert(const uint8_t*, size_t)	128	static

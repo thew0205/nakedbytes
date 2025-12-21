@@ -1,8 +1,12 @@
-g++ -g ./power_meter_protobuf_test.cpp  power_meter.pb.cc -lprotobuf -o ./power_meter_protobuf_test  $(pkg-config --cflags protobuf) $(pkg-config --libs protobuf) && ./power_meter_protobuf_te
-st
+g++ -g ./power_meter_protobuf_serialization_without_access.cpp  power_meter.pb.cc -lprotobuf -o ./power_meter_protobuf_test  $(pkg-config --cflags protobuf) $(pkg-config --libs protobuf) && ./power_meter_protobuf_test
+
+protoc --cpp_out=. -I=. ./power_meter.proto
+protoc --encode PowerMeter.MeterData ./power_meter_protobuf.proto < ./power_meter_protobuf_data.txt > ./power_meter_protobuf_data.bin
 
 
-protoc --encode PZEM004Tv30Data ./power_meter.proto < ./power_meter_data_protobuf.txt > ./power_meter_data_protobuf.bin
+
+flatc -o ./ --cpp power_meter.fbs  
+flatc --binary -o ./ power_meter.fbs ./power_meter_data_flatbuffers.json
 
 
 nm --size-sort -r --print-size ./power_meter_nakedbytes_test | c++filt > temp
@@ -14,7 +18,7 @@ objdump  ./power_meter_nakedbytes_test > temp
 
 size ./power_meter_nakedbytes_test
 
-python3 /home/busoye_tm/Documents/matthew/projects/nakedbytes/code_implementation/nakedbytes.py --cpp . -b ./power_meter_data_nakedbytes.json power_meter.json 
+python3 /home/busoye_tm/Documents/matthew/projects/nakedbytes/code_implementation/nakedbytes.py --cpp . -b ./power_meter_nakedbytes_data.json power_meter_nakedbytes.json 
 
 
 
@@ -27,3 +31,175 @@ top
 htop
 pmap <pid>
 
+
+
+
+To get the memory size breakdown of a C++ program, there are several levels depending on what you want: binary size, runtime memory, heap/stack usage, or per-object memory.
+
+Below is a clear, practical map, starting from static size → runtime memory → per-object memory.
+
+1️⃣ Binary size breakdown (compile-time / static)
+✅ Total binary size
+ls -lh your_program
+size your_program
+
+
+Example output:
+
+text    data     bss     dec     hex
+123456  2345     6789    132590  205ce
+
+Meaning
+Section	Meaning
+text	Code + read-only data
+data	Initialized globals
+bss	Zero-initialized globals
+dec	Total
+hex	Same in hex
+🔍 Detailed section breakdown
+objdump -h your_program
+
+
+or:
+
+readelf -S your_program
+
+
+Shows:
+
+.text
+
+.rodata
+
+.data
+
+.bss
+
+.heap (if present)
+
+.stack (platform dependent)
+
+2️⃣ Function-level size (code bloat analysis)
+nm --size-sort --print-size your_program | c++filt
+
+
+Sort largest first:
+
+nm --size-sort -r --print-size your_program | c++filt
+
+
+Useful for:
+
+template bloat
+
+protobuf / flatbuffers size impact
+
+unused functions
+
+3️⃣ Runtime memory usage (Linux)
+✅ Total memory (RSS, heap, stack)
+/usr/bin/time -v ./your_program
+
+
+Output:
+
+Maximum resident set size (kbytes): 15432
+
+🔍 Track heap usage (malloc/free)
+Valgrind
+valgrind --tool=massif ./your_program
+ms_print massif.out.*
+
+
+Shows:
+
+heap usage over time
+
+peak allocations
+
+🔥 Live tracking
+top
+htop
+pmap <pid>
+
+4️⃣ Per-object memory size (C++ level)
+✅ sizeof
+std::cout << sizeof(MyStruct) << std::endl;
+
+
+Includes:
+
+padding
+
+alignment
+
+🔍 Layout inspection (VERY useful)
+#include <iostream>
+
+struct Example {
+    char a;
+    int b;
+    double c;
+};
+
+int main() {
+    std::cout << sizeof(Example) << "\n";
+    std::cout << offsetof(Example, a) << "\n";
+    std::cout << offsetof(Example, b) << "\n";
+    std::cout << offsetof(Example, c) << "\n";
+}
+
+🧠 STL containers (important!)
+std::vector<int> v(100);
+
+sizeof(v);          // usually 24 bytes
+v.capacity() * sizeof(int); // heap usage
+
+
+Total memory ≈ control block + heap buffer
+
+5️⃣ Stack usage (embedded-critical)
+GCC stack usage file
+-fstack-usage
+
+
+Generates:
+
+file.su
+
+
+Example:
+
+main 64 static
+
+6️⃣ Embedded / bare-metal memory
+Map file (MOST IMPORTANT)
+-Wl,-Map=output.map
+
+
+Shows:
+
+exact RAM usage
+
+exact FLASH usage
+
+7️⃣ Protobuf / FlatBuffers specific
+Compare code size impact
+size flatbuffers_app
+size protobuf_app
+size nanopb_app
+
+
+You’ll typically see:
+
+nanopb   << protobuf << flatbuffers
+
+🧠 Summary table
+Goal	Tool
+Binary size	size, readelf
+Function size	nm --size-sort
+Runtime memory	/usr/bin/time, top
+Heap tracking	valgrind massif
+Stack usage	-fstack-usage
+Object layout	sizeof, offsetof
+Embedded memory	linker map

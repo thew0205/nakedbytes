@@ -1,0 +1,16 @@
+namespace PowerMeter;
+
+table MeterData
+{
+     id: string;
+     voltage: float;
+     current: float;
+     power: float;
+     energy: float;
+     freq: float;
+     pf: float;
+     alarms: uint16;
+     timestamp: string;
+}
+
+root_type MeterData;

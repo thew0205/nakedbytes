@@ -1,0 +1,17 @@
+/usr/local/include/flatbuffers/buffer.h:64:13:void flatbuffers::EndianCheck()	32	static
+/usr/local/include/flatbuffers/table.h:29:18:const uint8_t* flatbuffers::Table::GetVTable() const	48	static
+/usr/local/include/flatbuffers/table.h:35:13:flatbuffers::voffset_t flatbuffers::Table::GetOptionalFieldOffset(flatbuffers::voffset_t) const	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_flatbuffers_generated.h:37:9:float PowerMeter::MeterData::voltage() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_flatbuffers_generated.h:170:37:const PowerMeter::MeterData* PowerMeter::GetMeterData(const void*)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_flatbuffers_serialization_with_one_access.cpp:3:6:void test_function(const uint8_t*, size_t)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_flatbuffers_serialization_with_one_access.cpp:10:6:void test_assert(const uint8_t*, size_t)	48	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = unsigned int]	16	static
+/usr/local/include/flatbuffers/base.h:427:3:T flatbuffers::ReadScalar(const void*) [with T = int]	32	static
+/usr/local/include/flatbuffers/base.h:427:3:T flatbuffers::ReadScalar(const void*) [with T = short unsigned int]	32	static
+/usr/local/include/flatbuffers/table.h:45:26:T flatbuffers::Table::GetField(flatbuffers::voffset_t, T) const [with T = float]	48	static
+/usr/local/include/flatbuffers/buffer.h:207:31:const T* flatbuffers::GetRoot(const void*) [with T = PowerMeter::MeterData]	32	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = int]	16	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = short unsigned int]	16	static
+/usr/local/include/flatbuffers/base.h:427:3:T flatbuffers::ReadScalar(const void*) [with T = float]	32	static
+/usr/local/include/flatbuffers/buffer.h:194:25:T* flatbuffers::GetMutableRoot(void*) [with T = PowerMeter::MeterData]	32	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = float]	16	static

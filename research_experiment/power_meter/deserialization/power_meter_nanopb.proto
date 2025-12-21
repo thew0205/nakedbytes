@@ -1,0 +1,16 @@
+syntax = "proto3";
+import "nanopb.proto";
+
+package PowerMeter;
+
+message MeterData {
+  string id = 1  [(nanopb).max_length = 20];
+  float voltage = 2;
+  float current = 3;
+  float power = 4;
+  float energy = 5;
+  float freq = 6;
+  float pf = 7;
+  uint32 alarms = 8;
+  string timestamp = 9  [(nanopb).max_length = 20];
+}

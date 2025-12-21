@@ -1,0 +1,6 @@
+/usr/include/c++/13/bits/std_abs.h:71:3:constexpr double std::abs(double)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_protobuf.pb.h:76:10:PowerMeter::MeterData::MeterData()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_protobuf.pb.h:456:14:float PowerMeter::MeterData::voltage() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_protobuf.pb.h:465:14:float PowerMeter::MeterData::_internal_voltage() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_protobuf_serialization_with_one_access.cpp:3:6:void test_function(const uint8_t*, size_t)	144	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_protobuf_serialization_with_one_access.cpp:11:6:void test_assert(const uint8_t*, size_t)	144	static

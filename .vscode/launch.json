@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "cmake",
+            "request": "launch",
+            "name": "CMake: Configure project",
+            "cmakeDebugType": "configure",
+            "clean": true,
+            "configureAll": false
+        },
+        {
             "name": "Python Debugger: Current File with Arguments",
             "type": "debugpy",
             "request": "launch",
@@ -23,8 +31,8 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/protobuf/power_meter_protobuf_test",
-            "args": [],
+            "program": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/build/power_meter_nanopb_serialization_with_all_access",
+            "args": ["/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_protobuf_data.bin"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

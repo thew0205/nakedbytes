@@ -1,0 +1,3 @@
+/usr/include/c++/13/bits/std_abs.h:71:3:constexpr double std::abs(double)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nanopb_serialization_with_all_access.cpp:7:6:void test_function(const uint8_t*, size_t)	208	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nanopb_serialization_with_all_access.cpp:24:6:void test_assert(const uint8_t*, size_t)	208	static

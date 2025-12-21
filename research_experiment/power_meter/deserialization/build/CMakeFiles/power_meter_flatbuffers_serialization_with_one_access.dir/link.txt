@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/power_meter_flatbuffers_serialization_with_one_access.dir/power_meter_main.cpp.o CMakeFiles/power_meter_flatbuffers_serialization_with_one_access.dir/power_meter_flatbuffers_serialization_with_one_access.cpp.o -o power_meter_flatbuffers_serialization_with_one_access 

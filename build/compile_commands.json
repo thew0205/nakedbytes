@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/build",
+  "command": "/usr/bin/gcc -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb  -Wall -Werror -g -O0 -g -o CMakeFiles/nanopb.dir/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_decode.c.o -c /home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_decode.c",
+  "file": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_decode.c",
+  "output": "CMakeFiles/nanopb.dir/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_decode.c.o"
+},
+{
+  "directory": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/build",
+  "command": "/usr/bin/gcc -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb  -Wall -Werror -g -O0 -g -o CMakeFiles/nanopb.dir/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_encode.c.o -c /home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_encode.c",
+  "file": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_encode.c",
+  "output": "CMakeFiles/nanopb.dir/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_encode.c.o"
+},
+{
+  "directory": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/build",
+  "command": "/usr/bin/gcc -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb  -Wall -Werror -g -O0 -g -o CMakeFiles/nanopb.dir/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_common.c.o -c /home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_common.c",
+  "file": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_common.c",
+  "output": "CMakeFiles/nanopb.dir/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb/pb_common.c.o"
+},
+{
+  "directory": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/build",
+  "command": "/usr/bin/gcc -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/build -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/nanopb  -Wall -Werror -g -O0 -g -o CMakeFiles/proto.dir/power_meter.pb.c.o -c /home/busoye_tm/Documents/matthew/projects/nakedbytes/build/power_meter.pb.c",
+  "file": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/build/power_meter.pb.c",
+  "output": "CMakeFiles/proto.dir/power_meter.pb.c.o"
+}
+]

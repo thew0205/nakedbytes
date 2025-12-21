@@ -1,0 +1,52 @@
+{
+    "namespace": "PowerMeter",
+    "offset_size": 2,
+    "version": 5,
+    "root_type": "MeterData",
+    "types": [
+        {
+            "name": "MeterData",
+            "type": "class",
+            "members": [
+                {
+                    "name": "id",
+                    "type": "string"
+                },
+                {
+                    "name": "voltage",
+                    "type": "float32",
+                    "default_value": 230
+                },
+                {
+                    "name": "current",
+                    "type": "float32"
+                },
+                {
+                    "name": "power",
+                    "type": "float32"
+                },
+                {
+                    "name": "energy",
+                    "type": "float32"
+                },
+                {
+                    "name": "freq",
+                    "type": "float32"
+                },
+                {
+                    "name": "pf",
+                    "type": "float32"
+                },
+                {
+                    "name": "alarms",
+                    "type": "uint16",
+                    "default_value": 255
+                },
+                {
+                    "name": "timestamp",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}

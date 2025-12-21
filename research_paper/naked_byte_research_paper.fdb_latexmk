@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1766092345.73454 "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_paper/naked_byte_research_paper.tex" "naked_byte_research_paper.pdf" "naked_byte_research_paper" 1766092346.73429 0
+["pdflatex"] 1766181849.81714 "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_paper/naked_byte_research_paper.tex" "naked_byte_research_paper.pdf" "naked_byte_research_paper" 1766181850.90072 0
   "/etc/texmf/web2c/texmf.cnf" 1749155634.01611 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_paper/naked_byte_research_paper.tex" 1766092344.49655 672 635e87ce53756306ccf9b0410528a6e8 ""
+  "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_paper/naked_byte_research_paper.tex" 1766181848.31644 8236 4cfc45cbe47be03e27496838270b7fe0 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm" 1136768653 1296 45809c5a464d5f32c8f98ba97c1bb47f ""
   "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -63,6 +63,7 @@
   "/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty" 1700082560 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc" 1202520719 2327 9d6df24f9c4f7368395224341a95523a ""
+  "/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc" 1254269338 3031 6c4d3515bf7115d8518af1c9ab97ca44 ""
   "/usr/share/texmf/fonts/tfm/public/lm/lmex10.tfm" 1148093231 992 ce925c9346c7613270a79afbee98c070 ""
   "/usr/share/texmf/fonts/tfm/public/lm/lmmi12.tfm" 1148093231 1524 753b192b18f2991794f9d41a8228510b ""
   "/usr/share/texmf/fonts/tfm/public/lm/lmmi6.tfm" 1148093231 1512 94a3fd88c6f27dbd9ecb46987e297a4e ""
@@ -77,6 +78,7 @@
   "/usr/share/texmf/fonts/tfm/public/lm/rm-lmr17.tfm" 1254269338 11948 fa976674f030491ad35532a8a1e37325 ""
   "/usr/share/texmf/fonts/tfm/public/lm/rm-lmr6.tfm" 1254269338 11836 e3b6ce3e601aec94f64a536e7f4224d5 ""
   "/usr/share/texmf/fonts/tfm/public/lm/rm-lmr8.tfm" 1254269338 11864 309fd7f43e4a0ba39f6f7644d76e8edf ""
+  "/usr/share/texmf/fonts/tfm/public/lm/ts1-lmr10.tfm" 1254269338 1556 b86d923e6b2f9aab2e313098a95cb0b8 ""
   "/usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb" 1255129361 121021 1bf809ce4a594679006bd72263eba59b ""
   "/usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb" 1255129361 116908 1fca96723793882c2e0160350c192fc8 ""
   "/usr/share/texmf/fonts/type1/public/lm/lmr10.pfb" 1255129361 119235 f35b44530a1d90eb90fe15d9cba67ea0 ""
@@ -87,12 +89,13 @@
   "/usr/share/texmf/tex/latex/lm/omslmsy.fd" 1616454256 807 3de192f3efa968913bd2f096a7b430d8 ""
   "/usr/share/texmf/tex/latex/lm/omxlmex.fd" 1616454256 568 a5494d810f2680caf10205cd1226c76c ""
   "/usr/share/texmf/tex/latex/lm/ot1lmr.fd" 1616454256 1882 28c08db1407ebff35a658fd141753d16 ""
+  "/usr/share/texmf/tex/latex/lm/ts1lmr.fd" 1616454256 1914 884882d7ebb0fd65cea93fca77ff6f5a ""
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1749573967.58423 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1749573995 8214764 cbb5f90d23306f666826a02c48e802ec ""
-  "naked_byte_research_paper.aux" 1766092346.61661 607 3c50b9a028204044b9c8c7aeffeb1921 "pdflatex"
-  "naked_byte_research_paper.out" 1766092346.61761 466 c462a34f470c1535822efe908f245fef "pdflatex"
-  "naked_byte_research_paper.tex" 1766092344.49655 672 635e87ce53756306ccf9b0410528a6e8 ""
+  "naked_byte_research_paper.aux" 1766181850.6884 1465 2e63f01d24e3668ff0cbd144338a18cb "pdflatex"
+  "naked_byte_research_paper.out" 1766181850.6894 1502 f1732964e129155fa47750ada97087b4 "pdflatex"
+  "naked_byte_research_paper.tex" 1766181848.31644 8236 4cfc45cbe47be03e27496838270b7fe0 ""
   (generated)
   "naked_byte_research_paper.aux"
   "naked_byte_research_paper.log"

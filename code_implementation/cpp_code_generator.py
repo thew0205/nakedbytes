@@ -21,7 +21,7 @@ def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace:
 
     defined_type: List[str] = []
     str_file += get_all_type_definition(types_desc, root_type_name, defined_type)
-    str_file += get_root_type_definition(types_desc, root_type_name)
+    # str_file += get_root_type_definition(types_desc, root_type_name)
     if namespace:
         str_file += f'\n}} // namespace {namespace}\n'
         

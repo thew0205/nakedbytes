@@ -24,12 +24,141 @@
 \begin{abstract}
 
 \end{abstract}
+
 \section{Introduction}
 
 \section{Related Work}
 
 \section{Methodology}
+This paper present a comparative analysis on the three serialization framework with the aim to give a holistic analysis of them.
+The analysis focuses on the following major parameters:
+\begin{itemize}
+    \item {Resulting Binary}: This deals with the resulting storage requirement of the serialized binary output.
+    \item {Size}: This includes program size, and static ram usage.
+    \item {Computation time}: This includes the time required for serialization and Deserialization of the data into usage format int he native programming languages.
+    \item {Memory Usage}: This includes the stack and heap allocation requirement during serialization and Deserialization.
+    \item {Compatibility}: This includes forward and backward compatibility.
+\end{itemize}
+
+To experiment and analysis were curated to be able to determine the above parameters analytical while removing noise.
+
+The experiment was performed on the following data struct:
+
+The experiment carried out are then divided:
+\begin{itemize}
+    \item A simple code that contains utility code and functions and test are carried out to determine the default overhead added.
+    \item A Deserialization alone.
+    \item A Deserialization with one field access.
+    \item A deserialization with all fields access.
+    \item A deserialization with nested fields.
+    \item A serialization alone.
+    \item A serialization with one field access.
+    \item A serialization with all fields access.
+    \item A serialization with nested fields.
+    \item A serialization and Deserialization alone.
+    \item A serialization and Deserialization with one field access.
+    \item A serialization and deserialization with all fields access.
+    \item A serialization and deserialization with nested fields.
+\end{itemize}
+
+These experiment are both performed on the Dell Inc. Precision 5530 Intel® Core™ i9-8950HK × 12 Ubuntu 24.04.3 LTS 64-bit pc and rp2350  Dual Arm Cortex-M33 (150MHz)  520 KB 32 bit.
+
+
+\section{Methodology}
+
+This paper presents a comparative experimental evaluation of three serialization frameworks—NakedBytes, FlatBuffers, and Protocol Buffers—with the objective of providing a holistic and practically relevant analysis of their behavior across constrained and general-purpose systems. The evaluation is designed to capture not only serialized size, but also runtime, memory usage, and compatibility characteristics that are critical in energy-sector and embedded deployments.
+
+\subsection{Evaluation Parameters}
+
+The analysis focuses on the following primary parameters:
+
+\begin{itemize}
+    \item \textbf{Resulting Binary Size}: The size of the serialized output buffer produced by each framework for equivalent data structures. This metric captures the efficiency of the on-wire or stored representation, including all internal metadata.
+    
+    \item \textbf{Code Size and Static Memory Usage}: This includes the compiled program size (flash/ROM footprint) and static RAM usage introduced by the serialization framework and generated code.
+    
+    \item \textbf{Computation Time}: The execution time required for serialization and deserialization operations, measured separately. This includes the cost of parsing, offset resolution, and field access in the native programming language.
+    
+    \item \textbf{Memory Usage}: The runtime memory requirements during serialization and deserialization, including:
+    \begin{itemize}
+        \item Stack usage
+        \item Heap usage (if any)
+        \item Temporary buffers or scratch memory
+    \end{itemize}
+    
+    \item \textbf{Compatibility Properties}: The support for forward and backward compatibility, including schema evolution behavior, optional fields, and handling of missing or unknown fields.
+\end{itemize}
+
+These parameters were selected based on prior empirical studies of serialization frameworks and reflect constraints commonly encountered in embedded energy systems, industrial devices, and microcontroller-based platforms.
+
+\subsection{Experimental Design}
+
+The experiments were carefully curated to isolate individual costs and minimize measurement noise. All benchmarks were conducted using equivalent logical data models and access patterns across frameworks. Where applicable, generated code was used rather than hand-written adapters, reflecting real-world usage.
+
+To enable fine-grained analysis, the experiments were divided into the following categories:
+
+\begin{itemize}
+    \item \textbf{Baseline Overhead}: A minimal program containing only framework utilities and generated code, used to determine default code size and static memory overhead.
+    
+    \item \textbf{Deserialization Only}:
+    \begin{itemize}
+        \item Deserialization without field access
+        \item Deserialization with single-field access
+        \item Deserialization with full-field access
+        \item Deserialization with nested-field access
+    \end{itemize}
+    
+    \item \textbf{Serialization Only}:
+    \begin{itemize}
+        \item Serialization without field access
+        \item Serialization with single-field access
+        \item Serialization with full-field access
+        \item Serialization with nested-field access
+    \end{itemize}
+    
+    \item \textbf{Combined Serialization and Deserialization}:
+    \begin{itemize}
+        \item Serialization followed by deserialization without field access
+        \item Serialization and deserialization with single-field access
+        \item Serialization and deserialization with full-field access
+        \item Serialization and deserialization with nested-field access
+    \end{itemize}
+\end{itemize}
+
+This decomposition allows the separation of pure encoding/decoding costs from access-related overhead and highlights the impact of nested structures and variable-length fields.
+
+\subsection{Test Data Structures}
+
+All experiments were conducted using representative data structures derived from real-world SunSpec models. These structures include a mix of fixed-length primitive fields, variable-length fields, nested structures, and optional elements to reflect realistic energy-sector workloads.
+
+\subsection{Experimental Platforms}
+
+To evaluate behavior across both high-performance and constrained environments, all experiments were executed on the following platforms:
+
+\begin{itemize}
+    \item \textbf{Desktop System}:  
+    Dell Inc. Precision 5530, Intel® Core™ i9-8950HK (12 threads), Ubuntu 24.04.3 LTS (64-bit)
+    
+    \item \textbf{Embedded System}:  
+    RP2350 microcontroller, dual Arm Cortex-M33 at 150\,MHz, 520\,KB RAM, 32-bit architecture
+\end{itemize}
+
+On both platforms, identical logical benchmarks were executed. Compiler optimizations were fixed across experiments, and measurements were repeated multiple times to ensure consistency. Timing measurements exclude I/O and logging overhead and focus solely on serialization-related computation.
+
+\subsection{Measurement Considerations}
+
+To reduce noise and ensure reproducibility:
+\begin{itemize}
+    \item Warm-up iterations were executed prior to timing measurements.
+    \item Heap allocations were tracked explicitly to detect dynamic memory usage.
+    \item Stack usage was measured using static analysis and runtime watermarking on embedded targets.
+    \item All serialized buffers were validated for correctness after each experiment.
+\end{itemize}
+
+This methodology enables a fair, repeatable, and implementation-independent comparison of serialization frameworks under conditions representative of real-world energy and embedded systems.
 
 \section{Results and Discussion}
+
+\section{Conclusion}
 
 \end{document}
