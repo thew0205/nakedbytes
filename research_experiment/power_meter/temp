@@ -1,0 +1,703 @@
++ cmake -S . -B build
++ cmake --build build -j12
+
+======================================================================================================
+Analyzing for overhead_deserialization ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_overhead_deserialization
+{
+  "key": "overhead_deserialization",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 639,
+      "buffer_size": 0
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 201,
+      "buffer_size": 0
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 202,
+      "buffer_size": 0
+    }
+  ],
+  "size_results": {
+    "text": "4439",
+    "data": "672",
+    "bss": "8",
+    "dec": "5119",
+    "hex": "13ff",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_overhead_deserialization"
+  }
+}
+
+======================================================================================================
+Analyzing for nakedbytes_deserialization_without_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_deserialization_without_access
+{
+  "key": "nakedbytes_deserialization_without_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 357,
+      "buffer_size": 72
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 468,
+      "buffer_size": 72
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 492,
+      "buffer_size": 72
+    }
+  ],
+  "size_results": {
+    "text": "4452",
+    "data": "672",
+    "bss": "8",
+    "dec": "5132",
+    "hex": "140c",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_deserialization_without_access"
+  }
+}
+
+======================================================================================================
+Analyzing for nakedbytes_deserialization_with_one_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_deserialization_with_one_access
+{
+  "key": "nakedbytes_deserialization_with_one_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 733,
+      "buffer_size": 72
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 637,
+      "buffer_size": 72
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 813,
+      "buffer_size": 72
+    }
+  ],
+  "size_results": {
+    "text": "5153",
+    "data": "680",
+    "bss": "8",
+    "dec": "5841",
+    "hex": "16d1",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_deserialization_with_one_access"
+  }
+}
+
+======================================================================================================
+Analyzing for nakedbytes_deserialization_with_all_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_deserialization_with_all_access
+{
+  "key": "nakedbytes_deserialization_with_all_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 3266,
+      "buffer_size": 72
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 3388,
+      "buffer_size": 72
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 2738,
+      "buffer_size": 72
+    }
+  ],
+  "size_results": {
+    "text": "7361",
+    "data": "688",
+    "bss": "8",
+    "dec": "8057",
+    "hex": "1f79",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_deserialization_with_all_access"
+  }
+}
+
+======================================================================================================
+Analyzing for flatbuffers_deserialization_without_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_deserialization_without_access
+{
+  "key": "flatbuffers_deserialization_without_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 1587,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 2145,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 2607,
+      "buffer_size": 108
+    }
+  ],
+  "size_results": {
+    "text": "5186",
+    "data": "688",
+    "bss": "8",
+    "dec": "5882",
+    "hex": "16fa",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_deserialization_without_access"
+  }
+}
+
+======================================================================================================
+Analyzing for flatbuffers_deserialization_with_one_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_deserialization_with_one_access
+{
+  "key": "flatbuffers_deserialization_with_one_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 5409,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 5099,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 5248,
+      "buffer_size": 108
+    }
+  ],
+  "size_results": {
+    "text": "6413",
+    "data": "688",
+    "bss": "8",
+    "dec": "7109",
+    "hex": "1bc5",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_deserialization_with_one_access"
+  }
+}
+
+======================================================================================================
+Analyzing for flatbuffers_deserialization_with_all_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_deserialization_with_all_access
+{
+  "key": "flatbuffers_deserialization_with_all_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 33928,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 33623,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 33981,
+      "buffer_size": 108
+    }
+  ],
+  "size_results": {
+    "text": "8912",
+    "data": "696",
+    "bss": "8",
+    "dec": "9616",
+    "hex": "2590",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_deserialization_with_all_access"
+  }
+}
+
+======================================================================================================
+Analyzing for protobuf_deserialization_without_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_deserialization_without_access
+{
+  "key": "protobuf_deserialization_without_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 41060,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 40414,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 38213,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "2764956",
+    "data": "40072",
+    "bss": "114484",
+    "dec": "2919512",
+    "hex": "2c8c58",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_deserialization_without_access"
+  }
+}
+
+======================================================================================================
+Analyzing for protobuf_deserialization_with_one_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_deserialization_with_one_access
+{
+  "key": "protobuf_deserialization_with_one_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 41439,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 37621,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 51643,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "2765752",
+    "data": "40080",
+    "bss": "114484",
+    "dec": "2920316",
+    "hex": "2c8f7c",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_deserialization_with_one_access"
+  }
+}
+
+======================================================================================================
+Analyzing for protobuf_deserialization_with_all_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_deserialization_with_all_access
+{
+  "key": "protobuf_deserialization_with_all_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 54066,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 54618,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 52102,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "2767785",
+    "data": "40088",
+    "bss": "114484",
+    "dec": "2922357",
+    "hex": "2c9775",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_deserialization_with_all_access"
+  }
+}
+
+======================================================================================================
+Analyzing for nanopb_deserialization_without_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_deserialization_without_access
+{
+  "key": "nanopb_deserialization_without_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 135165,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 123500,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 168035,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "21095",
+    "data": "736",
+    "bss": "8",
+    "dec": "21839",
+    "hex": "554f",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_deserialization_without_access"
+  }
+}
+
+======================================================================================================
+Analyzing for nanopb_deserialization_with_one_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_deserialization_with_one_access
+{
+  "key": "nanopb_deserialization_with_one_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 122916,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 128294,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 120182,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "21741",
+    "data": "744",
+    "bss": "8",
+    "dec": "22493",
+    "hex": "57dd",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_deserialization_with_one_access"
+  }
+}
+
+======================================================================================================
+Analyzing for nanopb_deserialization_with_all_access ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_deserialization_with_all_access
+{
+  "key": "nanopb_deserialization_with_all_access",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 147501,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 133592,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 136622,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "23060",
+    "data": "744",
+    "bss": "8",
+    "dec": "23812",
+    "hex": "5d04",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_deserialization_with_all_access"
+  }
+}
+
+======================================================================================================
+Analyzing for overhead_serialization ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_overhead_serialization
+{
+  "key": "overhead_serialization",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 214,
+      "buffer_size": 0
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 236,
+      "buffer_size": 0
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 391,
+      "buffer_size": 0
+    }
+  ],
+  "size_results": {
+    "text": "3486",
+    "data": "632",
+    "bss": "8",
+    "dec": "4126",
+    "hex": "101e",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_overhead_serialization"
+  }
+}
+
+======================================================================================================
+Analyzing for nakedbytes_serialization_primitives ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_serialization_primitives
+{
+  "key": "nakedbytes_serialization_primitives",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 8533,
+      "buffer_size": 36
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 9142,
+      "buffer_size": 36
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 9356,
+      "buffer_size": 36
+    }
+  ],
+  "size_results": {
+    "text": "7492",
+    "data": "664",
+    "bss": "8",
+    "dec": "8164",
+    "hex": "1fe4",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_serialization_primitives"
+  }
+}
+
+======================================================================================================
+Analyzing for nakedbytes_serialization_all ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_serialization_all
+{
+  "key": "nakedbytes_serialization_all",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 14684,
+      "buffer_size": 71
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 13568,
+      "buffer_size": 71
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 21789,
+      "buffer_size": 71
+    }
+  ],
+  "size_results": {
+    "text": "8770",
+    "data": "688",
+    "bss": "8",
+    "dec": "9466",
+    "hex": "24fa",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nakedbytes_serialization_all"
+  }
+}
+
+======================================================================================================
+Analyzing for flatbuffers_serialization_primitives ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_serialization_primitives
+{
+  "key": "flatbuffers_serialization_primitives",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 132419,
+      "buffer_size": 56
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 126653,
+      "buffer_size": 56
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 109269,
+      "buffer_size": 56
+    }
+  ],
+  "size_results": {
+    "text": "25161",
+    "data": "888",
+    "bss": "8",
+    "dec": "26057",
+    "hex": "65c9",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_serialization_primitives"
+  }
+}
+
+======================================================================================================
+Analyzing for flatbuffers_serialization_all ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_serialization_all
+{
+  "key": "flatbuffers_serialization_all",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 179877,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 189342,
+      "buffer_size": 108
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 185854,
+      "buffer_size": 108
+    }
+  ],
+  "size_results": {
+    "text": "26747",
+    "data": "896",
+    "bss": "8",
+    "dec": "27651",
+    "hex": "6c03",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_flatbuffers_serialization_all"
+  }
+}
+
+======================================================================================================
+Analyzing for protobuf_serialization_primitives ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_serialization_primitives
+{
+  "key": "protobuf_serialization_primitives",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 78519,
+      "buffer_size": 33
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 69297,
+      "buffer_size": 33
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 68091,
+      "buffer_size": 33
+    }
+  ],
+  "size_results": {
+    "text": "2768492",
+    "data": "40072",
+    "bss": "114484",
+    "dec": "2923048",
+    "hex": "2c9a28",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_serialization_primitives"
+  }
+}
+
+======================================================================================================
+Analyzing for protobuf_serialization_all ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_serialization_all
+{
+  "key": "protobuf_serialization_all",
+  "program_results": [
+    {
+      "time_taken": 68663,
+      "buffer_size": 66
+    },
+    {
+      "time_taken": 69794,
+      "buffer_size": 66
+    },
+    {
+      "time_taken": 66671,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "2769817",
+    "data": "40080",
+    "bss": "114484",
+    "dec": "2924381",
+    "hex": "2c9f5d",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_protobuf_serialization_all"
+  }
+}
+
+======================================================================================================
+Analyzing for nanopb_serialization_primitives ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_serialization_primitives
+{
+  "key": "nanopb_serialization_primitives",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 98987,
+      "buffer_size": 33
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 84496,
+      "buffer_size": 33
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 81484,
+      "buffer_size": 33
+    }
+  ],
+  "size_results": {
+    "text": "30530",
+    "data": "704",
+    "bss": "8",
+    "dec": "31242",
+    "hex": "7a0a",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_serialization_primitives"
+  }
+}
+
+======================================================================================================
+Analyzing for nanopb_serialization_all ...
++ size /home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_serialization_all
+{
+  "key": "nanopb_serialization_all",
+  "program_results": [
+    {
+      "iteration": 100000,
+      "time_taken": 101711,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 101177,
+      "buffer_size": 66
+    },
+    {
+      "iteration": 100000,
+      "time_taken": 103513,
+      "buffer_size": 66
+    }
+  ],
+  "size_results": {
+    "text": "30932",
+    "data": "704",
+    "bss": "8",
+    "dec": "31644",
+    "hex": "7b9c",
+    "filename": "/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/build/power_meter_nanopb_serialization_all"
+  }
+}

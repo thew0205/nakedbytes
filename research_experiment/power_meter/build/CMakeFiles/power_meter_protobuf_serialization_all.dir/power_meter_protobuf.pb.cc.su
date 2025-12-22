@@ -1,0 +1,16 @@
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:57:3:PowerMeter::MeterDataDefaultTypeInternal::~MeterDataDefaultTypeInternal()	8	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:249:1:virtual const google::protobuf::internal::ClassData* PowerMeter::MeterData::GetClassData() const	8	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:347:24:virtual void PowerMeter::MeterData::Clear()	8	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:196:1:virtual PowerMeter::MeterData::~MeterData()	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:488:10:virtual size_t PowerMeter::MeterData::ByteSizeLong() const	8	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:212:31:static void* PowerMeter::MeterData::PlacementNew_(const void*, void*, google::protobuf::Arena*)	8	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:196:1:PowerMeter::MeterData::~MeterData()	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:379:29:virtual uint8_t* PowerMeter::MeterData::_InternalSerialize(uint8_t*, google::protobuf::io::EpsCopyOutputStream*) const	64	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:565:6:static void PowerMeter::MeterData::MergeImpl(google::protobuf::MessageLite&, const google::protobuf::MessageLite&)	96	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:139:1:PowerMeter::MeterData::MeterData(google::protobuf::Arena*)	8	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:157:1:PowerMeter::MeterData::MeterData(google::protobuf::Arena*, const PowerMeter::MeterData&)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:639:6:void PowerMeter::MeterData::CopyFrom(const PowerMeter::MeterData&)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:647:6:void PowerMeter::MeterData::InternalSwap(PowerMeter::MeterData*)	8	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.cc:663:30:google::protobuf::Metadata PowerMeter::MeterData::GetMetadata() const	16	static
+/usr/local/include/google/protobuf/port_undef.inc:85:27:inc)	8	static
+/usr/local/include/google/protobuf/port_undef.inc:85:27:inc)	8	static

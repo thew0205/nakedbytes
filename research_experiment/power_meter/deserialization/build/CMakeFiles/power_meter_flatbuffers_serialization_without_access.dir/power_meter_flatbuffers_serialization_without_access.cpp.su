@@ -1,7 +1,0 @@
-/usr/local/include/flatbuffers/buffer.h:64:13:void flatbuffers::EndianCheck()	32	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_flatbuffers_generated.h:170:37:const PowerMeter::MeterData* PowerMeter::GetMeterData(const void*)	32	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_flatbuffers_serialization_without_access.cpp:3:6:void test_function(const uint8_t*, size_t)	48	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_flatbuffers_serialization_without_access.cpp:8:6:void test_assert(const uint8_t*, size_t)	16	static
-/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = unsigned int]	16	static
-/usr/local/include/flatbuffers/buffer.h:207:31:const T* flatbuffers::GetRoot(const void*) [with T = PowerMeter::MeterData]	32	static
-/usr/local/include/flatbuffers/buffer.h:194:25:T* flatbuffers::GetMutableRoot(void*) [with T = PowerMeter::MeterData]	32	static

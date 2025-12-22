@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/power_meter_nakedbytes_serialization_with_all_access.dir/power_meter_main.cpp.o CMakeFiles/power_meter_nakedbytes_serialization_with_all_access.dir/power_meter_nakedbytes_serialization_with_all_access.cpp.o -o power_meter_nakedbytes_serialization_with_all_access 

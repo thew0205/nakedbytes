@@ -1,4 +1,0 @@
-/usr/include/c++/13/bits/std_abs.h:71:3:constexpr double std::abs(double)	16	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes.nbs.h:228:31:const float PowerMeter::MeterData::voltage() const	16	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes_serialization_with_one_access.cpp:4:6:void test_function(const uint8_t*, size_t)	48	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/deserialization/power_meter_nakedbytes_serialization_with_one_access.cpp:11:6:void test_assert(const uint8_t*, size_t)	48	static

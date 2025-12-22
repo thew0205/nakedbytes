@@ -1,0 +1,11 @@
+/usr/local/include/flatbuffers/default_allocator.h:26:7:flatbuffers::DefaultAllocator::~DefaultAllocator()	8	static
+/usr/local/include/flatbuffers/default_allocator.h:32:8:virtual void flatbuffers::DefaultAllocator::deallocate(uint8_t*, size_t)	8	static
+/usr/local/include/flatbuffers/default_allocator.h:28:12:virtual uint8_t* flatbuffers::DefaultAllocator::allocate(size_t)	8	static
+/usr/local/include/flatbuffers/default_allocator.h:26:7:virtual flatbuffers::DefaultAllocator::~DefaultAllocator()	8	static
+/usr/local/include/flatbuffers/allocator.h:41:20:virtual uint8_t* flatbuffers::Allocator::reallocate_downward(uint8_t*, size_t, size_t, size_t, size_t)	80	static
+/usr/include/c++/13/bits/stl_tree.h:1930:5:void std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_erase(_Link_type) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	96	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:157:3:flatbuffers::FlatBufferBuilderImpl<Is64Aware>::~FlatBufferBuilderImpl() [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:269:8:void flatbuffers::vector_downward<SizeT>::reallocate(size_t) [with SizeT = unsigned int]	80	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:120:41:flatbuffers::Offset<PowerMeter::MeterData> PowerMeter::CreateMeterData(flatbuffers::FlatBufferBuilder&, flatbuffers::Offset<flatbuffers::String>, float, float, float, float, float, float, uint16_t, flatbuffers::Offset<flatbuffers::String>)	160	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_flatbuffers_serialization_primitives.cpp:3:6:void test_function()	256	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_flatbuffers_serialization_primitives.cpp:13:8:size_t test_assert()	288	static

@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/power_meter_nakedbytes_serialization_primitives.dir/serialization/power_meter_main_serialization.cpp.o CMakeFiles/power_meter_nakedbytes_serialization_primitives.dir/serialization/power_meter_nakedbytes_serialization_primitives.cpp.o -o power_meter_nakedbytes_serialization_primitives 

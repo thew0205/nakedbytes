@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/power_meter_overhead_serialization.dir/serialization/power_meter_main_serialization.cpp.o CMakeFiles/power_meter_overhead_serialization.dir/serialization/power_meter_overhead_serialization.cpp.o -o power_meter_overhead_serialization 

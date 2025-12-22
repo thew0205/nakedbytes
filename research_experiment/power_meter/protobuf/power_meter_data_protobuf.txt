@@ -1,8 +1,0 @@
-voltage: 230.5
-current: 5.2
-power: 1196.6
-energy: 12345.6
-freq: 50.0
-pf: 0.98
-alarms: 1234
-g++ -g ./power_meter_protobuf_test.cpp  power_meter.pb.cc -lprotobuf -o ./power_meter_protobuf_test && ./power_meter_protobuf_test
