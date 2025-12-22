@@ -155,6 +155,32 @@ struct Serializer
         }
         return data_array_offset;
     }
+    
+     void deinit()
+        {
+            if (_buffer != nullptr)
+            {
+                free(_buffer);
+                _buffer = nullptr;
+                _buffer_size = 0;
+                _tail_offset = 0;
+            }
+        }
+
+        ~Serializer()
+        {
+            deinit();
+        } 
+        
+        const unsigned char *get_buffer() const
+        {
+            return _buffer;
+        }
+
+        size_t get_size() const
+        {
+            return _tail_offset;
+        }
 };
 }; //namespace nakedbytes
 """
@@ -214,9 +240,9 @@ def generate_struct_serializer_fields(type_desc: TypeDesc, is_root_type: bool, a
             continue
         type_name = get_cpp_type_name(mem.type_desc)
         if mem.is_offset_type:
-            ret_str += f"*reinterpret_cast<uint16_t *>(&(serializer->_buffer[{"current_offset" if is_root_type else "serializer->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = {access_prefix}{mem.name}.offset - ({"current_offset" if is_root_type else "serializer->_tail_offset"} {additional_prefix} +{type_desc.name.upper()}_{mem.name.upper()}_OFFSET);\n"
+            ret_str += f"*reinterpret_cast<uint16_t *>(&({"this" if is_root_type else "serializer"}->_buffer[{"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = {access_prefix}{mem.name}.offset - ({"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} +{type_desc.name.upper()}_{mem.name.upper()}_OFFSET);\n"
         elif mem.type_desc.is_primitive or mem.type_desc.type_type == 'enum':
-            ret_str += f"*reinterpret_cast<{type_name} *>(&(serializer->_buffer[{"current_offset" if is_root_type else "serializer->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = {access_prefix}{mem.name};\n"
+            ret_str += f"*reinterpret_cast<{type_name} *>(&({"this" if is_root_type else "serializer"}->_buffer[{"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = {access_prefix}{mem.name};\n"
         elif mem.type_desc.type_type == 'struct':
             ret_str += "\n\n" + generate_struct_serializer_fields(mem.type_desc, is_root_type= is_root_type, additional_prefix= additional_prefix + f"  + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET", access_prefix= access_prefix + f"{mem.name}.")
         
@@ -225,8 +251,10 @@ def generate_struct_serializer_fields(type_desc: TypeDesc, is_root_type: bool, a
               
     return ret_str
             
-def generate_serialization_function_parameters(type_desc: TypeDesc) -> str: 
+def generate_serialization_function_parameters(type_desc: TypeDesc, prepend_comma: bool) -> str: 
     ret_str  = ""
+    if prepend_comma:
+        ret_str += ","
     for mem in type_desc.members:
         if mem.name.startswith('pad'):
             continue
@@ -243,10 +271,10 @@ def generate_serialization_function_parameters(type_desc: TypeDesc) -> str:
             type_name = f"::nakedbytes::Vector<{type_name}>"
             
         if mem.is_offset_type:
-            ret_str += f",\n const ::nakedbytes::SerializeOffset<{type_name}> {mem.name}"
+            ret_str += f"\n const ::nakedbytes::SerializeOffset<{type_name}> {mem.name},"
         else:
-            ret_str += f",\n const {type_name} {mem.name}"
-    return ret_str 
+            ret_str += f"\n const {type_name} {mem.name},"
+    return ret_str [:-1]  # remove last comma
           
 def generate_offset_serialization_function(type_desc: TypeDesc) -> str:
 
@@ -254,7 +282,7 @@ def generate_offset_serialization_function(type_desc: TypeDesc) -> str:
     ret_str += f"inline ::nakedbytes::SerializeOffset<{type_desc.name}> serialize_{type_desc.name.lower()}"
     ret_str += "(::nakedbytes::Serializer *const serializer"
     
-    ret_str += generate_serialization_function_parameters(type_desc= type_desc)
+    ret_str += generate_serialization_function_parameters(type_desc= type_desc, prepend_comma= True)
     ret_str += "){\n"
     
     ret_str += f"::nakedbytes::SerializeOffset<{type_desc.name}> {type_desc.name.lower()}_offset;\n"
@@ -286,31 +314,55 @@ def get_all_types_offset_serialization_function(types_desc: set[TypeDesc]) -> st
 
 
 
-def generate_root_type_serialization_function(types_desc: 
+def generate_root_type_serialization_class(types_desc: 
     set[TypeDesc], root_type_name: str) -> str:
     ret_str = ""
     root_type_desc =cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc))
-    ret_str += "inline unsigned char *"
-    ret_str += f"serialize_{root_type_desc.name.lower()}_root"
-    ret_str += "(::nakedbytes::Serializer *const serializer"
+    ret_str += f"struct {root_type_desc.name}Serializer : public ::nakedbytes::Serializer{{\n"
     
-    ret_str += generate_serialization_function_parameters(type_desc=root_type_desc)
    
-    ret_str += "){\n"
-    
-    ret_str += f"uint16_t current_offset = OFFSET_SIZE * 2 + ::nakedbytes::get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);\n"
+    ret_str += f"    void init(size_t buffer_size){{\n"
+    ret_str += f"        ::nakedbytes::Serializer::init(buffer_size, {root_type_desc.name.upper()}_SIZE, {root_type_desc.name.upper()}_ALIGNMENT);\n"
+    ret_str += f"    }}\n\n"
+    ret_str += f"    inline size_t serialize_root("
+    ret_str += generate_serialization_function_parameters(type_desc= root_type_desc, prepend_comma= False)
+    ret_str += f"){{\n"
+    ret_str += f"        uint16_t current_offset = OFFSET_SIZE * 2 + ::nakedbytes::get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);\n"
     if root_type_desc.type_type == 'class':
-        ret_str += f"*reinterpret_cast<int16_t *>(&(serializer->_buffer[current_offset + {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = {root_type_desc.name.upper()}_SIZE;"
-    
-    ret_str += '\n\n'
-    
+        ret_str += f"        *reinterpret_cast<int16_t *>(&(this->_buffer[current_offset + {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = {root_type_desc.name.upper()}_SIZE;\n"
+
+
     ret_str += generate_struct_serializer_fields(root_type_desc, is_root_type= True, additional_prefix= "", access_prefix = "")
     ret_str += "\n"
            
-    ret_str += "*reinterpret_cast<uint16_t*>(&(serializer->_buffer[0])) = serializer->_tail_offset;\n"
+    ret_str += "*reinterpret_cast<uint16_t*>(&(this->_buffer[0])) = this->_tail_offset;\n"
     ret_str += "\n"
-    ret_str += "return serializer->_buffer;\n"
-    ret_str += "}"
+    ret_str += "return this->_tail_offset;\n"
+    ret_str += f"}}"
+    
+    ret_str += f"}};\n\n"
+    
+    # ret_str += "inline unsigned char *"
+    # ret_str += f"serialize_{root_type_desc.name.lower()}_root"
+    # ret_str += "(::nakedbytes::Serializer *const serializer"
+    
+    # ret_str += generate_serialization_function_parameters(type_desc=root_type_desc)
+   
+    # ret_str += "){\n"
+    
+    # ret_str += f"uint16_t current_offset = OFFSET_SIZE * 2 + ::nakedbytes::get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);\n"
+    # if root_type_desc.type_type == 'class':
+    #     ret_str += f"*reinterpret_cast<int16_t *>(&(serializer->_buffer[current_offset + {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = {root_type_desc.name.upper()}_SIZE;"
+    
+    # ret_str += '\n\n'
+    
+    # ret_str += generate_struct_serializer_fields(root_type_desc, is_root_type= True, additional_prefix= "", access_prefix = "")
+    # ret_str += "\n"
+           
+    # ret_str += "*reinterpret_cast<uint16_t*>(&(serializer->_buffer[0])) = serializer->_tail_offset;\n"
+    # ret_str += "\n"
+    # ret_str += "return serializer->_buffer;\n"
+    # ret_str += "}"
     
     return ret_str
 

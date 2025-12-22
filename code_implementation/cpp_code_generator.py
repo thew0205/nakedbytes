@@ -1,6 +1,6 @@
 from typing import List
 from code_implementation.cpp_code_generator_deserializer import get_all_type_declaration, get_all_type_definition, get_base_offset_types, get_header_files, get_root_type_definition
-from code_implementation.cpp_code_serializer import generate_all_types_serialize_vector_struct, generate_root_type_serialization_function, get_all_type_struct_offset_struct_field_struct, get_all_types_offset_serialization_function, get_base_serializer_class_function
+from code_implementation.cpp_code_serializer import generate_all_types_serialize_vector_struct, generate_root_type_serialization_class, get_all_type_struct_offset_struct_field_struct, get_all_types_offset_serialization_function, get_base_serializer_class_function
 from code_implementation.type_desc_holder import TypeDesc
 
 
@@ -35,7 +35,7 @@ def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace:
     str_file += '\n\n'
     str_file += generate_all_types_serialize_vector_struct(types_desc= types_desc)
     str_file += '\n\n'
-    str_file += generate_root_type_serialization_function(types_desc, root_type_name)
+    str_file += generate_root_type_serialization_class(types_desc, root_type_name)
     if namespace:
         str_file += f'\n}} // namespace {namespace}\n'
     
