@@ -6,14 +6,15 @@ from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_ty
 def get_base_serializer_class_function() -> str:
     return """
 namespace nakedbytes{
-NAKEDBYTES_FORCE_INLINE size_t get_padding_size(size_t offset, uint16_t alignment)
+NAKEDBYTES_FORCE_INLINE uint16_t get_padding_size(uint16_t offset, uint16_t alignment)
 {
-    return (alignment - (offset % alignment)) % alignment;
+    return static_cast<uint16_t>((alignment - (offset % alignment)) % alignment);
 }
 
 template <typename T>
 struct SerializeOffset
 {
+    // Offset relative to the start of the buffer
     uint16_t offset = 0;
 
     template<typename U = void>
@@ -37,8 +38,6 @@ struct is_serializable_offset_Type<SerializeOffset<T>> : std::true_type
 struct Serializer
 {
 
-#define VERSION 1
-#define OFFSET_SIZE 2
 
     unsigned char *_buffer = nullptr;
     uint16_t _buffer_size = 0;
@@ -47,11 +46,11 @@ struct Serializer
 
     void init(uint16_t buffer_size, const uint16_t root_type_size, uint16_t root_type_alignment)
     {
-        _buffer = reinterpret_cast<unsigned char *>(malloc(buffer_size));
+        _buffer = static_cast<unsigned char *>(malloc(buffer_size));
         _buffer_size = buffer_size;
         *reinterpret_cast<uint16_t *>(&_buffer[OFFSET_SIZE]) = VERSION;
 
-        _tail_offset = get_padding_size(OFFSET_SIZE * 2, root_type_alignment) + OFFSET_SIZE * 2 + root_type_size;
+        _tail_offset = static_cast<uint16_t>(get_padding_size(OFFSET_SIZE * 2, root_type_alignment) + OFFSET_SIZE * 2 + root_type_size);
         make_buffer_adequate();
     }
 
@@ -75,8 +74,8 @@ struct Serializer
         }
         else
         {
-            size_t len = strlen(str);
-            _tail_offset += get_padding_size(_tail_offset, OFFSET_SIZE);
+            uint16_t len = static_cast<uint16_t>(strlen(str));
+            _tail_offset += static_cast<uint16_t>(get_padding_size(_tail_offset, OFFSET_SIZE));
 
             make_buffer_adequate();
             str_offset.offset = _tail_offset;
@@ -85,7 +84,7 @@ struct Serializer
             _tail_offset += OFFSET_SIZE;
             memcpy(&_buffer[_tail_offset], str, len);
             *reinterpret_cast<unsigned char *>(&(((unsigned char *)_buffer)[_tail_offset + len])) = 0;
-            _tail_offset += len + 1;
+            _tail_offset += static_cast<uint16_t>(len + 1);
         }
         return str_offset;
     }
@@ -94,7 +93,7 @@ struct Serializer
     typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_enum<T>::value), SerializeOffset<T>>::type serialize_primitive(T data)
     {
         SerializeOffset<T> data_offset;
-        _tail_offset += get_padding_size(_tail_offset, sizeof(T));
+        _tail_offset += static_cast<uint16_t>(get_padding_size(_tail_offset, sizeof(T)));
 
         make_buffer_adequate();
         data_offset.offset = _tail_offset;
@@ -122,7 +121,7 @@ struct Serializer
     typename std::enable_if<(std::is_integral<vec_inner_t<T>>::value || std::is_floating_point<vec_inner_t<T>>::value || std::is_enum<vec_inner_t<T>>::value), SerializeOffset<Vector<vec_inner_t<T>>>>::type serialize_vector(T data_array)
     {
         SerializeOffset<Vector<vec_inner_t<T>>> data_array_offset;
-        size_t len = data_array.size();
+        uint16_t len = static_cast<uint16_t>(data_array.size());
         _tail_offset += get_padding_size(_tail_offset, OFFSET_SIZE);
 
         make_buffer_adequate();
@@ -139,7 +138,7 @@ struct Serializer
     typename std::enable_if<(is_serializable_offset_Type<vec_inner_t<T>>::value), SerializeOffset<Vector<vec_inner_t<T>>>>::type serialize_vector(T data_array)
     {
         SerializeOffset<Vector<vec_inner_t<T>>> data_array_offset;
-        size_t len = data_array.size();
+        uint16_t len = static_cast<uint16_t>(data_array.size());
         _tail_offset += get_padding_size(_tail_offset, OFFSET_SIZE);
 
         make_buffer_adequate();
@@ -240,9 +239,9 @@ def generate_struct_serializer_fields(type_desc: TypeDesc, is_root_type: bool, a
             continue
         type_name = get_cpp_type_name(mem.type_desc)
         if mem.is_offset_type:
-            ret_str += f"*reinterpret_cast<uint16_t *>(&({"this" if is_root_type else "serializer"}->_buffer[{"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = {access_prefix}{mem.name}.offset - ({"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} +{type_desc.name.upper()}_{mem.name.upper()}_OFFSET);\n"
+            ret_str += f"*reinterpret_cast<int16_t *>(&({"this" if is_root_type else "serializer"}->_buffer[{"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = static_cast<int16_t>({access_prefix}{mem.name}.offset - ({"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} +{type_desc.name.upper()}_{mem.name.upper()}_OFFSET));\n"
         elif mem.type_desc.is_primitive or mem.type_desc.type_type == 'enum':
-            ret_str += f"*reinterpret_cast<{type_name} *>(&({"this" if is_root_type else "serializer"}->_buffer[{"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = {access_prefix}{mem.name};\n"
+            ret_str += f"*reinterpret_cast<{type_name} *>(&({"this" if is_root_type else "serializer"}->_buffer[{"current_offset" if is_root_type else f"{"this" if is_root_type else "serializer"}->_tail_offset"} {additional_prefix} + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET])) = static_cast<{type_name}>({access_prefix}{mem.name});\n"
         elif mem.type_desc.type_type == 'struct':
             ret_str += "\n\n" + generate_struct_serializer_fields(mem.type_desc, is_root_type= is_root_type, additional_prefix= additional_prefix + f"  + {type_desc.name.upper()}_{mem.name.upper()}_OFFSET", access_prefix= access_prefix + f"{mem.name}.")
         
@@ -321,15 +320,15 @@ def generate_root_type_serialization_class(types_desc:
     ret_str += f"struct {root_type_desc.name}Serializer : public ::nakedbytes::Serializer{{\n"
     
    
-    ret_str += f"    void init(size_t buffer_size){{\n"
+    ret_str += f"    void init(uint16_t buffer_size){{\n"
     ret_str += f"        ::nakedbytes::Serializer::init(buffer_size, {root_type_desc.name.upper()}_SIZE, {root_type_desc.name.upper()}_ALIGNMENT);\n"
     ret_str += f"    }}\n\n"
-    ret_str += f"    inline size_t serialize_root("
+    ret_str += f"    inline uint16_t serialize_root("
     ret_str += generate_serialization_function_parameters(type_desc= root_type_desc, prepend_comma= False)
     ret_str += f"){{\n"
-    ret_str += f"        uint16_t current_offset = OFFSET_SIZE * 2 + ::nakedbytes::get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT);\n"
+    ret_str += f"        uint16_t current_offset = static_cast<uint16_t>(OFFSET_SIZE * 2 + ::nakedbytes::get_padding_size(OFFSET_SIZE * 2, {root_type_desc.name.upper()}_ALIGNMENT));\n"
     if root_type_desc.type_type == 'class':
-        ret_str += f"        *reinterpret_cast<int16_t *>(&(this->_buffer[current_offset + {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = {root_type_desc.name.upper()}_SIZE;\n"
+        ret_str += f"        *reinterpret_cast<uint16_t *>(&(this->_buffer[current_offset + {root_type_desc.name.upper()}_MEMBER_SIZE_OFFSET])) = static_cast<uint16_t>({root_type_desc.name.upper()}_SIZE);\n"
 
 
     ret_str += generate_struct_serializer_fields(root_type_desc, is_root_type= True, additional_prefix= "", access_prefix = "")
@@ -372,8 +371,8 @@ def generate_serialize_vector_struct(type_desc: TypeDesc) -> str:
     ret_str += f"serialize_vector_{type_desc.name.lower()}_struct("
     ret_str += f"::nakedbytes::Serializer *const serializer, std::vector<{type_desc.name}Struct> data_array){{\n"
     ret_str += f"::nakedbytes::SerializeOffset<::nakedbytes::Vector<{type_desc.name}Struct>> data_array_offset;\n"
-    ret_str += "uint16_t len = data_array.size();\n"
-    ret_str += "serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, OFFSET_SIZE);\n"
+    ret_str += "uint16_t len = static_cast<uint16_t>(data_array.size());\n"
+    ret_str += "serializer->_tail_offset += static_cast<uint16_t>(::nakedbytes::get_padding_size(serializer->_tail_offset, OFFSET_SIZE));\n"
     ret_str += "serializer->make_buffer_adequate();\n"
     ret_str += "data_array_offset.offset = serializer->_tail_offset;\n"
     ret_str += "*reinterpret_cast<uint16_t *>(&serializer->_buffer[serializer->_tail_offset]) = len;\n"
@@ -381,7 +380,7 @@ def generate_serialize_vector_struct(type_desc: TypeDesc) -> str:
     ret_str += f"serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);"
     ret_str += "for (uint16_t i = 0; i < len; i++){"
     ret_str += generate_struct_serializer_fields(type_desc=type_desc, is_root_type= False, additional_prefix= f" + ({type_desc.name.upper()}_SIZE * i)", access_prefix = "data_array[i].")
-    ret_str += f"serializer->_tail_offset += ({type_desc.name.upper()}_SIZE * len);\n"
+    ret_str += f"serializer->_tail_offset += static_cast<uint16_t>({type_desc.name.upper()}_SIZE * len);\n"
     ret_str += "}"
     
     ret_str += "return data_array_offset;"

@@ -14,6 +14,8 @@ def get_header_files() -> str:
 #include <vector>
 
 #define OFFSET_SIZE 2
+#define VERSION 1
+
 #if defined(__GNUC__) || defined(__clang__)
 #define NAKEDBYTES_INLINE inline
 #else
@@ -26,8 +28,12 @@ def get_header_files() -> str:
 #define NAKEDBYTES_FORCE_INLINE inline
 #endif
 
-#define REMOVE_ROOT(buffer) (&buffer[2 * OFFSET_SIZE])
+#define REMOVE_ROOT(buffer) (&(buffer)[2 * OFFSET_SIZE])
 
+constexpr const unsigned char *remove_root(const unsigned char *const buffer)
+{
+    return &buffer[2 * OFFSET_SIZE];
+}
 '''
 
 def get_base_offset_types() -> str:
@@ -36,7 +42,7 @@ namespace nakedbytes{
 struct String
 {
 #define STRING_LENGTH_OFFSET 0
-    NAKEDBYTES_FORCE_INLINE const uint16_t length() const
+    NAKEDBYTES_FORCE_INLINE uint16_t length() const
     {
         const int16_t offset = STRING_LENGTH_OFFSET;
         return *reinterpret_cast<const uint16_t *>(&data_[offset]);
@@ -62,7 +68,7 @@ private:
 template<typename T, typename Enable = void>
 struct Offset
 {
-    static constexpr size_t nakedbytes_sizeof = 2;
+    static constexpr uint16_t nakedbytes_sizeof = 2;
 
     NAKEDBYTES_FORCE_INLINE bool is_null() const
     {
@@ -93,7 +99,7 @@ private:
 template<typename T>
 struct Offset<T, typename std::enable_if<(std::is_integral<T>::value || std::is_floating_point<T>::value)>::type>
 {
-    static constexpr size_t nakedbytes_sizeof = sizeof(T);
+    static constexpr uint16_t nakedbytes_sizeof = sizeof(T);
     
     NAKEDBYTES_FORCE_INLINE bool is_null() const
     {
@@ -137,18 +143,18 @@ struct Vector
     
     NAKEDBYTES_FORCE_INLINE uint16_t size() const
     {
-        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]);
+        const int16_t offset =  *reinterpret_cast<const int16_t *>(&data_[0]);
         return *reinterpret_cast<const uint16_t *>(&data_[offset]);
     }
 
-    NAKEDBYTES_FORCE_INLINE const T& get(size_t index) const
+    NAKEDBYTES_FORCE_INLINE const T& get(uint16_t index) const
     {
-        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
+        const int16_t offset =  static_cast<int16_t>(*reinterpret_cast<const int16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }
     
-    NAKEDBYTES_FORCE_INLINE const T& operator[](size_t index) const {
-        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index;
+    NAKEDBYTES_FORCE_INLINE const T& operator[](uint16_t index) const {
+        const int16_t offset =  static_cast<int16_t>(*reinterpret_cast<const int16_t *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }
 
@@ -173,18 +179,18 @@ struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || st
     
     NAKEDBYTES_FORCE_INLINE uint16_t size() const
     {
-        int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]);
+        const int16_t offset =  *reinterpret_cast<const int16_t *>(&data_[0]);
         return *reinterpret_cast<const uint16_t *>(&data_[offset]);
     }
 
-    NAKEDBYTES_FORCE_INLINE const T& get(size_t index) const
+    NAKEDBYTES_FORCE_INLINE const T& get(uint16_t index) const
     {
-        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+        const int16_t offset =  static_cast<int16_t>(*reinterpret_cast<const int16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }
     
-    NAKEDBYTES_FORCE_INLINE const T& operator[](size_t index) const {
-        const int16_t offset =  *reinterpret_cast<const uint16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index;
+    NAKEDBYTES_FORCE_INLINE const T& operator[](uint16_t index) const {
+        const int16_t offset =  static_cast<int16_t>(*reinterpret_cast<const int16_t *>(&data_[0]) + OFFSET_SIZE + OFFSET_SIZE * index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }
 
@@ -210,7 +216,7 @@ private:
 def generate_struct_enum_number_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ""
-    ret_str += f"{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const {mem.type_desc.name} {mem.name}() const {{"
+    ret_str += f"{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} {mem.type_desc.name} {mem.name}() const {{"
     ret_str += '\n'
     if is_class_type:
         ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<const uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
@@ -232,7 +238,7 @@ def generate_struct_primitive_number_member_get_function(mem: MemberDesc, parent
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ""
     type_name = convert_to_cpp_primitive_type(mem.type_desc.name)
-    ret_str += f"{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const {type_name} {mem.name}() const {{"
+    ret_str += f"{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} {type_name} {mem.name}() const {{"
     ret_str += '\n'
     
     if is_class_type:
@@ -346,11 +352,11 @@ def generate_struct_union_member_get_function(mem: MemberDesc, parent_type_desc:
 def generate_struct_class_struct_offset_member_get_function(mem: MemberDesc, parent_type_desc: TypeDesc, is_root_type: bool) -> str:
     is_class_type = parent_type_desc.type_type == 'class'
     ret_str = ''
-    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const Offset<{mem.type_desc.name}>* {mem.name}() const {{'
+    ret_str += f'{"NAKEDBYTES_INLINE" if is_class_type else "NAKEDBYTES_FORCE_INLINE"} const ::nakedbytes::Offset<{mem.type_desc.name}>* {mem.name}() const {{'
     if is_class_type:
         ret_str += f'if({parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET < *reinterpret_cast<const uint16_t *>(&data_[{parent_type_desc.name.upper()}_MEMBER_SIZE_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''}])){{'
     ret_str += f'const int16_t offset ={parent_type_desc.name.upper()}_{mem.name.upper()}_OFFSET {'+ 2* OFFSET_SIZE' if is_root_type else ''};'
-    ret_str += f'return reinterpret_cast<const Offset<{mem.type_desc.name}>*>(&data_[offset]);'
+    ret_str += f'return reinterpret_cast<const ::nakedbytes::Offset<{mem.type_desc.name}>*>(&data_[offset]);'
     if is_class_type:
         ret_str += f'}}\n'
         ret_str += 'return nullptr;\n'
@@ -598,8 +604,8 @@ def generate_union_type_access_offset_type_definition(type_desc: TypeDesc, paren
     # if type_desc.is_offset_type:
     #     type_name = f'Offset<{type_name}>'
     ret_str = ''
-    ret_str += f'const Offset<{type_name}>* data_as_{type_desc.name}() const {{\n'
-    ret_str += f'return type() == {parent_type_desc.name}_enum_{type_desc.name} ? reinterpret_cast<const Offset<{type_name}>*>(&data_[{parent_type_desc.name.upper()}_DATA_OFFSET]) : nullptr;\n'
+    ret_str += f'const ::nakedbytes::Offset<{type_name}>* data_as_{type_desc.name}() const {{\n'
+    ret_str += f'return type() == {parent_type_desc.name}_enum_{type_desc.name} ? reinterpret_cast<const ::nakedbytes::Offset<{type_name}>*>(&data_[{parent_type_desc.name.upper()}_DATA_OFFSET]) : nullptr;\n'
     ret_str += f'}}'
     
     return ret_str
@@ -619,12 +625,12 @@ def generate_union_type_definition(type_desc: TypeDesc, is_root_type: bool, type
 
     
     ret_str += 'bool is_null() const {\n'
-    ret_str += f'return (type() == 0) or (*reinterpret_cast<const uint16_t *>(&data_[{type_desc.name.upper()}_DATA_OFFSET]) == 0);\n'
+    ret_str += f'return (type() == 0) or (*reinterpret_cast<const int16_t *>(&data_[{type_desc.name.upper()}_DATA_OFFSET]) == 0);\n'
     ret_str += '}'
     ret_str += '\n\n'
     
     ret_str += 'const unsigned char *raw_data() const {'
-    ret_str += f'const int16_t offset = *reinterpret_cast<const uint16_t *>(&data_[{type_desc.name.upper()}_DATA_OFFSET]) + {type_desc.name.upper()}_DATA_OFFSET;\n'
+    ret_str += f'const int16_t offset = *reinterpret_cast<const int16_t *>(&data_[{type_desc.name.upper()}_DATA_OFFSET]) + {type_desc.name.upper()}_DATA_OFFSET;\n'
     ret_str += f'return reinterpret_cast<const unsigned char *>(&data_[offset]);\n'
     ret_str += '}\n'
     
@@ -676,7 +682,7 @@ def generate_struct_offset_struct_class_type_definition(type_desc: TypeDesc, is_
         ret_str += generate_struct_class_member_get_function(mem, type_desc, is_root_type)
         ret_str += '\n\n'
     
-    ret_str += f"static constexpr size_t nakedbytes_sizeof = {type_desc.size};\n\n"
+    ret_str += f"static constexpr uint16_t nakedbytes_sizeof = {type_desc.size};\n\n"
     ret_str += generate_constructor(type_desc=type_desc, is_root_type = is_root_type)
     
     ret_str += f"}};"
