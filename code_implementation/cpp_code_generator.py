@@ -1,16 +1,17 @@
 from typing import List
-from code_implementation.cpp_code_generator_deserializer import get_all_type_declaration, get_all_type_definition, get_base_offset_types, get_header_files, get_root_type_definition
+from code_implementation.cpp_code_generator_deserializer import get_all_type_declaration, get_all_type_definition, get_base_offset_types, get_header_files, get_root_buffer_accessor_function, get_root_type_definition
 from code_implementation.cpp_code_serializer import generate_all_types_serialize_vector_struct, generate_root_type_serialization_class, get_all_type_struct_offset_struct_field_struct, get_all_types_offset_serialization_function, get_base_serializer_class_function
 from code_implementation.type_desc_holder import TypeDesc
 
 
-def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace: str|None, file_name: str) -> str:
+
+def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace: str|None, file_name: str, offset_size: int, version: int) -> str:
     str_file:str = ""
     str_file += f"#ifndef __{file_name.upper()}_NAKEDBYTES_GENERATED_H\n"
     str_file += f"#define __{file_name.upper()}_NAKEDBYTES_GENERATED_H\n"
-    str_file += get_header_files()
+    str_file += get_header_files(offset_size = offset_size, version= version)
     str_file += '\n\n'
-    str_file += get_base_offset_types()
+    str_file += get_base_offset_types(offset_size = offset_size)
     str_file += '\n\n'
     
     if namespace:
@@ -20,22 +21,23 @@ def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace:
     str_file += '\n\n'
 
     defined_type: List[str] = []
-    str_file += get_all_type_definition(types_desc, root_type_name, defined_type)
+    str_file += get_all_type_definition(types_desc, root_type_name, defined_type, offset_size= offset_size)
     # str_file += get_root_type_definition(types_desc, root_type_name)
+    str_file += get_root_buffer_accessor_function(root_name= root_type_name)
     if namespace:
         str_file += f'\n}} // namespace {namespace}\n'
         
-    str_file += get_base_serializer_class_function()
+    str_file += get_base_serializer_class_function(offset_size= offset_size)
     str_file += '\n\n'
     if namespace:
         str_file += f'namespace {namespace} {{\n'
     str_file += get_all_type_struct_offset_struct_field_struct(types_desc)
     str_file += '\n\n'
-    str_file += get_all_types_offset_serialization_function(types_desc)
+    str_file += get_all_types_offset_serialization_function(types_desc, offset_size= offset_size)
     str_file += '\n\n'
-    str_file += generate_all_types_serialize_vector_struct(types_desc= types_desc)
+    str_file += generate_all_types_serialize_vector_struct(types_desc= types_desc, offset_size= offset_size)
     str_file += '\n\n'
-    str_file += generate_root_type_serialization_class(types_desc, root_type_name)
+    str_file += generate_root_type_serialization_class(types_desc, root_type_name, offset_size= offset_size)
     if namespace:
         str_file += f'\n}} // namespace {namespace}\n'
     

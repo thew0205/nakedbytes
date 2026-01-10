@@ -79,3 +79,23 @@ def get_cpp_default_value(type_desc: TypeDesc, default_value) -> str:
         return f"{type_desc.name}::{default_value}"
     else:
         raise ValueError(f"Unsupported primitive type for default value: {type_desc.name}")
+    
+    
+def get_offset_type(offset_size: int) -> tuple[str, str]:
+    match offset_size:
+        case 1:
+            return 'uint8_t', 'int8_t'
+        case 2:
+            return 'uint16_t', 'int16_t'
+        case 4:
+            return 'uint32_t', 'int32_t'
+        case 8:
+            return 'uint64_t', 'int64_t'
+    raise ValueError("Offset value given dosn't have a corresponding type in cpp")
+
+def get_unsigned_offset_type(offset_size: int) -> str:
+    return get_offset_type(offset_size)[0]
+    
+def get_signed_offset_type(offset_size: int) -> str:
+    return get_offset_type(offset_size)[1]
+
