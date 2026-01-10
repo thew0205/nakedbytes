@@ -160,7 +160,34 @@ static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {of
         const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }}
+ public:
+        struct Iterator
+        {{
+            using iterator_category = std::forward_iterator_tag;
+            using difference_type = std::ptrdiff_t;
+            using value_type = T;
+            using pointer = T *;
+            using reference = T &;
 
+            Iterator({get_unsigned_offset_type(offset_size)} index, const Vector<T> &vec) : index_(index), vec_{{vec}} {{}}
+
+            value_type operator*() const {{ return vec_[index_]; }}
+            pointer operator->() {{ return vec_.get(index); }}
+            const Iterator operator++()
+            {{
+                index_++;
+                return Iterator(index_, vec_);
+            }}
+
+            friend bool operator==(const Iterator &a, const Iterator &b) {{ return a.index_ == b.index_; }};
+            friend bool operator!=(const Iterator &a, const Iterator &b) {{ return a.index_ != b.index_; }};
+
+        private:
+            {get_unsigned_offset_type(offset_size)} index_;
+            const Vector<T> &vec_;
+        }};
+        Iterator begin() const {{ return Iterator(0, *this); }}
+        Iterator end() const {{ return Iterator(size(), *this); }}
     
 private:
 
@@ -198,7 +225,34 @@ static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {of
         const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0])) + static_cast<{get_signed_offset_type(offset_size)}>(OFFSET_SIZE) + static_cast<{get_signed_offset_type(offset_size)}>(OFFSET_SIZE) * static_cast<{get_signed_offset_type(offset_size)}>(index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }}
+ public:
+        struct Iterator
+        {{
+            using iterator_category = std::forward_iterator_tag;
+            using difference_type = std::ptrdiff_t;
+            using value_type = T;
+            using pointer = T *;
+            using reference = T &;
 
+            Iterator({get_unsigned_offset_type(offset_size)} index, const Vector<T> &vec) : index_(index), vec_{{vec}} {{}}
+
+            value_type operator*() const {{ return vec_[index_]; }}
+            pointer operator->() {{ return vec_.get(index); }}
+            const Iterator operator++()
+            {{
+                index_++;
+                return Iterator(index_, vec_);
+            }}
+
+            friend bool operator==(const Iterator &a, const Iterator &b) {{ return a.index_ == b.index_; }};
+            friend bool operator!=(const Iterator &a, const Iterator &b) {{ return a.index_ != b.index_; }};
+
+        private:
+            {get_unsigned_offset_type(offset_size)} index_;
+            const Vector<T> &vec_;
+        }};
+        Iterator begin() const {{ return Iterator(0, *this); }}
+        Iterator end() const {{ return Iterator(size(), *this); }}
 
 private:
 
