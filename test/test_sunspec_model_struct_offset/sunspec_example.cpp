@@ -1,4 +1,4 @@
-#include "sunspec_model_generated_struct_offset.h"
+#include "sunspec_model_struct_offset.nbs.h"
 #include <stdio.h>
 
 int main()
@@ -11,16 +11,16 @@ int main()
     long file_size = ftell(file); // Get current position (which is the file size)
     fclose(file);
     file = fopen(file_name, "rb");
-    uint8_t buffer[file_size];
-    int a = fread(buffer, 1, file_size, file);
-    if (file_size != a)
+    uint8_t buffer[1000];
+    size_t a = fread(buffer, 1, size_t(file_size), file);
+    if (file_size != (long)a)
     {
         fclose(file);
 
         return -1;
     }
 
-    SunspecModelDefRoot model_root{buffer};
+    const SunspecModelDef &model_root = *GetRootSunspecModelDef(buffer);
     printf("id: %d\n", model_root.id());
     fclose(file);
 }

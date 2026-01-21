@@ -1,2 +1,53 @@
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_protobuf_serialization_all.cpp:3:6:void test_function()	144	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_protobuf_serialization_all.cpp:19:8:size_t test_assert()	272	static
+/usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:540:3:constexpr bool std::__is_constant_evaluated()	16	static
+/usr/include/c++/13/bits/char_traits.h:393:7:static constexpr std::size_t std::char_traits<char>::length(const char_type*)	32	static
+/usr/include/c++/13/bits/std_abs.h:71:3:constexpr double std::abs(double)	16	static
+/usr/local/include/absl/log/internal/log_message.h:117:15:absl::log_internal::LogMessage& absl::log_internal::LogMessage::InternalStream()	16	static
+/usr/local/include/google/protobuf/arenastring.h:163:23:std::string* google::protobuf::internal::TaggedStringPtr::Get() const	32	static
+/usr/local/include/google/protobuf/arenastring.h:199:13:uintptr_t google::protobuf::internal::TaggedStringPtr::as_int() const	16	static
+/usr/local/include/google/protobuf/arenastring.h:335:45:const std::string& google::protobuf::internal::ArenaStringPtr::Get() const	32	static
+/usr/local/include/google/protobuf/arenastring.h:468:13:void google::protobuf::internal::ArenaStringPtr::Set(const char*, google::protobuf::Arena*)	112	static
+/usr/local/include/google/protobuf/metadata_lite.h:66:33:google::protobuf::Arena* google::protobuf::internal::InternalMetadata::arena() const	32	static
+/usr/local/include/google/protobuf/metadata_lite.h:74:31:bool google::protobuf::internal::InternalMetadata::have_unknown_fields() const	16	static
+/usr/local/include/google/protobuf/message_lite.h:564:10:google::protobuf::Arena* google::protobuf::MessageLite::GetArena() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:76:10:PowerMeter::MeterData::MeterData()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:391:29:const std::string& PowerMeter::MeterData::id() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:410:29:const std::string& PowerMeter::MeterData::_internal_id() const	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:456:14:float PowerMeter::MeterData::voltage() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:460:13:void PowerMeter::MeterData::set_voltage(float)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:465:14:float PowerMeter::MeterData::_internal_voltage() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:469:13:void PowerMeter::MeterData::_internal_set_voltage(float)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:481:14:float PowerMeter::MeterData::current() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:485:13:void PowerMeter::MeterData::set_current(float)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:490:14:float PowerMeter::MeterData::_internal_current() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:494:13:void PowerMeter::MeterData::_internal_set_current(float)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:506:14:float PowerMeter::MeterData::power() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:510:13:void PowerMeter::MeterData::set_power(float)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:515:14:float PowerMeter::MeterData::_internal_power() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:519:13:void PowerMeter::MeterData::_internal_set_power(float)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:531:14:float PowerMeter::MeterData::energy() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:535:13:void PowerMeter::MeterData::set_energy(float)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:540:14:float PowerMeter::MeterData::_internal_energy() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:544:13:void PowerMeter::MeterData::_internal_set_energy(float)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:556:14:float PowerMeter::MeterData::freq() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:560:13:void PowerMeter::MeterData::set_freq(float)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:565:14:float PowerMeter::MeterData::_internal_freq() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:569:13:void PowerMeter::MeterData::_internal_set_freq(float)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:581:14:float PowerMeter::MeterData::pf() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:585:13:void PowerMeter::MeterData::set_pf(float)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:590:14:float PowerMeter::MeterData::_internal_pf() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:594:13:void PowerMeter::MeterData::_internal_set_pf(float)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:606:19:uint32_t PowerMeter::MeterData::alarms() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:610:13:void PowerMeter::MeterData::set_alarms(uint32_t)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:615:19:uint32_t PowerMeter::MeterData::_internal_alarms() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:619:13:void PowerMeter::MeterData::_internal_set_alarms(uint32_t)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:631:29:const std::string& PowerMeter::MeterData::timestamp() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_protobuf.pb.h:650:29:const std::string& PowerMeter::MeterData::_internal_timestamp() const	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_protobuf_serialization_all.cpp:3:6:void test_function()	160	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_protobuf_serialization_all.cpp:19:8:size_t test_assert()	336	static
+/usr/include/c++/13/bits/char_traits.h:199:5:static constexpr std::size_t __gnu_cxx::char_traits<_CharT>::length(const char_type*) [with _CharT = char]	64	static
+/usr/include/c++/13/string_view:140:7:constexpr std::basic_string_view<_CharT, _Traits>::basic_string_view(const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>]	32	static
+/usr/local/include/absl/log/internal/voidify.h:39:28:void absl::log_internal::Voidify::operator&&(T&&) const && [with T = absl::log_internal::LogMessage&]	32	static
+/usr/local/include/google/protobuf/metadata_lite.h:147:6:U* google::protobuf::internal::InternalMetadata::PtrValue() const [with U = ContainerBase]	16	static
+/usr/local/include/google/protobuf/metadata_lite.h:147:6:U* google::protobuf::internal::InternalMetadata::PtrValue() const [with U = google::protobuf::Arena]	16	static
+/usr/local/include/google/protobuf/has_bits.h:45:36:uint32_t& google::protobuf::internal::HasBits<doublewords>::operator[](int) [with int doublewords = 1]	16	static
+/usr/include/c++/13/bits/char_traits.h:136:7:static constexpr bool __gnu_cxx::char_traits<_CharT>::eq(const char_type&, const char_type&) [with _CharT = char]	16	static

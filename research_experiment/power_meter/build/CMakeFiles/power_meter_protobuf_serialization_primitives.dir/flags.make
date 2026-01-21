@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter
 
-CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -fstack-usage
+CXX_FLAGS = -O0 -std=gnu++17 -fstack-usage
 

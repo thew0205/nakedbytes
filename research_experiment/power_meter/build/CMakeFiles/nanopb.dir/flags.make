@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter -I/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/third_party/nanopb
 
-C_FLAGS = -O3 -DNDEBUG -fstack-usage
+C_FLAGS = -O0 -fstack-usage
 

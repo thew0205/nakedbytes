@@ -4,6 +4,9 @@ project(nakedbytes_research)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE "-O0" )
+set(CMAKE_C_FLAGS_RELEASE "-O0")
+
 add_compile_options(-fstack-usage)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

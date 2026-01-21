@@ -5,7 +5,7 @@ set -e
 PWD=$(pwd)
 
 cmake -S . -B build
-cmake --build build -j12
+cmake --build build -j12 -v
 
 # clear
 declare -A programs

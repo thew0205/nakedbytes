@@ -1,6 +1,6 @@
 {
-    "offset_size": 2,
-    "version": 0,
+    "offset_size": 8,
+    "version": 7,
     "root_type": "Packet",
     "types": [
         {

@@ -1,11 +1,151 @@
-/usr/local/include/flatbuffers/default_allocator.h:26:7:flatbuffers::DefaultAllocator::~DefaultAllocator()	8	static
-/usr/local/include/flatbuffers/default_allocator.h:32:8:virtual void flatbuffers::DefaultAllocator::deallocate(uint8_t*, size_t)	8	static
-/usr/local/include/flatbuffers/default_allocator.h:28:12:virtual uint8_t* flatbuffers::DefaultAllocator::allocate(size_t)	8	static
-/usr/local/include/flatbuffers/default_allocator.h:26:7:virtual flatbuffers::DefaultAllocator::~DefaultAllocator()	8	static
-/usr/local/include/flatbuffers/allocator.h:41:20:virtual uint8_t* flatbuffers::Allocator::reallocate_downward(uint8_t*, size_t, size_t, size_t, size_t)	80	static
-/usr/include/c++/13/bits/stl_tree.h:1930:5:void std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_erase(_Link_type) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	96	static
-/usr/local/include/flatbuffers/flatbuffer_builder.h:157:3:flatbuffers::FlatBufferBuilderImpl<Is64Aware>::~FlatBufferBuilderImpl() [with bool Is64Aware = false]	32	static
-/usr/local/include/flatbuffers/vector_downward.h:269:8:void flatbuffers::vector_downward<SizeT>::reallocate(size_t) [with SizeT = unsigned int]	80	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:120:41:flatbuffers::Offset<PowerMeter::MeterData> PowerMeter::CreateMeterData(flatbuffers::FlatBufferBuilder&, flatbuffers::Offset<flatbuffers::String>, float, float, float, float, float, float, uint16_t, flatbuffers::Offset<flatbuffers::String>)	160	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_flatbuffers_serialization_all.cpp:3:6:void test_function()	256	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_flatbuffers_serialization_all.cpp:13:8:size_t test_assert()	288	static
+/usr/include/c++/13/limits:995:7:static constexpr short unsigned int std::numeric_limits<short unsigned int>::max()	16	static
+/usr/include/c++/13/limits:1068:7:static constexpr int std::numeric_limits<int>::max()	16	static
+/usr/local/include/flatbuffers/base.h:458:15:size_t flatbuffers::PaddingBytes(size_t, size_t)	16	static
+/usr/local/include/flatbuffers/buffer.h:64:13:void flatbuffers::EndianCheck()	32	static
+/usr/local/include/flatbuffers/allocator.h:28:11:flatbuffers::Allocator::~Allocator()	16	static
+/usr/local/include/flatbuffers/allocator.h:28:11:virtual flatbuffers::Allocator::~Allocator()	32	static
+/usr/local/include/flatbuffers/allocator.h:41:20:virtual uint8_t* flatbuffers::Allocator::reallocate_downward(uint8_t*, size_t, size_t, size_t, size_t)	96	dynamic,bounded
+/usr/local/include/flatbuffers/allocator.h:57:8:void flatbuffers::Allocator::memcpy_downward(uint8_t*, size_t, uint8_t*, size_t, size_t, size_t)	64	static
+/usr/local/include/flatbuffers/default_allocator.h:28:12:virtual uint8_t* flatbuffers::DefaultAllocator::allocate(size_t)	32	static
+/usr/local/include/flatbuffers/default_allocator.h:32:8:virtual void flatbuffers::DefaultAllocator::deallocate(uint8_t*, size_t)	48	static
+/usr/local/include/flatbuffers/allocator.h:26:7:constexpr flatbuffers::Allocator::Allocator()	16	static
+/usr/local/include/flatbuffers/default_allocator.h:26:7:constexpr flatbuffers::DefaultAllocator::DefaultAllocator()	32	static
+/usr/local/include/flatbuffers/default_allocator.h:26:7:flatbuffers::DefaultAllocator::~DefaultAllocator()	32	static
+/usr/local/include/flatbuffers/default_allocator.h:26:7:virtual flatbuffers::DefaultAllocator::~DefaultAllocator()	32	static
+/usr/local/include/flatbuffers/default_allocator.h:41:17:uint8_t* flatbuffers::Allocate(Allocator*, size_t)	64	static
+/usr/local/include/flatbuffers/default_allocator.h:46:13:void flatbuffers::Deallocate(Allocator*, uint8_t*, size_t)	64	static
+/usr/local/include/flatbuffers/default_allocator.h:53:17:uint8_t* flatbuffers::ReallocateDownward(Allocator*, uint8_t*, size_t, size_t, size_t, size_t)	96	static
+/usr/local/include/flatbuffers/string.h:26:15:const char* flatbuffers::String::c_str() const	32	static
+/usr/local/include/flatbuffers/table.h:29:18:const uint8_t* flatbuffers::Table::GetVTable() const	48	static
+/usr/local/include/flatbuffers/table.h:35:13:flatbuffers::voffset_t flatbuffers::Table::GetOptionalFieldOffset(flatbuffers::voffset_t) const	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:44:18:flatbuffers::voffset_t flatbuffers::FieldIndexToOffset(voffset_t)	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:34:32:const flatbuffers::String* PowerMeter::MeterData::id() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:37:9:float PowerMeter::MeterData::voltage() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:40:9:float PowerMeter::MeterData::current() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:43:9:float PowerMeter::MeterData::power() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:46:9:float PowerMeter::MeterData::energy() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:49:9:float PowerMeter::MeterData::freq() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:52:9:float PowerMeter::MeterData::pf() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:55:12:uint16_t PowerMeter::MeterData::alarms() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:58:32:const flatbuffers::String* PowerMeter::MeterData::timestamp() const	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:82:8:void PowerMeter::MeterDataBuilder::add_id(flatbuffers::Offset<flatbuffers::String>)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:85:8:void PowerMeter::MeterDataBuilder::add_voltage(float)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:88:8:void PowerMeter::MeterDataBuilder::add_current(float)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:91:8:void PowerMeter::MeterDataBuilder::add_power(float)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:94:8:void PowerMeter::MeterDataBuilder::add_energy(float)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:97:8:void PowerMeter::MeterDataBuilder::add_freq(float)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:100:8:void PowerMeter::MeterDataBuilder::add_pf(float)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:103:8:void PowerMeter::MeterDataBuilder::add_alarms(uint16_t)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:106:8:void PowerMeter::MeterDataBuilder::add_timestamp(flatbuffers::Offset<flatbuffers::String>)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:109:12:PowerMeter::MeterDataBuilder::MeterDataBuilder(flatbuffers::FlatBufferBuilder&)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:113:36:flatbuffers::Offset<PowerMeter::MeterData> PowerMeter::MeterDataBuilder::Finish()	48	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:120:41:flatbuffers::Offset<PowerMeter::MeterData> PowerMeter::CreateMeterData(flatbuffers::FlatBufferBuilder&, flatbuffers::Offset<flatbuffers::String>, float, float, float, float, float, float, uint16_t, flatbuffers::Offset<flatbuffers::String>)	96	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_flatbuffers_generated.h:170:37:const PowerMeter::MeterData* PowerMeter::GetMeterData(const void*)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_flatbuffers_serialization_all.cpp:3:6:void test_function()	192	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_flatbuffers_serialization_all.cpp:13:8:size_t test_assert()	256	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = unsigned int]	16	static
+/usr/local/include/flatbuffers/vector.h:270:18:const uint8_t* flatbuffers::Vector<T, SizeT>::Data() const [with T = char; SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/base.h:427:3:T flatbuffers::ReadScalar(const void*) [with T = int]	32	static
+/usr/local/include/flatbuffers/base.h:427:3:T flatbuffers::ReadScalar(const void*) [with T = short unsigned int]	32	static
+/usr/local/include/flatbuffers/base.h:427:3:T flatbuffers::ReadScalar(const void*) [with T = unsigned int]	32	static
+/usr/local/include/flatbuffers/table.h:58:5:P flatbuffers::Table::GetPointer(flatbuffers::voffset_t) const [with P = const flatbuffers::String*; OffsetSize = unsigned int]	32	static
+/usr/local/include/flatbuffers/table.h:45:26:T flatbuffers::Table::GetField(flatbuffers::voffset_t, T) const [with T = float]	48	static
+/usr/local/include/flatbuffers/table.h:45:26:T flatbuffers::Table::GetField(flatbuffers::voffset_t, T) const [with T = short unsigned int]	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:343:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AddOffset(flatbuffers::voffset_t, flatbuffers::Offset<T>) [with T = flatbuffers::String; bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:333:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AddElement(flatbuffers::voffset_t, T, T) [with T = float; bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:333:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AddElement(flatbuffers::voffset_t, T, T) [with T = short unsigned int; bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:409:13:flatbuffers::uoffset_t flatbuffers::FlatBufferBuilderImpl<Is64Aware>::StartTable() [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:418:13:flatbuffers::uoffset_t flatbuffers::FlatBufferBuilderImpl<Is64Aware>::EndTable(flatbuffers::uoffset_t) [with bool Is64Aware = false]	128	static
+/usr/local/include/flatbuffers/buffer.h:35:3:flatbuffers::Offset<T>::Offset(offset_type) [with T = PowerMeter::MeterData]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:545:19:OffsetT<flatbuffers::String> flatbuffers::FlatBufferBuilderImpl<Is64Aware>::CreateString(const char*) [with OffsetT = flatbuffers::Offset; bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/buffer.h:35:3:flatbuffers::Offset<T>::Offset(offset_type) [with T = flatbuffers::String]	16	static
+/usr/local/include/flatbuffers/buffer.h:207:31:const T* flatbuffers::GetRoot(const void*) [with T = PowerMeter::MeterData]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:1228:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::Finish(flatbuffers::Offset<T>, const char*) [with T = PowerMeter::MeterData; bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/buffer.h:72:51:constexpr size_t flatbuffers::AlignOf() [with T = long unsigned int]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:95:12:flatbuffers::FlatBufferBuilderImpl<Is64Aware>::FlatBufferBuilderImpl(size_t, flatbuffers::Allocator*, bool, size_t) [with bool Is64Aware = false]	80	static
+/usr/include/c++/13/bits/stl_set.h:283:7:std::set<_Key, _Compare, _Alloc>::~set() [with _Key = flatbuffers::Offset<flatbuffers::String>; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:157:3:flatbuffers::FlatBufferBuilderImpl<Is64Aware>::~FlatBufferBuilderImpl() [with bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:180:9:flatbuffers::FlatBufferBuilderImpl<Is64Aware>::SizeT flatbuffers::FlatBufferBuilderImpl<Is64Aware>::GetSize() const [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:208:12:uint8_t* flatbuffers::FlatBufferBuilderImpl<Is64Aware>::GetBufferPointer() const [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = int]	16	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = short unsigned int]	16	static
+/usr/local/include/flatbuffers/table.h:51:5:P flatbuffers::Table::GetPointer(flatbuffers::voffset_t) [with P = const flatbuffers::String*; OffsetSize = unsigned int]	48	static
+/usr/local/include/flatbuffers/base.h:427:3:T flatbuffers::ReadScalar(const void*) [with T = float]	32	static
+/usr/local/include/flatbuffers/buffer.h:37:8:bool flatbuffers::Offset<T>::IsNull() const [with T = flatbuffers::String]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:367:13:flatbuffers::uoffset_t flatbuffers::FlatBufferBuilderImpl<Is64Aware>::ReferTo(flatbuffers::uoffset_t) [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:333:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AddElement(flatbuffers::voffset_t, T, T) [with T = unsigned int; bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/base.h:469:34:bool flatbuffers::IsTheSameAs(T, T) [with T = float]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:325:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::TrackField(flatbuffers::voffset_t, flatbuffers::uoffset_t) [with bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:310:11:ReturnT flatbuffers::FlatBufferBuilderImpl<Is64Aware>::PushElement(T) [with T = float; ReturnT = unsigned int; bool Is64Aware = false]	64	static
+/usr/local/include/flatbuffers/base.h:469:34:bool flatbuffers::IsTheSameAs(T, T) [with T = short unsigned int]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:310:11:ReturnT flatbuffers::FlatBufferBuilderImpl<Is64Aware>::PushElement(T) [with T = short unsigned int; ReturnT = unsigned int; bool Is64Aware = false]	64	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:393:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::NotNested() [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:200:52:typename std::enable_if<(! is_64), unsigned int>::type flatbuffers::FlatBufferBuilderImpl<Is64Aware>::GetSizeRelative32BitRegion() const [with bool is_64 = false; bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:310:11:ReturnT flatbuffers::FlatBufferBuilderImpl<Is64Aware>::PushElement(T) [with T = int; ReturnT = unsigned int; bool Is64Aware = false]	64	static
+/usr/include/c++/13/bits/stl_algobase.h:257:5:const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = short unsigned int]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:220:8:void flatbuffers::vector_downward<SizeT>::fill_big(size_t) [with SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:178:12:uint8_t* flatbuffers::vector_downward<SizeT>::data() const [with SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/base.h:441:6:void flatbuffers::WriteScalar(void*, T) [with T = short unsigned int]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:188:12:uint8_t* flatbuffers::vector_downward<SizeT>::scratch_end() const [with SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:508:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::ClearOffsets() [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:183:12:uint8_t* flatbuffers::vector_downward<SizeT>::scratch_data() const [with SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:193:12:uint8_t* flatbuffers::vector_downward<SizeT>::data_at(size_t) const [with SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:224:8:void flatbuffers::vector_downward<SizeT>::pop(size_t) [with SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:205:29:void flatbuffers::vector_downward<SizeT>::scratch_push_small(const T&) [with T = unsigned int; SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/base.h:441:6:void flatbuffers::WriteScalar(void*, T) [with T = int]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:535:19:OffsetT<flatbuffers::String> flatbuffers::FlatBufferBuilderImpl<Is64Aware>::CreateString(const char*, size_t) [with OffsetT = flatbuffers::Offset; bool Is64Aware = false]	64	static
+/usr/local/include/flatbuffers/buffer.h:194:25:T* flatbuffers::GetMutableRoot(void*) [with T = PowerMeter::MeterData]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:1258:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::Finish(flatbuffers::uoffset_t, const char*, bool) [with bool Is64Aware = false]	80	static
+/usr/local/include/flatbuffers/vector_downward.h:37:12:flatbuffers::vector_downward<SizeT>::vector_downward(size_t, flatbuffers::Allocator*, bool, size_t, SizeT) [with SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:80:3:flatbuffers::vector_downward<SizeT>::~vector_downward() [with SizeT = unsigned int]	32	static
+/usr/include/c++/13/bits/stl_tree.h:662:9:std::_Rb_tree<flatbuffers::Offset<flatbuffers::String>, flatbuffers::Offset<flatbuffers::String>, std::_Identity<flatbuffers::Offset<flatbuffers::String> >, flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare, std::allocator<flatbuffers::Offset<flatbuffers::String> > >::_Rb_tree_impl<flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare, false>::~_Rb_tree_impl()	48	static
+/usr/include/c++/13/bits/stl_tree.h:985:7:std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::~_Rb_tree() [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:166:16:SizeT flatbuffers::vector_downward<SizeT>::size() const [with SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:261:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::Finished() const [with bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/buffer.h:72:51:constexpr size_t flatbuffers::AlignOf() [with T = unsigned int]	16	static
+/usr/local/include/flatbuffers/base.h:416:24:T flatbuffers::EndianScalar(T) [with T = float]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:289:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::Align(size_t) [with bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:388:26:T flatbuffers::FlatBufferBuilderImpl<Is64Aware>::ReferTo(T, T) [with T = unsigned int; bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/base.h:469:34:bool flatbuffers::IsTheSameAs(T, T) [with T = unsigned int]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:310:11:ReturnT flatbuffers::FlatBufferBuilderImpl<Is64Aware>::PushElement(T) [with T = unsigned int; ReturnT = unsigned int; bool Is64Aware = false]	64	static
+/usr/local/include/flatbuffers/vector_downward.h:205:29:void flatbuffers::vector_downward<SizeT>::scratch_push_small(const T&) [with T = flatbuffers::FlatBufferBuilderImpl<false>::FieldLoc; SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:303:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AssertScalarT() [with T = float; bool Is64Aware = false]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:200:29:void flatbuffers::vector_downward<SizeT>::push_small(const T&) [with T = float; SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:1403:3:typename std::enable_if<std::is_same<T, unsigned int>::value, T>::type flatbuffers::FlatBufferBuilderImpl<Is64Aware>::CalculateOffset() [with T = unsigned int; bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:303:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AssertScalarT() [with T = short unsigned int; bool Is64Aware = false]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:200:29:void flatbuffers::vector_downward<SizeT>::push_small(const T&) [with T = short unsigned int; SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:303:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AssertScalarT() [with T = int; bool Is64Aware = false]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:200:29:void flatbuffers::vector_downward<SizeT>::push_small(const T&) [with T = int; SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:150:19:uint8_t* flatbuffers::vector_downward<SizeT>::make_space(size_t) [with SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:229:8:void flatbuffers::vector_downward<SizeT>::scratch_pop(size_t) [with SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:141:10:size_t flatbuffers::vector_downward<SizeT>::ensure_space(size_t) [with SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:1375:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::CreateStringImpl(const char*, size_t) [with bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/vector_downward.h:101:8:void flatbuffers::vector_downward<SizeT>::clear_scratch() [with SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:285:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::TrackMinAlign(size_t) [with bool Is64Aware = false]	16	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:516:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::PreAlign(size_t, size_t) [with bool Is64Aware = false]	64	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:299:8:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::PushBytes(const uint8_t*, size_t) [with bool Is64Aware = false]	48	static
+/usr/local/include/flatbuffers/vector_downward.h:109:8:void flatbuffers::vector_downward<SizeT>::clear_buffer() [with SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:103:8:void flatbuffers::vector_downward<SizeT>::clear_allocator() [with SizeT = unsigned int]	32	static
+/usr/include/c++/13/bits/stl_tree.h:1930:5:void std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_erase(_Link_type) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	48	static
+/usr/include/c++/13/bits/stl_tree.h:740:7:std::_Rb_tree_node<_Val>* std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_begin() [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:213:8:void flatbuffers::vector_downward<SizeT>::fill(size_t) [with SizeT = unsigned int]	48	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:303:29:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::AssertScalarT() [with T = unsigned int; bool Is64Aware = false]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:200:29:void flatbuffers::vector_downward<SizeT>::push_small(const T&) [with T = unsigned int; SizeT = unsigned int]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:169:9:SizeT flatbuffers::vector_downward<SizeT>::unused_buffer_size() const [with SizeT = unsigned int]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:269:8:void flatbuffers::vector_downward<SizeT>::reallocate(size_t) [with SizeT = unsigned int]	64	static
+/usr/local/include/flatbuffers/flatbuffer_builder.h:524:34:void flatbuffers::FlatBufferBuilderImpl<Is64Aware>::PreAlign(size_t) [with AlignT = unsigned int; bool Is64Aware = false]	32	static
+/usr/local/include/flatbuffers/vector_downward.h:195:8:void flatbuffers::vector_downward<SizeT>::push(const uint8_t*, size_t) [with SizeT = unsigned int]	48	static
+/usr/include/c++/13/bits/new_allocator.h:104:7:std::__new_allocator<_Tp>::~__new_allocator() [with _Tp = std::_Rb_tree_node<flatbuffers::Offset<flatbuffers::String> >]	16	static
+/usr/include/c++/13/bits/stl_tree.h:789:7:static std::_Rb_tree_node<_Val>* std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_S_right(_Base_ptr) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	16	static
+/usr/include/c++/13/bits/stl_tree.h:781:7:static std::_Rb_tree_node<_Val>* std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_S_left(_Base_ptr) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	16	static
+/usr/include/c++/13/bits/stl_tree.h:631:7:void std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_drop_node(_Link_type) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	32	static
+/usr/include/c++/13/bits/stl_tree.h:736:7:std::_Rb_tree_node<_Val>* std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_mbegin() const [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	16	static
+/usr/local/include/flatbuffers/vector_downward.h:174:9:SizeT flatbuffers::vector_downward<SizeT>::scratch_size() const [with SizeT = unsigned int]	16	static
+/usr/include/c++/13/bits/stl_algobase.h:257:5:const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = long unsigned int]	16	static
+/usr/include/c++/13/bits/stl_tree.h:620:7:void std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_destroy_node(_Link_type) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	80	static
+/usr/include/c++/13/bits/stl_tree.h:566:7:void std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_put_node(_Link_type) [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	64	static
+/usr/include/c++/13/bits/stl_tree.h:549:7:std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_Node_allocator& std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_get_Node_allocator() [with _Key = flatbuffers::Offset<flatbuffers::String>; _Val = flatbuffers::Offset<flatbuffers::String>; _KeyOfValue = std::_Identity<flatbuffers::Offset<flatbuffers::String> >; _Compare = flatbuffers::FlatBufferBuilderImpl<false>::StringOffsetCompare; _Alloc = std::allocator<flatbuffers::Offset<flatbuffers::String> >]	16	static
+/usr/include/c++/13/bits/stl_tree.h:234:7:_Val* std::_Rb_tree_node<_Val>::_M_valptr() [with _Val = flatbuffers::Offset<flatbuffers::String>]	32	static
+/usr/include/c++/13/ext/aligned_buffer.h:72:7:_Tp* __gnu_cxx::__aligned_membuf<_Tp>::_M_ptr() [with _Tp = flatbuffers::Offset<flatbuffers::String>]	32	static
+/usr/include/c++/13/bits/new_allocator.h:156:7:void std::__new_allocator<_Tp>::deallocate(_Tp*, size_type) [with _Tp = std::_Rb_tree_node<flatbuffers::Offset<flatbuffers::String> >]	48	static
+/usr/include/c++/13/ext/aligned_buffer.h:64:7:void* __gnu_cxx::__aligned_membuf<_Tp>::_M_addr() [with _Tp = flatbuffers::Offset<flatbuffers::String>]	16	static

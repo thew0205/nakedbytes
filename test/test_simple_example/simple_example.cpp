@@ -20,7 +20,6 @@ int main()
 
         return -1;
     }
-    uint8_t *buf = buffer;
     PacketRoot& packet = *(PacketRoot *)buffer;
     printf("Packet\n");
     printf("id: %d\n", packet.id());
@@ -40,3 +39,4 @@ int main()
 
     fclose(file);
 }
+ 

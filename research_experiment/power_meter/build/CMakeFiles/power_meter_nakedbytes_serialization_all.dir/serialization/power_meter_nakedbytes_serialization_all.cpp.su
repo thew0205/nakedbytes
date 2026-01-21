@@ -1,2 +1,21 @@
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_nakedbytes_serialization_all.cpp:4:6:void test_function()	8	static
-/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_nakedbytes_serialization_all.cpp:13:8:size_t test_assert()	8	static
+/usr/include/c++/13/bits/std_abs.h:71:3:constexpr double std::abs(double)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:213:77:const nakedbytes::Offset<nakedbytes::String>* PowerMeter::MeterData::id() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:223:39:const float PowerMeter::MeterData::voltage() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:232:39:const float PowerMeter::MeterData::current() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:241:39:const float PowerMeter::MeterData::power() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:250:39:const float PowerMeter::MeterData::energy() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:259:39:const float PowerMeter::MeterData::freq() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:268:39:const float PowerMeter::MeterData::pf() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:277:42:const uint16_t PowerMeter::MeterData::alarms() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:286:77:const nakedbytes::Offset<nakedbytes::String>* PowerMeter::MeterData::timestamp() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:348:14:void nakedbytes::Serializer::init(uint16_t, uint16_t, uint16_t)	64	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:358:21:void nakedbytes::Serializer::make_buffer_adequate()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:367:33:nakedbytes::SerializeOffset<nakedbytes::String> nakedbytes::Serializer::serialize_string(const char*)	64	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:458:14:void nakedbytes::Serializer::deinit()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:469:9:nakedbytes::Serializer::~Serializer()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:474:30:const unsigned char* nakedbytes::Serializer::get_buffer() const	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:560:14:void PowerMeter::MeterDataSerializer::init(size_t)	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:565:23:size_t PowerMeter::MeterDataSerializer::serialize_root(nakedbytes::SerializeOffset<nakedbytes::String>, float, float, float, float, float, float, uint16_t, nakedbytes::SerializeOffset<nakedbytes::String>)	16	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/power_meter_nakedbytes.nbs.h:558:12:PowerMeter::MeterDataSerializer::~MeterDataSerializer()	32	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_nakedbytes_serialization_all.cpp:4:6:void test_function()	80	static
+/home/busoye_tm/Documents/matthew/projects/nakedbytes/research_experiment/power_meter/serialization/power_meter_nakedbytes_serialization_all.cpp:13:8:size_t test_assert()	176	static
