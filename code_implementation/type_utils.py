@@ -3,37 +3,40 @@
 
 from typing import Dict
 
-"""
-Get the required padding size need to required alignment for a type.
-"""
+
 def get_padding_size(offset: int, alignment: int) -> int:
+    """
+    Get the required padding size needed to meet the alignment requirement for a type.
+    """
     return (alignment - (offset % alignment)) % alignment
 
 def get_next_valid_offset(offset: int, alignment: int) -> int:
+    """
+    Get the next valid offset value that meets the alignment requirement for that type.
+    """
     return offset + get_padding_size(offset, alignment)
 
-'''
-Basically append all the type defined in the schema file.
-'''
 def set_all_types(model_def: Dict, all_types: set[str]) -> set[str]:
+    '''
+    Basically append all the type defined in the schema file.
+    '''
     for ty in model_def.get('types', []):
         all_types.add(ty['name'])
     return all_types
 
-"""
-Return the dictionary definition for a type as provide in the schema
-"""
 def get_type_from_json(type_name, model_def: Dict) -> Dict:
-    
+    """
+    Return the dictionary definition for a type as provide in the schema
+    """
     for model_type in model_def['types']:
         if model_type['name'] == type_name:
             return model_type
     raise ValueError(f"Type name given {type_name} but type definition json not found. Error in model definition.")
 
-"""
-Get the int type to be used for the offset type based on the offset size.
-"""
 def get_offset_type_int(offset_size: int) -> str:
+    """
+    Get the int type to be used for the offset type based on the offset size.
+    """
     if offset_size == 1:
         return ('uint8')
     elif offset_size == 2:
@@ -45,11 +48,11 @@ def get_offset_type_int(offset_size: int) -> str:
     else: 
         return 'uint16'
 
-"""
-Get the real object type.
-For now only used to strip away the array type array.
-"""
 def get_real_type_name(type_name: str) -> str:
+    """
+    Get the real object type.
+    For now only used to strip away the array type array.
+    """
     first_bracket_index = type_name.find('[')
     last_bracket_index = type_name.find(']')
     if  first_bracket_index != -1 and last_bracket_index != -1:

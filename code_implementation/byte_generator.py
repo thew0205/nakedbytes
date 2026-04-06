@@ -1,11 +1,7 @@
-
-import struct
 from typing import Dict, List, Tuple, cast
 from code_implementation.byte_generator_utils import check_and_increment_bytearray, generate_enum_byte, generate_primitive_number_byte, generate_string_byte
 from code_implementation.type_desc_holder import  TypeDesc, get_offset_type_desc_int, get_type_desc_from_types_desc
 from code_implementation.type_utils import get_padding_size
-
-
 
 
 
@@ -18,7 +14,6 @@ def generate_vector_type(model: List, root_array: bytearray,  current_type_desc:
     item_count =  len(model)
     current_offset += get_padding_size(offset= current_offset, alignment= offset_size)
     root_array[current_offset: current_offset + offset_size] = generate_primitive_number_byte(item_count, get_offset_type_desc_int(offset_size=offset_size, types_desc=types_desc))
-    temp_current_offset = current_offset
     current_offset += offset_size 
     
     if current_type_desc.is_offset_type:
@@ -72,7 +67,7 @@ def generate_vector_type(model: List, root_array: bytearray,  current_type_desc:
         raise ValueError(f"Type of {current_type_desc.name} is unknown")
             
           
-    return temp_current_offset, tail_offset
+    return current_offset, tail_offset
 
 def generate_union_type(model, root_array: bytearray, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int, true_union_type: TypeDesc) ->Tuple[int|None, int]:
     """

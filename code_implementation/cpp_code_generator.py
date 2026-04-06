@@ -3,8 +3,6 @@ from code_implementation.cpp_code_generator_deserializer import get_all_type_dec
 from code_implementation.cpp_code_serializer import generate_all_types_serialize_vector_struct, generate_root_type_serialization_class, get_all_type_struct_offset_struct_field_struct, get_all_types_offset_serialization_function, get_base_serializer_class_function
 from code_implementation.type_desc_holder import TypeDesc
 
-
-
 def generate_cpp_code(types_desc: set[TypeDesc], root_type_name: str, namespace: str|None, file_name: str, offset_size: int, version: int) -> str:
     str_file:str = ""
     str_file += f"#ifndef __{file_name.upper()}_NAKEDBYTES_GENERATED_H\n"

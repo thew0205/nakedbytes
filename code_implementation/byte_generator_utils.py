@@ -114,8 +114,9 @@ def generate_string_byte(model: str, root_array: bytearray,  current_type_desc: 
     root_array[current_offset + offset_size + len(model) : current_offset + offset_size + len(model) +1 ] = bytearray([0x00])
     return current_offset, tail_offset
 
-"""
-Generate the byte representation of a blob storing the len with the offset size representation and copying the bytes in the bytearray provided.
-"""
+
 def generate_blob_type(model: str, root_array: bytearray, array_size: int, current_type_desc: TypeDesc,  types_desc: set[TypeDesc], current_offset: int,offset_size: int) ->Tuple[int, int]:
+    """
+    Generate the byte representation of a blob storing the len with the offset size representation and copying the bytes in the bytearray provided.
+    """
     pass

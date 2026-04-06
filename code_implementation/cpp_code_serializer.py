@@ -120,10 +120,13 @@ struct Serializer
         _tail_offset += get_padding_size(_tail_offset, OFFSET_SIZE);
 
         make_buffer_adequate();
-        data_array_offset.offset = _tail_offset;
 
         *reinterpret_cast<{get_unsigned_offset_type(offset_size)} *>(&_buffer[_tail_offset]) = len;
         _tail_offset += OFFSET_SIZE;
+
+        _tail_offset += get_padding_size(_tail_offset, sizeof(vec_inner_t<T>));
+        data_array_offset.offset = _tail_offset;
+
         memcpy(&_buffer[_tail_offset], data_array.data(), len * sizeof(vec_inner_t<T>));
         _tail_offset += len * sizeof(vec_inner_t<T>);
         return data_array_offset;
@@ -137,10 +140,10 @@ struct Serializer
         _tail_offset += get_padding_size(_tail_offset, OFFSET_SIZE);
 
         make_buffer_adequate();
-        data_array_offset.offset = _tail_offset;
 
         *reinterpret_cast<{get_unsigned_offset_type(offset_size)} *>(&_buffer[_tail_offset]) = len;
         _tail_offset += OFFSET_SIZE;
+        data_array_offset.offset = _tail_offset;
 
         for ({get_unsigned_offset_type(offset_size)} i = 0; i < len; i++)
         {{
@@ -366,10 +369,10 @@ def generate_serialize_vector_struct(type_desc: TypeDesc, offset_size: int) -> s
     ret_str += f"{get_unsigned_offset_type(offset_size)} len = static_cast<{get_unsigned_offset_type(offset_size)}>(data_array.size());\n"
     ret_str += f"serializer->_tail_offset += static_cast<{get_unsigned_offset_type(offset_size)}>(::nakedbytes::get_padding_size(serializer->_tail_offset, OFFSET_SIZE));\n"
     ret_str += "serializer->make_buffer_adequate();\n"
-    ret_str += "data_array_offset.offset = serializer->_tail_offset;\n"
     ret_str += f"*reinterpret_cast<{get_unsigned_offset_type(offset_size)} *>(&serializer->_buffer[serializer->_tail_offset]) = len;\n"
     ret_str += "serializer->_tail_offset += OFFSET_SIZE;"
     ret_str += f"serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);"
+    ret_str += "data_array_offset.offset = serializer->_tail_offset;\n"
     ret_str += f"for ({get_unsigned_offset_type(offset_size)} i = 0; i < len; i++){{"
     ret_str += generate_struct_serializer_fields(type_desc=type_desc, is_root_type= False, additional_marco_offset_prefix= f" + ({type_desc.name.upper()}_SIZE * i)", access_prefix = "data_array[i].", offset_size= offset_size)
     ret_str += f"serializer->_tail_offset += static_cast<{get_unsigned_offset_type(offset_size)}>({type_desc.name.upper()}_SIZE * len);\n"
