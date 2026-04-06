@@ -1,14 +1,20 @@
 import json
-import struct
-from typing import List, Dict, cast
 
 from code_implementation.type_utils import set_all_types, set_needed_types
-
-from .type_desc_holder import *
+from code_implementation.type_desc_holder import primitive_types, TypeDesc, get_type_from_json, compute_all_types_desc
 
 
 
 def parsing_schema_to_type_desc(model_def_file: str):
+    """
+    Parse the schema file to get the type descriptions.
+    
+    Args:
+        model_def_file (str): The path to the schema file.
+        
+    Returns:
+        set['TypeDesc']: The set of all the instantiated type descriptions.
+    """
     model_def = {}
     with open(model_def_file, 'r') as f:
         model_def = json.load(f)

@@ -92,9 +92,9 @@ Generate the byte representation for an enum by check for the enum value in the 
             if (isinstance(model, int) and enu.value == model) or (isinstance(model, str) and enu.name == model):
                 return generate_primitive_number_byte(value= enu.value , type_desc= current_type_desc.basetype, )
         else:
-            raise ValueError(f"Default value for enum type must be of int or str type but got {type(model)}")
+            raise ValueError(f"Enum value must be in {current_type_desc.name} enum definition which contains {current_type_desc.e_members} but got {model}")
     else:
-        raise ValueError(f"Default value for enum type must be of int type but got {type(model)}")
+        raise ValueError(f"Default value for enum type must be of int or str type but got {type(model)}")
 
     
 
