@@ -4,6 +4,15 @@ from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_ty
 
 
 def get_base_serializer_class_function(offset_size: int) -> str:
+    """
+    Return the base serializer class function.
+    
+    Args:
+        offset_size (int): The size of the offset type to be used.
+        
+    Returns:
+        str: The base serializer class function.
+    """
     return f"""
 namespace nakedbytes{{
 template <typename T>
@@ -32,11 +41,8 @@ struct is_serializable_offset_Type<SerializeOffset<T>> : std::true_type
 
 struct Serializer
 {{
-
-
     unsigned char *_buffer = nullptr;
     {get_unsigned_offset_type(offset_size)} _buffer_size = 0;
-    // {get_unsigned_offset_type(offset_size)} _current_offset = 0;
     {get_unsigned_offset_type(offset_size)} _tail_offset = 0;
 
     void init({get_unsigned_offset_type(offset_size)} buffer_size, const uint16_t root_type_size, uint16_t root_type_alignment)
@@ -120,10 +126,13 @@ struct Serializer
         _tail_offset += get_padding_size(_tail_offset, OFFSET_SIZE);
 
         make_buffer_adequate();
-        data_array_offset.offset = _tail_offset;
 
         *reinterpret_cast<{get_unsigned_offset_type(offset_size)} *>(&_buffer[_tail_offset]) = len;
         _tail_offset += OFFSET_SIZE;
+
+        _tail_offset += get_padding_size(_tail_offset, sizeof(vec_inner_t<T>));
+        data_array_offset.offset = _tail_offset;
+
         memcpy(&_buffer[_tail_offset], data_array.data(), len * sizeof(vec_inner_t<T>));
         _tail_offset += len * sizeof(vec_inner_t<T>);
         return data_array_offset;
@@ -137,10 +146,10 @@ struct Serializer
         _tail_offset += get_padding_size(_tail_offset, OFFSET_SIZE);
 
         make_buffer_adequate();
-        data_array_offset.offset = _tail_offset;
 
         *reinterpret_cast<{get_unsigned_offset_type(offset_size)} *>(&_buffer[_tail_offset]) = len;
         _tail_offset += OFFSET_SIZE;
+        data_array_offset.offset = _tail_offset;
 
         for ({get_unsigned_offset_type(offset_size)} i = 0; i < len; i++)
         {{
@@ -180,6 +189,16 @@ struct Serializer
 """
 
 def generate_struct_offset_struct_field_struct(type_desc: TypeDesc, type_def_generated: set[str]) -> str:
+    """
+    Generate the struct offset struct field struct.
+    
+    Args:
+        type_desc (TypeDesc): The type description.
+        type_def_generated (set[str]): The set of type definitions that have already been generated.
+        
+    Returns:
+        str: The struct offset struct field struct.
+    """
     if type_desc.name in type_def_generated:
         return ''
     type_def_generated.add(type_desc.name)
@@ -216,6 +235,15 @@ def generate_struct_offset_struct_field_struct(type_desc: TypeDesc, type_def_gen
 
 
 def get_all_type_struct_offset_struct_field_struct(types_desc: set[TypeDesc]) -> str:
+    """
+    Generate the struct offset struct field struct for all the types in the types_desc.
+    
+    Args:
+        types_desc (set[TypeDesc]): The set of type descriptions.
+        
+    Returns:
+        str: The struct offset struct field struct for all the types in the types_desc.
+    """
     type_def_generated: set[str] = set()
     ret_str = ""
     for type_desc in types_desc:
@@ -228,20 +256,20 @@ def get_all_type_struct_offset_struct_field_struct(types_desc: set[TypeDesc]) ->
 
 def generate_struct_serializer_fields(type_desc: TypeDesc, is_root_type: bool, additional_marco_offset_prefix: str, access_prefix: str, offset_size: int) -> str:
     """
-    Generate the serialization line into the serializer buffer, 
-    
-    :param type_desc: The struct type desc
-    :type type_desc: TypeDesc
-    :param is_root_type: If this is the root type. If it is a root type, it uses current_offset as the offset variable, else it uses the serializer->_tail_offset
-    :type is_root_type: bool
-    :param additional_marco_offset_prefix: The additional marco offset to be added to get the offset in the parent type of the struct to get the start of the offset in the inplace in the parent sturct 
-    :type additional_marco_offset_prefix: str
-    :param access_prefix: The addtonal access prefix to be added to ge the field in the parent field
-    :type access_prefix: str
-    :param offset_size: The offset size for the project
-    :type offset_size: int
-    :return: The cpp code generated to setialize the struct field
-    :rtype: str
+    Generate the serialization lines that write each field of a struct into the serializer buffer.
+
+    Args:
+        type_desc (TypeDesc): The struct type description whose fields will be serialized.
+        is_root_type (bool): If True, uses `current_offset` as the base offset variable;
+            otherwise uses `serializer->_tail_offset`.
+        additional_marco_offset_prefix (str): Extra offset expression appended to the macro
+            offset, used to locate the field relative to its parent struct.
+        access_prefix (str): Extra accessor prefix used to reach the field in the parent object
+            (e.g. `"member_name."`)
+        offset_size (int): The offset size for the project.
+
+    Returns:
+        str: The generated C++ code that serializes each field of the struct.
     """
     ret_str = ""
     
@@ -264,6 +292,16 @@ def generate_struct_serializer_fields(type_desc: TypeDesc, is_root_type: bool, a
     return ret_str
             
 def generate_serialization_function_parameters(type_desc: TypeDesc, prepend_comma: bool) -> str: 
+    """
+    Generate the serialization function parameters.
+    
+    Args:
+        type_desc (TypeDesc): The type description.
+        prepend_comma (bool): If the first parameter should be prepended with a comma.
+        
+    Returns:
+        str: The serialization function parameters.
+    """
     ret_str  = ""
     if prepend_comma:
         ret_str += ","
@@ -289,7 +327,16 @@ def generate_serialization_function_parameters(type_desc: TypeDesc, prepend_comm
     return ret_str [:-1]  # remove last comma
           
 def generate_offset_serialization_function(type_desc: TypeDesc, offset_size: int) -> str:
-
+    """
+    Generate the offset serialization function.
+    
+    Args:
+        type_desc (TypeDesc): The type description.
+        offset_size (int): The offset size for the project.
+        
+    Returns:
+        str: The offset serialization function.
+    """
     ret_str = ""
     ret_str += f"inline ::nakedbytes::SerializeOffset<{type_desc.name}> serialize_{type_desc.name.lower()}"
     ret_str += "(::nakedbytes::Serializer *const serializer"
@@ -315,6 +362,16 @@ def generate_offset_serialization_function(type_desc: TypeDesc, offset_size: int
     return ret_str
 
 def get_all_types_offset_serialization_function(types_desc: set[TypeDesc], offset_size: int) -> str:
+    """
+    Generate the offset serialization function for all the types in the types_desc.
+    
+    Args:
+        types_desc (set[TypeDesc]): The set of type descriptions.
+        offset_size (int): The offset size for the project.
+        
+    Returns:
+        str: The offset serialization function.
+    """
     ret_str = ""
     for type_desc in types_desc:
         if type_desc.is_primitive or type_desc.type_type == 'enum':
@@ -326,8 +383,23 @@ def get_all_types_offset_serialization_function(types_desc: set[TypeDesc], offse
 
 
 
-def generate_root_type_serialization_class(types_desc: 
-    set[TypeDesc], root_type_name: str, offset_size: int) -> str:
+def generate_root_type_serialization_class(types_desc: set[TypeDesc], root_type_name: str, offset_size: int) -> str:
+    """
+    Generate a C++ serializer class for the root type.
+
+    The generated class inherits from `::nakedbytes::Serializer` and exposes an
+    `init()` method (which pre-allocates the buffer sized to the root type) and a
+    `serialize_root()` method that writes all root-type fields directly into the
+    buffer at a fixed offset.
+
+    Args:
+        types_desc (set[TypeDesc]): The full set of resolved type descriptions.
+        root_type_name (str): The name of the root type to generate a serializer for.
+        offset_size (int): The offset size for the project.
+
+    Returns:
+        str: The generated C++ class definition as a string.
+    """
     ret_str = ""
     root_type_desc =cast(TypeDesc, get_type_desc_from_types_desc(root_type_name, types_desc))
     ret_str += f"struct {root_type_desc.name}Serializer : public ::nakedbytes::Serializer{{\n"
@@ -358,6 +430,20 @@ def generate_root_type_serialization_class(types_desc:
     return ret_str
 
 def generate_serialize_vector_struct(type_desc: TypeDesc, offset_size: int) -> str:
+    """
+    Generate a C++ helper function that serializes a `std::vector` of a given struct type
+    into the nakedbytes buffer.
+
+    The generated function writes the element count followed by the serialized fields of
+    each element contiguously, respecting alignment requirements.
+
+    Args:
+        type_desc (TypeDesc): The type description of the struct element type.
+        offset_size (int): The offset size for the project.
+
+    Returns:
+        str: The generated C++ inline function definition as a string.
+    """
     ret_str = ""
     ret_str += f"inline ::nakedbytes::SerializeOffset<::nakedbytes::Vector<{type_desc.name}Struct>> "
     ret_str += f"serialize_vector_{type_desc.name.lower()}_struct("
@@ -366,10 +452,10 @@ def generate_serialize_vector_struct(type_desc: TypeDesc, offset_size: int) -> s
     ret_str += f"{get_unsigned_offset_type(offset_size)} len = static_cast<{get_unsigned_offset_type(offset_size)}>(data_array.size());\n"
     ret_str += f"serializer->_tail_offset += static_cast<{get_unsigned_offset_type(offset_size)}>(::nakedbytes::get_padding_size(serializer->_tail_offset, OFFSET_SIZE));\n"
     ret_str += "serializer->make_buffer_adequate();\n"
-    ret_str += "data_array_offset.offset = serializer->_tail_offset;\n"
     ret_str += f"*reinterpret_cast<{get_unsigned_offset_type(offset_size)} *>(&serializer->_buffer[serializer->_tail_offset]) = len;\n"
     ret_str += "serializer->_tail_offset += OFFSET_SIZE;"
     ret_str += f"serializer->_tail_offset += ::nakedbytes::get_padding_size(serializer->_tail_offset, {type_desc.name.upper()}_ALIGNMENT);"
+    ret_str += "data_array_offset.offset = serializer->_tail_offset;\n"
     ret_str += f"for ({get_unsigned_offset_type(offset_size)} i = 0; i < len; i++){{"
     ret_str += generate_struct_serializer_fields(type_desc=type_desc, is_root_type= False, additional_marco_offset_prefix= f" + ({type_desc.name.upper()}_SIZE * i)", access_prefix = "data_array[i].", offset_size= offset_size)
     ret_str += f"serializer->_tail_offset += static_cast<{get_unsigned_offset_type(offset_size)}>({type_desc.name.upper()}_SIZE * len);\n"
@@ -380,7 +466,21 @@ def generate_serialize_vector_struct(type_desc: TypeDesc, offset_size: int) -> s
     return ret_str
 
 
-def generate_all_types_serialize_vector_struct(types_desc: set[TypeDesc], offset_size: int) -> str :
+def generate_all_types_serialize_vector_struct(types_desc: set[TypeDesc], offset_size: int) -> str:
+    """
+    Generate C++ vector-serialization helper functions for every non-primitive,
+    non-enum type in the provided set.
+
+    Iterates over `types_desc`, skipping primitive and enum types, and calls
+    `generate_serialize_vector_struct` for each eligible type.
+
+    Args:
+        types_desc (set[TypeDesc]): The full set of resolved type descriptions.
+        offset_size (int): The offset size for the project.
+
+    Returns:
+        str: The concatenated C++ function definitions as a string.
+    """
     ret_str = ""
     for type_desc in types_desc:
         if type_desc.is_primitive or type_desc.type_type == 'enum':

@@ -1,6 +1,5 @@
 from typing import List, cast
 from code_implementation.cpp_code_generator_utils import convert_to_cpp_primitive_type, generate_define_offset_macro, get_cpp_default_value, get_cpp_type_name, get_signed_offset_type, get_unsigned_offset_type
-from code_implementation.cpp_code_serializer import generate_all_types_serialize_vector_struct, get_all_type_struct_offset_struct_field_struct, get_all_types_offset_serialization_function, get_base_serializer_class_function
 from code_implementation.type_desc_holder import MemberDesc, TypeDesc, get_type_desc_from_types_desc
 
 def get_header_files(offset_size: int, version: int) -> str:
@@ -128,7 +127,9 @@ private:
     Offset &operator=(const Offset &other) = delete;
 }};
 
-template<typename T> struct is_Offset_Type : std::false_type {{}};
+template<typename T>
+struct is_Offset_Type : std::false_type {{}};
+
 template<typename T>
 struct is_Offset_Type<Offset<T>> : std::true_type {{}};
 
@@ -146,18 +147,18 @@ static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {of
     
     NAKEDBYTES_FORCE_INLINE {get_unsigned_offset_type(offset_size)} size() const
     {{
-        const {get_signed_offset_type(offset_size)} offset =  *reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0]);
+        const {get_signed_offset_type(offset_size)} offset =  *reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0]) - OFFSET_SIZE;
         return *reinterpret_cast<const {get_unsigned_offset_type(offset_size)} *>(&data_[offset]);
     }}
 
     NAKEDBYTES_FORCE_INLINE const T& get({get_unsigned_offset_type(offset_size)} index) const
     {{
-        const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0])) + static_cast<{get_signed_offset_type(offset_size)}>(OFFSET_SIZE) + static_cast<{get_signed_offset_type(offset_size)}>(T::nakedbytes_sizeof) * static_cast<{get_signed_offset_type(offset_size)}>(index);
+        const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0])) + static_cast<{get_signed_offset_type(offset_size)}>(T::nakedbytes_sizeof) * static_cast<{get_signed_offset_type(offset_size)}>(index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }}
     
     NAKEDBYTES_FORCE_INLINE const T& operator[]({get_unsigned_offset_type(offset_size)} index) const {{
-        const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0]) + OFFSET_SIZE + T::nakedbytes_sizeof * index);
+        const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0]) + T::nakedbytes_sizeof * index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }}
  public:
@@ -199,10 +200,10 @@ private:
 }};
 
 template<typename T>
-struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || std::is_integral<T>::value)>::type>
+struct Vector<T, typename std::enable_if<(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value)>::type>
 {{
 
-static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {offset_size};
+static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = sizeof(T);
 
     NAKEDBYTES_FORCE_INLINE bool is_null() const
     {{
@@ -211,7 +212,7 @@ static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {of
     
     NAKEDBYTES_FORCE_INLINE {get_unsigned_offset_type(offset_size)} size() const
     {{
-        const {get_signed_offset_type(offset_size)} offset =  *reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0]);
+        const {get_signed_offset_type(offset_size)} offset =  *reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0]) - OFFSET_SIZE;
         return *reinterpret_cast<const {get_unsigned_offset_type(offset_size)} *>(&data_[offset]);
     }}
 
@@ -222,7 +223,7 @@ static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {of
     }}
     
     NAKEDBYTES_FORCE_INLINE const T& operator[]({get_unsigned_offset_type(offset_size)} index) const {{
-        const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0])) + static_cast<{get_signed_offset_type(offset_size)}>(OFFSET_SIZE) + static_cast<{get_signed_offset_type(offset_size)}>(OFFSET_SIZE) * static_cast<{get_signed_offset_type(offset_size)}>(index);
+        const {get_signed_offset_type(offset_size)} offset =  static_cast<{get_signed_offset_type(offset_size)}>(*reinterpret_cast<const {get_signed_offset_type(offset_size)} *>(&data_[0])) + static_cast<{get_signed_offset_type(offset_size)}>(sizeof(T)) * static_cast<{get_signed_offset_type(offset_size)}>(index);
         return *reinterpret_cast<const T*>(&data_[offset]);
     }}
  public:

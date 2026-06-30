@@ -1,13 +1,13 @@
 import sys
 import argparse
 from pathlib import Path
+import os
+import json
+from typing import cast
 
 script_dir = Path(__file__).parent
 sys.path.append(f"{script_dir.parent}")
 
-import os
-import json
-from typing import cast
 from code_implementation.byte_generator import generate_byte
 from code_implementation.type_desc_holder import TypeDesc, get_type_desc_from_types_desc
 from code_implementation.type_parsing import parsing_schema_to_type_desc
@@ -17,11 +17,10 @@ parser = argparse.ArgumentParser(prog='nakedbytes')
 
 parser.add_argument("schema", help= "The schema file defining the nakedbytes.")
 parser.add_argument("-b", "--binary", help= "Json file to serialize")
-parser.add_argument("-o", "--outbin", help= "output dir to store generated binary files")
-parser.add_argument("--cpp", help= "output dir to store generated cpp files")
+parser.add_argument("-o", "--outbin", help= "Output dir to store generated binary files")
+parser.add_argument("--cpp", help= "Output dir to store generated cpp files")
 
 args = parser.parse_args()
-
 
 schema_def_file = str(args.schema)
 schema_def_file_with_ext = os.path.basename(schema_def_file)

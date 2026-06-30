@@ -82,6 +82,20 @@ def get_cpp_default_value(type_desc: TypeDesc, default_value) -> str:
     
     
 def get_offset_type(offset_size: int) -> tuple[str, str]:
+    """
+    Return the C++ unsigned and signed integer type names corresponding to the
+    given offset size.
+
+    Args:
+        offset_size (int): The size in bytes of the offset (1, 2, 4, or 8).
+
+    Returns:
+        tuple[str, str]: A pair ``(unsigned_type, signed_type)``, e.g.
+        ``('uint16_t', 'int16_t')`` for ``offset_size=2``.
+
+    Raises:
+        ValueError: If ``offset_size`` is not 1, 2, 4, or 8.
+    """
     match offset_size:
         case 1:
             return 'uint8_t', 'int8_t'
