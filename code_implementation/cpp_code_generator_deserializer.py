@@ -172,7 +172,7 @@ static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {of
             Iterator({get_unsigned_offset_type(offset_size)} index, const Vector<T> &vec) : index_(index), vec_{{vec}} {{}}
 
             value_type operator*() const {{ return vec_[index_]; }}
-            pointer operator->() {{ return vec_.get(index); }}
+            pointer operator->() {{ return vec_.get(index_); }}
             const Iterator operator++()
             {{
                 index_++;
@@ -237,7 +237,7 @@ static constexpr {get_unsigned_offset_type(offset_size)} nakedbytes_sizeof = {of
             Iterator({get_unsigned_offset_type(offset_size)} index, const Vector<T> &vec) : index_(index), vec_{{vec}} {{}}
 
             value_type operator*() const {{ return vec_[index_]; }}
-            pointer operator->() {{ return vec_.get(index); }}
+            pointer operator->() {{ return vec_.get(index_); }}
             const Iterator operator++()
             {{
                 index_++;
@@ -286,7 +286,7 @@ def generate_struct_enum_number_member_get_function(mem: MemberDesc, parent_type
     
     if is_class_type:
         ret_str += f'}}'
-        ret_str += '\n'
+        ret_str += f'return static_cast<{mem.type_desc.name}>(0);\n'
         
     ret_str += f"}}"
     return ret_str

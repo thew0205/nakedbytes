@@ -341,7 +341,7 @@ def compute_add_type_desc(type_name: str, types_desc: set['TypeDesc'], model_def
         types_desc.add(type_desc)
         return type_desc
     elif type_def['type'] == 'union':
-        types_desc.add(TypeDesc.generate_enum_type(f"{type_def['name']}_enum", get_offset_type_int(offset_size), type_def['unions'],types_desc))
+        types_desc.add(TypeDesc.generate_enum_type(f"{type_def['name']}_enum", get_offset_type_int(offset_size), [{'name': 'None', 'value': 0}] + type_def['unions'],types_desc))
         type_desc =  TypeDesc.gen_union_type(type_def['name'],type_def['unions'],offset_size, types_desc, model_def,parent_types)
         types_desc.add(type_desc)
         return type_desc
